@@ -146,8 +146,14 @@
 /* Fill: as large as the column allows while the whole framed piece still fits
    on screen below the header */
 .fas .work--fill .frame, .fas .work--fill.work--portrait .frame { width: auto; max-width: 100%; justify-self: center; }
-.fas .work--fill .frame__mat img { width: auto; max-width: 100%; max-height: calc(100vh - 76px - 9rem); }
-.fas .work--fill .frame__mat .crop { width: auto; height: calc(100vh - 76px - 9rem); max-width: 100%; }
+.fas .work--fill .frame__mat img { width: auto; max-width: 100%; max-height: calc((100vh - 76px - 9rem) * .95); }
+.fas .work--fill .frame__mat .crop { width: auto; height: calc((100vh - 76px - 9rem) * .95); max-width: 100%; }
+/* Centre the piece between the page content edge and its placard (shift by
+   half the column gap toward the placard). Wide screens only. */
+@media (min-width: 861px) {
+  .fas .work--fill .frame { left: clamp(.75rem, .5rem + 1.5vw, 2.25rem); }
+  .fas .work--fill:nth-child(even) .frame { left: calc(-1 * clamp(.75rem, .5rem + 1.5vw, 2.25rem)); }
+}
 .fas .work:nth-child(even).work--portrait .frame { justify-self: center; }
 
 /* Frame: brushed charcoal metal moulding with a fine horizontal grain and
