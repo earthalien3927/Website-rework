@@ -146,12 +146,17 @@
 /* Fill: as large as the column allows while the whole framed piece still fits
    on screen below the header */
 .fas .work--fill .frame, .fas .work--fill.work--portrait .frame { width: auto; max-width: 100%; justify-self: center; }
-.fas .work--fill .frame__mat img { width: auto; max-width: 100%; max-height: calc((100vh - 76px - 9rem) * .95); }
+.fas .work--fill .frame__mat img { width: auto; max-width: 100%; max-height: calc((100vh - 76px - 9rem) * .95 + 3.75rem); }
 .fas .work--fill .frame__mat .crop { width: auto; height: calc((100vh - 76px - 9rem) * .95); max-width: 100%; }
-/* Community Property's frame: outer moulding 10% thicker, plus a brighter
-   brushed-metal liner hugging the painting inside the mat. */
-.fas .work--fill .frame { padding: calc(clamp(12px, .6rem + .9vw, 22px) * 1.1); }
-.fas .work--fill .frame::after { inset: calc(clamp(12px, .6rem + .9vw, 22px) * 1.1 - 3px); }
+/* Community Property's frame, built the way the studio builds them: a heavier
+   charcoal outer tube with a brighter brushed-metal liner set right inside it,
+   against the painting. No mat. */
+.fas .work--fill .frame { padding: calc(clamp(12px, .6rem + .9vw, 22px) * 1.3); }
+.fas .work--fill .frame::after {          /* just a fine seam where the two metals meet */
+  inset: calc(clamp(12px, .6rem + .9vw, 22px) * 1.3 - 1px);
+  border-width: 1px; border-color: rgba(0,0,0,.6) rgba(0,0,0,.35) rgba(255,255,255,.18) rgba(0,0,0,.45);
+}
+.fas .work--fill .frame__mat { padding: 0; background: none; box-shadow: none; }
 .fas .work--fill .frame__mat > img {
   padding: clamp(6px, .3rem + .4vw, 12px);
   background:
@@ -159,7 +164,7 @@
     linear-gradient(135deg, #c9ccd0 0%, #7b7e83 16%, #a4a7ac 34%, #66696d 52%, #b3b6bb 70%, #74777b 86%, #d2d5d9 100%);
   box-shadow:
     inset 1px 1px 0 rgba(255,255,255,.55), inset -1px -1px 0 rgba(0,0,0,.45),
-    0 0 0 1px rgba(0,0,0,.7), 0 4px 10px rgba(0,0,0,.6);
+    0 0 0 1px rgba(0,0,0,.5);
 }
 /* Centre the piece between the page content edge and its placard (shift by
    half the column gap toward the placard). Wide screens only. */
