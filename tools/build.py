@@ -4,13 +4,14 @@
 For every pages/<name>.html this writes:
   dist/<name>.html          WordPress-ready: shared CSS inlined, images point at
                             the live site. Paste into a Custom HTML block.
-  .preview/<name>/index.html + img/
+  .preview/<name>/index.html
                             Preview copy for the private preview link. Images are
-                            downloaded once, resized and served next to the page,
+                            downloaded once, resized to WebP and embedded in the page,
                             because preview pages can't load images from other sites.
 
 Usage: python3 tools/build.py [name ...]
 """
+import base64
 import hashlib
 import io
 import pathlib
@@ -74,8 +75,14 @@ def preview_version(name: str, html: str) -> None:
         if not (out / local).exists():
             to_webp(fetch(src), out / local)
         mapping[u] = local
+    # The lightbox falls back to the thumbnail, so drop the full-size links
+    # rather than embedding every artwork twice.
+    html = re.sub(r' data-full="[^"]*"', "", html)
+    # Embed images as data: URIs. The preview viewer only reliably shows
+    # images that live inside the page itself.
     for u in sorted(mapping, key=len, reverse=True):
-        html = html.replace(u, mapping[u])
+        data = base64.b64encode((out / mapping[u]).read_bytes()).decode()
+        html = html.replace(u, "data:image/webp;base64," + data)
     (out / "index.html").write_text(html)
     print(f"preview: .preview/{name}/index.html ({len(mapping)} images)")
 
