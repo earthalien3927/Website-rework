@@ -265,10 +265,13 @@ body::before {
 .fas .metal-frame img, .fas .metal-frame .crop { display: block; width: 100%; }
 .fas .metal-frame .crop img { position: absolute; max-width: none; height: auto; }
 .fas .statement__art { isolation: isolate; }
+.fas .statement { overflow-x: clip; }
 /* Dark emerald glow spilling out from behind the frame, bottom right */
 .fas .statement__art::before {
-  content: ""; position: absolute; right: -40%; bottom: -26%; width: 125%; height: 85%; z-index: -1;
-  background: radial-gradient(closest-side, rgba(22,140,88,.95), rgba(10,92,58,.7) 45%, rgba(6,60,38,.3) 75%, transparent);
+  content: ""; position: absolute; left: -32%; right: -22%; bottom: -26%; height: 85%; z-index: -1;
+  background:
+    radial-gradient(ellipse 44% 60% at 66% 55%, rgba(22,140,88,.95), rgba(10,92,58,.7) 45%, rgba(6,60,38,.3) 75%, transparent),
+    radial-gradient(ellipse 55% 48% at 34% 62%, rgba(12,100,62,.7), rgba(6,60,38,.35) 55%, transparent);
   filter: blur(40px);
 }
 .fas .statement__text { display: grid; gap: 1.75rem; min-width: 0; }
