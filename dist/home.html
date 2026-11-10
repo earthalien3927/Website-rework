@@ -194,21 +194,28 @@ body::before {
   position: relative; isolation: isolate; overflow: hidden;
   min-height: clamp(560px, 82vh, 860px); display: flex; align-items: flex-end;
 }
-/* Spoiled Kitten, blurred. The source file has black bars on both sides
-   (the painting is the middle ~78%), so the image box is widened past the
-   hero edges to push the bars out of view. */
+/* Spoiled Kitten: sharp underneath, a blurred copy on top that fades out
+   toward the right, so the headline sits on soft colour and the jet and
+   the orange glow come into focus on the right. The source file has black
+   bars on both sides (the painting is the middle ~78%), so the image boxes
+   are widened past the hero edges to push the bars out of view. */
 .fas .hero__bg { position: absolute; inset: 0; z-index: -2; overflow: hidden; }
 .fas .hero__img {
-  position: absolute; top: 0; left: -15%; width: 130%; height: 100%; max-width: none;
-  object-fit: cover; object-position: 50% 45%;
-  filter: blur(7px) brightness(.78) saturate(1.1);
+  position: absolute; top: 0; left: -17%; width: 134%; height: 100%; max-width: none;
+  object-fit: cover; object-position: 50% 60%;
   animation: fas-settle 3.2s cubic-bezier(.2,.7,.2,1) both;
+}
+.fas .hero__img--sharp { filter: brightness(.95) saturate(1.15); }
+.fas .hero__img--soft {
+  filter: blur(12px) brightness(.7);
+  -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 35%, transparent 75%);
+  mask-image: linear-gradient(90deg, #000 0%, #000 35%, transparent 75%);
 }
 .fas .hero::after {
   content: ""; position: absolute; inset: 0; z-index: -1;
   background:
-    linear-gradient(90deg, rgba(13,10,11,.72) 0%, rgba(13,10,11,.2) 55%, rgba(13,10,11,0) 100%),
-    linear-gradient(180deg, rgba(13,10,11,.35) 0%, rgba(13,10,11,0) 30%, rgba(13,10,11,.95) 100%);
+    linear-gradient(90deg, rgba(13,10,11,.75) 0%, rgba(13,10,11,.35) 40%, rgba(13,10,11,0) 70%),
+    linear-gradient(180deg, rgba(13,10,11,.3) 0%, rgba(13,10,11,0) 25%, rgba(13,10,11,0) 60%, rgba(13,10,11,.95) 100%);
 }
 .fas .hero .wrap { width: 100%; padding-block: 0 clamp(3rem, 2rem + 4vw, 5.5rem); }
 .fas .hero__copy { display: grid; gap: 1.6rem; max-width: 46rem; animation: fas-rise 1.6s .2s cubic-bezier(.2,.7,.2,1) both; }
@@ -351,6 +358,13 @@ body::before {
   .fas .statement .wrap, .fas .toybox .wrap, .fas .quote .wrap { grid-template-columns: minmax(0, 1fr); }
   .fas .toybox__img::after { background: linear-gradient(0deg, var(--ink), transparent 45%); }
   .fas .hero { min-height: 640px; }
+  .fas .hero__img--soft {
+    -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 70%, transparent 100%);
+    mask-image: linear-gradient(90deg, #000 0%, #000 70%, transparent 100%);
+  }
+  .fas .hero::after {
+    background: linear-gradient(180deg, rgba(13,10,11,.45) 0%, rgba(13,10,11,.35) 50%, rgba(13,10,11,.95) 100%);
+  }
 }
 @media (max-width: 520px) {
   .fas .hero__facts { grid-template-columns: minmax(0, 1fr); gap: 1rem; }
@@ -398,7 +412,10 @@ body::before {
   <main>
 
     <section class="hero" aria-labelledby="hero-title">
-      <div class="hero__bg"><img class="hero__img" src="https://www.fineartbyscotty.com/wp-content/uploads/2026/01/6973eac242517-51-1024x576.png" alt="" width="1024" height="576"></div>
+      <div class="hero__bg">
+        <img class="hero__img hero__img--sharp" src="https://www.fineartbyscotty.com/wp-content/uploads/2026/01/6973eac242517-51-1536x864.png" alt="" width="1536" height="864">
+        <img class="hero__img hero__img--soft" src="https://www.fineartbyscotty.com/wp-content/uploads/2026/01/6973eac242517-51-1536x864.png" alt="" width="1536" height="864">
+      </div>
       <div class="wrap">
         <div class="hero__copy">
           <p class="label label--gold">Fine Art by Scotty · Tastefully Edgy</p>
