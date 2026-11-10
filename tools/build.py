@@ -132,6 +132,8 @@ def fill_newest(html: str) -> str:
         live_keys = {key(w["title"]) for w in live}
         pinned = [w for w in picks.get("pinned", []) if key(w["title"]) not in live_keys]
         works = (pinned + live)[:count]
+        last = {key(t) for t in picks.get("last", [])}
+        works = [w for w in works if key(w["title"]) not in last] + [w for w in works if key(w["title"]) in last]
         print("gallery: " + ", ".join(w["title"] + (" (pinned)" if w in pinned else "") for w in works))
         return m.group(1) + "\n" + "".join(work_html(w) for w in works) + m.group(4)
     return NEWEST_RE.sub(repl, html)

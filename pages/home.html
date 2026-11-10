@@ -382,7 +382,8 @@
              site's artwork list (newest first, skipping the categories in data-exclude). On the live site the script below
              refreshes it on every visit, so new uploads appear here by themselves. -->
         <!-- Pinned pieces show first (e.g. new work not on the site yet); "skip"
-             leaves pieces out. Everything else fills in from the site, newest first.
+             leaves pieces out; "last" moves pieces to the bottom. Everything else
+             fills in from the site, newest first, up to data-count pieces.
              When a pinned piece is added to the site, the site's copy is used. -->
         <script type="application/json" id="gallery-picks">
 {
@@ -390,10 +391,11 @@
     { "title": "Community Property", "num": "144", "meta": "New for 2026",
       "img": "../assets/art-new/community-property-sz144.jpg", "width": 1208, "height": 1600 }
   ],
-  "skip": ["Pre Flight"]
+  "skip": ["Pre Flight", "Trouble", "Power Ball"],
+  "last": ["Soul Keeper"]
 }
         </script>
-        <div class="works" id="gallery" data-count="6" data-exclude="sculpture,uncategorized">
+        <div class="works" id="gallery" data-count="4" data-exclude="sculpture,uncategorized">
 <!-- newest:start -->
 <!-- newest:end -->
         </div>
@@ -563,7 +565,11 @@
           var live = top.map(function (p) { return fromSite(p, byId[p.featured_media], cats[(p['fine-art-category'] || [])[0]]); }).filter(Boolean);
           var liveKeys = {}; live.forEach(function (w) { liveKeys[key(w.title)] = 1; });
           var pinned = (picks.pinned || []).filter(function (w) { return !liveKeys[key(w.title)]; });
-          var html = pinned.concat(live).slice(0, count).map(workHTML).join('');
+          var works = pinned.concat(live).slice(0, count), lastKeys = {};
+          (picks.last || []).forEach(function (t) { lastKeys[key(t)] = 1; });
+          works = works.filter(function (w) { return !lastKeys[key(w.title)]; })
+            .concat(works.filter(function (w) { return lastKeys[key(w.title)]; }));
+          var html = works.map(workHTML).join('');
           if (html) { gallery.innerHTML = html; trimAll(); }
         });
       });
