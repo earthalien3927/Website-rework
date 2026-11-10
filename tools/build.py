@@ -147,6 +147,30 @@ def fetch(url: str) -> bytes:
     return key.read_bytes()
 
 
+EDITS = ROOT / "assets" / "art-edits"
+
+
+def source_bytes(url: str) -> bytes:
+    """Image bytes for a live-site URL, using an edited copy from assets/art-edits
+    when one exists (matched on the original file name; sized variants such as
+    -768x432 are resized from the edit)."""
+    name = url.rsplit("/", 1)[1]
+    base = SIZE_RE.sub(r"\1", name)
+    edit = EDITS / base
+    if not edit.exists():
+        return fetch(url)
+    from PIL import Image
+    im = Image.open(edit)
+    m = re.search(r"-(\d+)x(\d+)\.\w+$", name)
+    if m:
+        im = im.copy()
+        im.thumbnail((int(m.group(1)), int(m.group(2))))
+    buf = io.BytesIO()
+    im.save(buf, "PNG")
+    print(f"edited:  {name} <- assets/art-edits/{base}")
+    return buf.getvalue()
+
+
 def to_webp(data: bytes, dest: pathlib.Path) -> None:
     from PIL import Image
     im = Image.open(io.BytesIO(data))
@@ -165,7 +189,7 @@ def preview_version(name: str, html: str) -> None:
         src = sized.get(u, u)  # full-size originals reuse their resized copy
         local = "img/" + re.sub(r"[^a-zA-Z0-9]+", "-", src.split("/uploads/")[1].rsplit(".", 1)[0]).strip("-") + ".webp"
         if not (out / local).exists():
-            to_webp(fetch(src), out / local)
+            to_webp(source_bytes(src), out / local)
         mapping[u] = local
     # The lightbox falls back to the thumbnail, so drop the full-size links
     # rather than embedding every artwork twice.
