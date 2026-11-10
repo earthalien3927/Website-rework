@@ -11,22 +11,26 @@
   position: relative; isolation: isolate; overflow: hidden;
   min-height: clamp(560px, 82vh, 860px); display: flex; align-items: flex-end;
 }
-/* Spoiled Kitten: sharp underneath, a blurred copy on top that fades out
-   toward the right, so the headline sits on soft colour and the jet and
-   the orange glow come into focus on the right. The source file has black
-   bars on both sides (the painting is the middle ~78%), so the image boxes
-   are widened past the hero edges to push the bars out of view. */
+/* Spoiled Kitten. A blurred copy fills the whole hero; a sharp copy is
+   shifted right so the woman and the jet engine land on the right side of
+   the screen, in focus, while the headline sits on soft colour. The sharp
+   copy fades in from its left edge, which also hides the black bar baked
+   into the left of the image file. (Not mirrored: the signature would flip.) */
 .fas .hero__bg { position: absolute; inset: 0; z-index: -2; overflow: hidden; }
 .fas .hero__img {
-  position: absolute; top: 0; left: -17%; width: 134%; height: 100%; max-width: none;
-  object-fit: cover; object-position: 50% 60%;
+  position: absolute; top: 0; height: 100%; max-width: none;
+  object-fit: cover; object-position: 0% 60%;
   animation: fas-settle 3.2s cubic-bezier(.2,.7,.2,1) both;
 }
-.fas .hero__img--sharp { filter: brightness(.95) saturate(1.15); }
 .fas .hero__img--soft {
-  filter: blur(12px) brightness(.7);
-  -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 35%, transparent 75%);
-  mask-image: linear-gradient(90deg, #000 0%, #000 35%, transparent 75%);
+  left: -17%; width: 134%; object-position: 50% 60%;
+  filter: blur(14px) brightness(.62);
+}
+.fas .hero__img--sharp {
+  z-index: 1; left: 38%; width: 120%;
+  filter: brightness(.95) saturate(1.15);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, transparent 12%, #000 30%);
+  mask-image: linear-gradient(90deg, transparent 0%, transparent 12%, #000 30%);
 }
 .fas .hero::after {
   content: ""; position: absolute; inset: 0; z-index: -1;
@@ -46,6 +50,7 @@
   margin-top: clamp(2.5rem, 2rem + 2vw, 4rem); padding-top: 1.5rem;
   border-top: 1px solid rgba(239,232,227,.18);
   display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem;
+  max-width: 40rem;
 }
 .fas .hero__facts div { display: grid; gap: .35rem; }
 .fas .hero__facts strong {
@@ -239,9 +244,10 @@
   .fas .work .frame { justify-self: center; }
   .fas .placard { justify-self: center; width: min(100%, 30rem); }
   .fas .hero { min-height: 640px; }
-  .fas .hero__img--soft {
-    -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 70%, transparent 100%);
-    mask-image: linear-gradient(90deg, #000 0%, #000 70%, transparent 100%);
+  .fas .hero__img--sharp {
+    left: 30%; width: 150%;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, transparent 25%, #000 45%);
+    mask-image: linear-gradient(90deg, transparent 0%, transparent 25%, #000 45%);
   }
   .fas .hero::after {
     background: linear-gradient(180deg, rgba(13,10,11,.45) 0%, rgba(13,10,11,.35) 50%, rgba(13,10,11,.95) 100%);
