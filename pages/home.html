@@ -138,6 +138,11 @@
 .fas .work:nth-child(even) .placard { order: 1; }
 .fas .work--landscape .frame { width: min(100%, 860px); }
 .fas .work--portrait .frame { width: min(100%, 440px); justify-self: center; }
+/* A featured piece: wider frame, slimmer placard column */
+.fas .work--large { grid-template-columns: minmax(0, 1fr) minmax(0, 15rem); }
+.fas .work--large:nth-child(even) { grid-template-columns: minmax(0, 15rem) minmax(0, 1fr); }
+.fas .work--large.work--landscape .frame { width: 100%; }
+.fas .work--large.work--portrait .frame { width: min(100%, 560px); }
 .fas .work:nth-child(even).work--portrait .frame { justify-self: center; }
 
 /* Frame: brushed charcoal metal moulding with a fine horizontal grain and
@@ -382,7 +387,8 @@
              site's artwork list (newest first, skipping the categories in data-exclude). On the live site the script below
              refreshes it on every visit, so new uploads appear here by themselves. -->
         <!-- Pinned pieces show first (e.g. new work not on the site yet); "skip"
-             leaves pieces out; "last" moves pieces to the bottom. Everything else
+             leaves pieces out; "order" puts pieces first in that order; "last" moves
+             pieces to the bottom; "large" shows a piece bigger. Everything else
              fills in from the site, newest first, up to data-count pieces.
              When a pinned piece is added to the site, the site's copy is used. -->
         <script type="application/json" id="gallery-picks">
@@ -392,7 +398,9 @@
       "img": "../assets/art-new/community-property-sz144.jpg", "width": 1208, "height": 1600 }
   ],
   "skip": ["Pre Flight", "Trouble", "Power Ball"],
-  "last": ["Soul Keeper"]
+  "order": ["Community Property", "Spoiled Kitten"],
+  "last": ["Soul Keeper"],
+  "large": ["Spoiled Kitten"]
 }
         </script>
         <div class="works" id="gallery" data-count="4" data-exclude="sculpture,uncategorized">
@@ -527,7 +535,8 @@
   function workHTML(w) {
     var orient = (+w.height > +w.width) ? 'portrait' : 'landscape';
     var meta = [w.num ? 'No. ' + w.num : '', w.meta || ''].filter(Boolean).join(' · ') || 'by Scotty';
-    return '<article class="work work--' + orient + '">' +
+    var big = (picks.large || []).map(key).indexOf(key(w.title)) > -1 ? ' work--large' : '';
+    return '<article class="work work--' + orient + big + '">' +
       '<button class="frame" type="button" data-full="' + esc(w.full || w.img) + '" aria-label="View ' + esc(w.title) + ' full size">' +
       '<span class="frame__mat"><img src="' + esc(w.img) + '" alt="' + esc(w.title) + '" width="' + (w.width || '') + '" height="' + (w.height || '') + '" loading="lazy"></span></button>' +
       '<div class="placard"><p class="label label--gold">' + esc(meta) + '</p><h3>' + esc(w.title) + '</h3>' +
@@ -544,6 +553,13 @@
   var picks = { pinned: [], skip: [] };
   try { var pj = document.getElementById('gallery-picks'); if (pj) picks = JSON.parse(pj.textContent); } catch (e) {}
   function key(t) { return String(t).toLowerCase().replace(/[^a-z0-9]/g, ''); }
+  // Apply "order" (first, in that order) and "last" (to the bottom) from the picks.
+  function arrange(works) {
+    var ord = (picks.order || []).map(key), last = (picks.last || []).map(key);
+    function rank(w) { var k = key(w.title), i = ord.indexOf(k); return last.indexOf(k) > -1 ? 2e3 + last.indexOf(k) : i > -1 ? i : 1e3; }
+    return works.map(function (w, i) { return [rank(w), i, w]; })
+      .sort(function (a, b) { return a[0] - b[0] || a[1] - b[1]; }).map(function (x) { return x[2]; });
+  }
   if (gallery && /(^|\.)fineartbyscotty\.com$/.test(location.hostname) && window.fetch && window.Promise) {
     var count = +gallery.getAttribute('data-count') || 6;
     var skip = (gallery.getAttribute('data-exclude') || '').split(',');
@@ -565,10 +581,8 @@
           var live = top.map(function (p) { return fromSite(p, byId[p.featured_media], cats[(p['fine-art-category'] || [])[0]]); }).filter(Boolean);
           var liveKeys = {}; live.forEach(function (w) { liveKeys[key(w.title)] = 1; });
           var pinned = (picks.pinned || []).filter(function (w) { return !liveKeys[key(w.title)]; });
-          var works = pinned.concat(live).slice(0, count), lastKeys = {};
-          (picks.last || []).forEach(function (t) { lastKeys[key(t)] = 1; });
-          works = works.filter(function (w) { return !lastKeys[key(w.title)]; })
-            .concat(works.filter(function (w) { return lastKeys[key(w.title)]; }));
+          var works = pinned.concat(live).slice(0, count);
+          works = arrange(works);
           var html = works.map(workHTML).join('');
           if (html) { gallery.innerHTML = html; trimAll(); }
         });
