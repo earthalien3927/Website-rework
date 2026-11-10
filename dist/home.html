@@ -243,8 +243,27 @@ body::before {
   display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
   gap: clamp(2.5rem, 1rem + 6vw, 7rem); align-items: center;
 }
-.fas .statement__art { position: relative; max-width: 560px; }
-.fas .statement__art img { width: 100%; box-shadow: 0 40px 80px -30px rgba(0,0,0,.9); }
+.fas .statement__art { position: relative; max-width: 460px; justify-self: center; width: 100%; }
+/* Brushed metal frame: a polished chrome moulding with a fine brushed grain,
+   a bright inner lip, and a long shadow so it floats off the wall. */
+.fas .metal-frame {
+  display: block; position: relative; padding: clamp(14px, .6rem + 1vw, 24px);
+  background:
+    repeating-linear-gradient(90deg, rgba(255,255,255,.05) 0 1px, transparent 1px 3px),
+    linear-gradient(135deg, #f2f2f0 0%, #9a9a98 16%, #e4e4e1 30%, #6e6e6c 48%, #d8d8d5 64%, #8b8b88 80%, #f0f0ee 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.65),
+    inset 0 0 0 2px rgba(0,0,0,.25),
+    0 60px 90px -35px rgba(0,0,0,1),
+    0 30px 45px -15px rgba(0,0,0,.9),
+    0 0 0 1px rgba(0,0,0,.6);
+}
+.fas .metal-frame::after {             /* inner lip where the moulding meets the art */
+  content: ""; position: absolute; inset: calc(clamp(14px, .6rem + 1vw, 24px) - 4px); pointer-events: none;
+  border: 4px solid; border-color: #5d5d5b #cfcfcc #efefec #7a7a78;
+}
+.fas .metal-frame img, .fas .metal-frame .crop { display: block; width: 100%; }
+.fas .metal-frame .crop img { position: absolute; max-width: none; height: auto; }
 .fas .statement__art::before {
   content: ""; position: absolute; left: -10%; top: 10%; width: 80%; height: 80%; z-index: -1;
   background: radial-gradient(closest-side, rgba(125,22,34,.55), transparent);
@@ -498,7 +517,7 @@ body::before {
     <section class="section statement" aria-labelledby="statement-title">
       <div class="wrap">
         <div class="statement__art">
-          <img src="https://www.fineartbyscotty.com/wp-content/uploads/2020/09/Winners-Circle_1920px-768x1018.jpg" alt="Winner's Circle by Scotty" width="768" height="1018" loading="lazy">
+          <span class="metal-frame"><img src="https://www.fineartbyscotty.com/wp-content/uploads/2025/01/9-768x1365.jpg" alt="Sunday Morning by Scotty" width="768" height="1365" loading="lazy"></span>
         </div>
         <div class="statement__text">
           <p class="label label--gold">For the private collection</p>
@@ -733,8 +752,8 @@ body::before {
     img.style.left = (-l / W / cw * 100) + '%';
     img.style.top = (-t / H / ch * 100) + '%';
   }
-  function trimAll() { Array.prototype.forEach.call(gallery.querySelectorAll('.frame__mat img'), trimBars); }
-  if (gallery) trimAll();
+  function trimAll() { Array.prototype.forEach.call(document.querySelectorAll('.fas .frame__mat img, .fas .metal-frame img'), trimBars); }
+  trimAll();
 
   // Lightbox (works for pieces added after page load)
   var dlg = document.getElementById('lightbox');
