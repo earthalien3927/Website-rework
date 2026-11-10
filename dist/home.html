@@ -1,0 +1,617 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=Manrope:wght@400;500;600;700&family=Syncopate:wght@700&display=swap">
+<style>
+/* Fine Art by Scotty — shared site styles
+   Layout: a private gallery after hours. Art sits on near-black, type is
+   quiet and high-contrast, champagne gold marks actions. One look, on purpose. */
+:root {
+  --ink: #0d0a0b;        /* gallery wall */
+  --panel: #171214;      /* raised surfaces: header, form, cards */
+  --line: #2e2528;       /* hairlines */
+  --bone: #efe8e3;       /* primary text */
+  --smoke: #a89d9a;      /* secondary text */
+  --gold: #c9a86a;       /* champagne gold: actions and rare accents */
+  --gold-hi: #e3c68e;    /* action hover */
+  --wine: #7d1622;       /* deep red glow, borrowed from the paintings */
+  --chrome: linear-gradient(100deg, #f4f1ee 0%, #9c9692 38%, #f7f5f2 55%, #8a8480 80%, #e9e6e2 100%);
+
+  --f-display: "Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
+  --f-body: "Manrope", "Helvetica Neue", Arial, sans-serif;
+  --f-label: "Syncopate", "Arial Black", "Helvetica Neue", sans-serif;
+
+  --step--1: 0.8125rem;
+  --step-0: 1rem;
+  --step-1: 1.25rem;
+  --step-2: clamp(1.6rem, 1.2rem + 1.6vw, 2.4rem);
+  --step-3: clamp(2.2rem, 1.4rem + 3.4vw, 3.8rem);
+  --step-4: clamp(3rem, 1.6rem + 6.4vw, 6.6rem);
+
+  --wrap: 1240px;
+  --gutter: max(16px, env(safe-area-inset-left, 0px));
+  --gutter-r: max(16px, env(safe-area-inset-right, 0px));
+  color-scheme: dark;
+}
+
+.fas, .fas *, .fas *::before, .fas *::after { box-sizing: border-box; }
+body { background: var(--ink); color: var(--bone); margin: 0; }
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px);
+  z-index: 60; background: var(--ink);
+}
+.fas {
+  background: var(--ink); color: var(--bone);
+  font-family: var(--f-body); font-size: var(--step-0); line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+.fas img { max-width: 100%; height: auto; display: block; }
+.fas a { color: inherit; }
+.fas :focus-visible { outline: 2px solid var(--gold-hi); outline-offset: 3px; }
+
+.fas .wrap {
+  max-width: var(--wrap); margin-inline: auto;
+  padding-left: var(--gutter); padding-right: var(--gutter-r);
+}
+.fas .section { padding-block: clamp(4rem, 3rem + 5vw, 8rem); }
+
+/* Type */
+.fas h1, .fas h2, .fas h3 {
+  font-family: var(--f-display); font-weight: 500; line-height: 1.02;
+  letter-spacing: -0.01em; margin: 0; text-wrap: balance;
+}
+.fas h2 { font-size: var(--step-3); }
+.fas h2 em, .fas h1 em { font-style: italic; font-weight: 400; }
+.fas p { margin: 0; max-width: 62ch; }
+.fas .lede { font-size: var(--step-1); color: var(--smoke); line-height: 1.55; }
+.fas .label {
+  font-family: var(--f-label); font-weight: 700; font-size: 0.6875rem;
+  letter-spacing: 0.22em; text-transform: uppercase; color: var(--smoke);
+}
+.fas .label--gold { color: var(--gold); }
+
+/* Buttons */
+.fas .btns { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+.fas .btn {
+  display: inline-flex; align-items: center; gap: 0.6em;
+  font-family: var(--f-label); font-weight: 700; font-size: 0.6875rem;
+  letter-spacing: 0.2em; text-transform: uppercase; text-decoration: none;
+  padding: 1.15em 1.9em; border: 1px solid transparent; cursor: pointer;
+  transition: background-color .2s, border-color .2s, color .2s;
+}
+.fas .btn--gold { background: var(--gold); color: var(--ink); }
+.fas .btn--gold:hover { background: var(--gold-hi); }
+.fas .btn--ghost { border-color: rgba(239, 232, 227, .45); color: var(--bone); background: transparent; }
+.fas .btn--ghost:hover { border-color: var(--bone); background: rgba(239, 232, 227, .06); }
+.fas .btn .arrow { transition: transform .2s; }
+.fas .btn:hover .arrow { transform: translateX(3px); }
+
+/* Header */
+.fas .site-header {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50;
+  background: rgba(13, 10, 11, .86); backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--line);
+}
+.fas .site-header .wrap {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1.5rem; min-height: 76px;
+}
+.fas .brand { display: flex; align-items: center; gap: 0.85rem; text-decoration: none; }
+.fas .brand img { width: 52px; height: auto; }
+.fas .brand span {
+  font-family: var(--f-display); font-size: 1.2rem; font-style: italic; line-height: 1;
+}
+.fas .nav { display: flex; align-items: center; gap: 1.75rem; }
+.fas .nav ul { list-style: none; margin: 0; padding: 0; display: flex; gap: 1.6rem; align-items: center; }
+.fas .nav a, .fas .nav .sub-toggle {
+  font-family: var(--f-label); font-weight: 700; font-size: 0.625rem;
+  letter-spacing: 0.2em; text-transform: uppercase; text-decoration: none;
+  color: var(--smoke); background: none; border: 0; padding: 0.5rem 0; cursor: pointer;
+  transition: color .2s;
+}
+.fas .nav a:hover, .fas .nav .sub-toggle:hover, .fas .nav a[aria-current="page"] { color: var(--bone); }
+.fas .nav .has-sub { position: relative; }
+.fas .nav .sub {
+  position: absolute; top: 100%; left: -1.25rem; min-width: 12rem;
+  flex-direction: column; align-items: stretch; gap: 0;
+  background: var(--panel); border: 1px solid var(--line); padding: 0.5rem 0;
+  opacity: 0; visibility: hidden; transform: translateY(6px);
+  transition: opacity .18s, transform .18s, visibility .18s;
+}
+.fas .nav .sub a { display: block; padding: 0.7rem 1.25rem; }
+.fas .nav .has-sub:hover .sub, .fas .nav .has-sub:focus-within .sub {
+  opacity: 1; visibility: visible; transform: none;
+}
+.fas .nav .btn { padding: 0.95em 1.4em; }
+.fas .menu-btn {
+  display: none; background: none; border: 1px solid var(--line); color: var(--bone);
+  width: 44px; height: 44px; cursor: pointer; padding: 0;
+}
+.fas .menu-btn svg { width: 20px; height: 20px; margin: auto; display: block; }
+
+@media (max-width: 1020px) {
+  .fas .menu-btn { display: block; }
+  .fas .nav {
+    position: fixed; inset: calc(77px + env(safe-area-inset-top, 0px)) 0 0 0;
+    background: var(--ink); flex-direction: column; align-items: stretch; gap: 2rem;
+    padding: 2rem var(--gutter-r) 3rem var(--gutter); overflow-y: auto;
+    display: none;
+  }
+  .fas .nav.is-open { display: flex; }
+  .fas .nav ul { flex-direction: column; align-items: stretch; gap: 0; }
+  .fas .nav > ul > li { border-bottom: 1px solid var(--line); }
+  .fas .nav a, .fas .nav .sub-toggle { display: block; padding: 1.1rem 0; font-size: 0.75rem; }
+  .fas .nav .sub-toggle { display: none; }
+  .fas .nav .sub {
+    position: static; opacity: 1; visibility: visible; transform: none;
+    background: none; border: 0; padding: 0; min-width: 0;
+  }
+  .fas .nav .sub a { padding: 1.1rem 0; }
+  .fas .nav .sub li { border-top: 1px solid var(--line); }
+  .fas .nav .btn { justify-content: center; }
+}
+
+/* Forms */
+.fas .field { display: grid; gap: 0.45rem; min-width: 0; }
+.fas .field label { font-size: var(--step--1); color: var(--smoke); font-weight: 600; }
+.fas .field input, .fas .field textarea {
+  width: 100%; font: inherit; color: var(--bone); background: var(--ink);
+  border: 1px solid var(--line); padding: 0.9rem 1rem; border-radius: 0;
+  transition: border-color .2s;
+}
+.fas .field input::placeholder { color: #6f6563; }
+.fas .field input:focus, .fas .field textarea:focus { outline: none; border-color: var(--gold); }
+
+/* Footer */
+.fas .site-footer { border-top: 1px solid var(--line); padding-block: 3.5rem 2.5rem; }
+.fas .site-footer .wrap { display: grid; gap: 2.5rem; }
+.fas .footer-top {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 2rem;
+}
+.fas .footer-top img { width: 96px; }
+.fas .footer-nav ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem 1.75rem; }
+.fas .footer-nav a {
+  font-family: var(--f-label); font-weight: 700; font-size: 0.625rem; letter-spacing: 0.2em;
+  text-transform: uppercase; text-decoration: none; color: var(--smoke);
+}
+.fas .footer-nav a:hover { color: var(--bone); }
+.fas .footer-bottom {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem;
+  border-top: 1px solid var(--line); padding-top: 1.5rem;
+  font-size: var(--step--1); color: var(--smoke);
+}
+.fas .footer-bottom a { text-decoration: none; }
+.fas .footer-bottom a:hover { color: var(--bone); }
+
+@media (prefers-reduced-motion: reduce) {
+  .fas *, .fas *::before, .fas *::after { transition: none !important; animation: none !important; }
+}
+</style>
+<style>
+/* Home page */
+.fas .hero {
+  position: relative; isolation: isolate; overflow: hidden;
+  min-height: clamp(560px, 82vh, 860px); display: flex; align-items: flex-end;
+}
+.fas .hero__img {
+  position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%;
+  object-fit: cover; object-position: 42% 50%;
+  animation: fas-settle 3.2s cubic-bezier(.2,.7,.2,1) both;
+}
+.fas .hero::after {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background:
+    radial-gradient(120% 90% at 85% 10%, transparent 0 40%, rgba(13,10,11,.55) 75%),
+    linear-gradient(180deg, rgba(13,10,11,.15) 0%, rgba(13,10,11,0) 35%, rgba(13,10,11,.92) 100%);
+}
+.fas .hero .wrap { width: 100%; padding-block: 0 clamp(3rem, 2rem + 4vw, 5.5rem); }
+.fas .hero__copy { display: grid; gap: 1.6rem; max-width: 46rem; animation: fas-rise 1.6s .2s cubic-bezier(.2,.7,.2,1) both; }
+.fas .hero h1 { font-size: var(--step-4); line-height: .95; letter-spacing: -0.02em; }
+.fas .chrome {
+  background: var(--chrome); -webkit-background-clip: text; background-clip: text;
+  color: transparent; padding-right: .08em;
+}
+.fas .hero .lede { max-width: 38rem; color: #cfc6c2; }
+.fas .hero__facts {
+  margin-top: clamp(2.5rem, 2rem + 2vw, 4rem); padding-top: 1.5rem;
+  border-top: 1px solid rgba(239,232,227,.18);
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem;
+}
+.fas .hero__facts div { display: grid; gap: .35rem; }
+.fas .hero__facts strong {
+  font-family: var(--f-display); font-weight: 400; font-size: var(--step-2); line-height: 1;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+@keyframes fas-settle { from { transform: scale(1.09); } to { transform: scale(1); } }
+@keyframes fas-rise { from { transform: translateY(28px); } to { transform: none; } }
+
+/* Statement */
+.fas .statement .wrap {
+  display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: clamp(2.5rem, 1rem + 6vw, 7rem); align-items: center;
+}
+.fas .statement__art { position: relative; padding: 0 12% 14% 0; }
+.fas .statement__art img { width: 100%; box-shadow: 0 40px 80px -30px rgba(0,0,0,.9); }
+.fas .statement__art .inset {
+  position: absolute; right: 0; bottom: 0; width: 46%;
+  border: 6px solid var(--ink); box-shadow: 0 30px 60px -20px rgba(0,0,0,.95);
+}
+.fas .statement__art::before {
+  content: ""; position: absolute; left: -10%; top: 10%; width: 80%; height: 80%; z-index: -1;
+  background: radial-gradient(closest-side, rgba(125,22,34,.55), transparent);
+  filter: blur(30px);
+}
+.fas .statement__text { display: grid; gap: 1.75rem; min-width: 0; }
+.fas .subjects { display: grid; gap: .9rem; padding-top: 1.75rem; border-top: 1px solid var(--line); }
+.fas .subjects ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .4rem 0; }
+.fas .subjects li { font-family: var(--f-display); font-style: italic; font-size: 1.15rem; color: var(--smoke); }
+.fas .subjects li:not(:last-child)::after { content: "·"; margin-inline: .6rem; color: var(--gold); font-style: normal; }
+
+/* Collection */
+.fas .collection { background: linear-gradient(180deg, var(--ink), var(--panel) 30%, var(--ink)); }
+.fas .collection__head {
+  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end;
+  gap: 1.5rem 3rem; margin-bottom: clamp(2.5rem, 2rem + 2vw, 4rem);
+}
+.fas .collection__head > div { display: grid; gap: 1.25rem; min-width: 0; }
+.fas .grid { columns: 3 280px; column-gap: clamp(1rem, .5rem + 1.5vw, 2rem); }
+.fas .piece {
+  break-inside: avoid; margin: 0 0 clamp(1rem, .5rem + 1.5vw, 2rem);
+  display: block; width: 100%; padding: 0; border: 0; background: none; color: inherit;
+  text-align: left; cursor: zoom-in;
+}
+.fas .piece__frame { position: relative; overflow: hidden; background: #000; }
+.fas .piece img { width: 100%; transition: transform .8s cubic-bezier(.2,.7,.2,1), opacity .4s; }
+.fas .piece:hover img { transform: scale(1.035); }
+.fas .piece__frame::after {
+  content: ""; position: absolute; inset: 0; border: 1px solid rgba(201,168,106,0);
+  transition: border-color .4s;
+}
+.fas .piece:hover .piece__frame::after, .fas .piece:focus-visible .piece__frame::after { border-color: rgba(201,168,106,.7); }
+.fas .piece__cap { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding-top: .8rem; }
+.fas .piece__cap .label { color: var(--bone); }
+.fas .piece__cap span:last-child { font-family: var(--f-display); font-style: italic; color: var(--smoke); font-size: .95rem; }
+.fas .collection__foot { display: flex; justify-content: center; margin-top: clamp(2rem, 1.5rem + 2vw, 3.5rem); }
+
+/* Toy Box */
+.fas .toybox { position: relative; isolation: isolate; overflow: hidden; border-block: 1px solid var(--line); }
+.fas .toybox .wrap {
+  display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: clamp(2rem, 1rem + 4vw, 5rem); align-items: center;
+}
+.fas .toybox__img { position: relative; }
+.fas .toybox__img img { width: 100%; filter: saturate(.85) contrast(1.05); }
+.fas .toybox__img::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent 60%, var(--ink)), linear-gradient(0deg, rgba(13,10,11,.5), transparent 40%);
+}
+.fas .toybox__text { display: grid; gap: 1.5rem; min-width: 0; }
+.fas .toybox h2 { font-size: var(--step-4); }
+
+/* Quote */
+.fas .quote .wrap {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: clamp(2.5rem, 1rem + 5vw, 6rem); align-items: start;
+}
+.fas .quote__text { display: grid; gap: 1.75rem; min-width: 0; }
+.fas .contact-list { list-style: none; margin: 1rem 0 0; padding: 0; display: grid; border-top: 1px solid var(--line); }
+.fas .contact-list li {
+  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: .25rem 1rem;
+  padding-block: 1.1rem; border-bottom: 1px solid var(--line);
+}
+.fas .contact-list a {
+  font-family: var(--f-display); font-size: 1.35rem; text-decoration: none; overflow-wrap: anywhere;
+  font-variant-numeric: lining-nums;
+}
+.fas .contact-list a:hover { color: var(--gold-hi); }
+.fas .quote-form {
+  background: var(--panel); border: 1px solid var(--line);
+  padding: clamp(1.5rem, 1rem + 2.5vw, 3rem);
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem;
+  position: relative;
+}
+.fas .quote-form::before {
+  content: ""; position: absolute; left: -1px; right: -1px; top: -1px; height: 2px; background: var(--gold);
+}
+.fas .quote-form .full { grid-column: 1 / -1; }
+.fas .quote-form .btn { justify-content: center; width: 100%; }
+.fas .form-note { font-size: var(--step--1); color: var(--smoke); }
+.fas .form-done { grid-column: 1 / -1; display: grid; gap: .75rem; padding-block: 2rem; }
+.fas .form-done h3 { font-size: var(--step-2); }
+
+/* Lightbox */
+.fas-lightbox {
+  border: 0; padding: 0; background: transparent; color: var(--bone);
+  max-width: 100vw; max-height: 100vh; width: 100%; height: 100%;
+}
+.fas-lightbox::backdrop { background: rgba(5,4,5,.94); }
+.fas-lightbox .lb {
+  height: 100%; display: grid; grid-template-rows: minmax(0, 1fr) auto;
+  padding: calc(1rem + env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) calc(1rem + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+  font-family: var(--f-body);
+}
+.fas-lightbox figure { margin: 0; min-height: 0; display: grid; place-items: center; }
+.fas-lightbox img { max-width: 100%; max-height: 100%; object-fit: contain; box-shadow: 0 30px 90px rgba(0,0,0,.8); }
+.fas-lightbox .lb__bar {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem;
+  padding-top: 1rem; max-width: var(--wrap); width: 100%; margin-inline: auto;
+}
+.fas-lightbox h3 { font-family: var(--f-display); font-weight: 400; font-style: italic; font-size: var(--step-2); margin: 0; }
+.fas-lightbox .lb__ctrl { display: flex; gap: .5rem; flex-wrap: wrap; }
+.fas-lightbox .icon-btn {
+  width: 48px; height: 48px; display: grid; place-items: center; cursor: pointer;
+  background: transparent; color: var(--bone); border: 1px solid rgba(239,232,227,.3);
+}
+.fas-lightbox .icon-btn:hover { border-color: var(--bone); }
+.fas-lightbox .icon-btn svg { width: 18px; height: 18px; }
+
+@media (max-width: 860px) {
+  .fas .statement .wrap, .fas .toybox .wrap, .fas .quote .wrap { grid-template-columns: minmax(0, 1fr); }
+  .fas .toybox__img::after { background: linear-gradient(0deg, var(--ink), transparent 45%); }
+  .fas .hero { min-height: 640px; }
+  .fas .hero__img { object-position: 46% 50%; }
+}
+@media (max-width: 520px) {
+  .fas .hero__facts { grid-template-columns: minmax(0, 1fr); gap: 1rem; }
+  .fas .hero__facts div { grid-template-columns: 6.5rem minmax(0, 1fr); align-items: baseline; }
+  .fas .quote-form { grid-template-columns: minmax(0, 1fr); }
+  .fas .grid { columns: 2 140px; }
+  .fas .piece__cap { flex-direction: column; gap: .2rem; }
+  .fas .piece__cap .label { font-size: .5625rem; }
+}
+</style>
+
+<div class="fas" id="top">
+
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="https://www.fineartbyscotty.com/">
+        <img src="https://www.fineartbyscotty.com/wp-content/uploads/2025/01/image-49.png" alt="Fine Art by Scotty logo" width="273" height="253">
+        <span>Fine Art by Scotty</span>
+      </a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 6h16M2 14h16"/></svg>
+      </button>
+      <nav class="nav" id="site-nav" aria-label="Main">
+        <ul>
+          <li><a href="https://www.fineartbyscotty.com/fine-art/">The Art</a></li>
+          <li><a href="https://www.fineartbyscotty.com/about-us/">The Artist</a></li>
+          <li><a href="https://www.fineartbyscotty.com/toy-box/">Toy Box</a></li>
+          <li><a href="https://www.fineartbyscotty.com/videos/">Videos</a></li>
+          <li class="has-sub">
+            <button class="sub-toggle" type="button" aria-haspopup="true">News</button>
+            <ul class="sub">
+              <li><a href="https://www.fineartbyscotty.com/category/announcements/">Announcements</a></li>
+              <li><a href="https://www.fineartbyscotty.com/category/press/">Press</a></li>
+              <li><a href="https://www.fineartbyscotty.com/category/events/">Events</a></li>
+              <li><a href="https://www.fineartbyscotty.com/category/blog/">Blog</a></li>
+            </ul>
+          </li>
+          <li><a href="https://www.fineartbyscotty.com/contact/">Contact</a></li>
+        </ul>
+        <a class="btn btn--gold" href="#quote">Request a quote</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <section class="hero" aria-labelledby="hero-title">
+      <img class="hero__img" src="https://www.fineartbyscotty.com/wp-content/uploads/2025/01/Group-1000001932.png" alt="" width="1920" height="691">
+      <div class="wrap">
+        <div class="hero__copy">
+          <p class="label label--gold">Fine Art by Scotty · Tastefully Edgy</p>
+          <h1 id="hero-title">Own the <em class="chrome">room.</em></h1>
+          <p class="lede">Original works by Scotty. Champagne, chrome, red heels and late nights, painted for the people who set the tone the moment they walk in.</p>
+          <div class="btns">
+            <a class="btn btn--gold" href="https://www.fineartbyscotty.com/fine-art/">View the collection <span class="arrow" aria-hidden="true">→</span></a>
+            <a class="btn btn--ghost" href="https://www.fineartbyscotty.com/about-us/">Meet the artist</a>
+          </div>
+        </div>
+        <div class="hero__facts">
+          <div><strong>140</strong><span class="label">Original works</span></div>
+          <div><strong>15</strong><span class="label">Collections</span></div>
+          <div><strong>Signed</strong><span class="label">By the artist</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section statement" aria-labelledby="statement-title">
+      <div class="wrap">
+        <div class="statement__art">
+          <img src="https://www.fineartbyscotty.com/wp-content/uploads/2020/09/Winners-Circle_1920px-768x1018.jpg" alt="Winner's Circle by Scotty" width="768" height="1018" loading="lazy">
+          <img class="inset" src="https://www.fineartbyscotty.com/wp-content/uploads/2025/01/26-768x1365.jpg" alt="Night Cap by Scotty" width="768" height="1365" loading="lazy">
+        </div>
+        <div class="statement__text">
+          <p class="label label--gold">For the private collection</p>
+          <h2 id="statement-title">Art that <em>transforms</em> a space.</h2>
+          <p class="lede">The penthouse. The corner office. The bar only a few people get invited to. Scotty's work is made to be the first thing people notice and the last thing they forget.</p>
+          <p>Experience the elegance of Scotty's work in your own home, then make it part of the story people tell about you.</p>
+          <div class="btns"><a class="btn btn--ghost" href="https://www.fineartbyscotty.com/fine-art/">Explore the collection <span class="arrow" aria-hidden="true">→</span></a></div>
+          <div class="subjects">
+            <p class="label">Collections include</p>
+            <ul>
+              <li>Horsepower</li><li>Spirits</li><li>Marilyn</li><li>Masks</li><li>Mermaids</li>
+              <li>Angels</li><li>Aviation</li><li>Venetian Plaster</li><li>Sculpture</li><li>Animals</li>
+              <li>Clowns</li><li>Cross</li><li>Hobbies</li><li>Modest</li><li>Breast Cancer Awareness</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section collection" aria-labelledby="collection-title">
+      <div class="wrap">
+        <div class="collection__head">
+          <div>
+            <p class="label label--gold">The Collection</p>
+            <h2 id="collection-title">Explore the <em>collection.</em></h2>
+          </div>
+          <p class="lede">Select any piece to see it in full.</p>
+        </div>
+
+        <div class="grid" id="gallery">
+          <button class="piece" type="button" data-full="https://www.fineartbyscotty.com/wp-content/uploads/2025/01/17.jpg"><span class="piece__frame"><img src="https://www.fineartbyscotty.com/wp-content/uploads/2025/01/17-768x1365.jpg" alt="Save for Sunday" width="768" height="1365" loading="lazy"></span><span class="piece__cap"><span class="label">Save for Sunday</span><span>by Scotty</span></span></button>
+          <button class="piece" type="button" data-full="https://www.fineartbyscotty.com/wp-content/uploads/2025/01/41.jpg"><span class="piece__frame"><img src="https://www.fineartbyscotty.com/wp-content/uploads/2025/01/41-768x432.jpg" alt="Captivated" width="768" height="432" loading="lazy"></span><span class="piece__cap"><span class="label">Captivated</span><span>by Scotty</span></span></button>
+          <button class="piece" type="button" data-full="https://www.fineartbyscotty.com/wp-content/uploads/2025/01/23.jpg"><span class="piece__frame"><img src="https://www.fineartbyscotty.com/wp-content/uploads/2025/01/23-768x1365.jpg" alt="Perfect Night's Sleep" width="768" height="1365" loading="lazy"></span><span class="piece__cap"><span class="label">Perfect Night's Sleep</span><span>by Scotty</span></span></button>
+          <button class="piece" type="button" data-full="https://www.fineartbyscotty.com/wp-content/uploads/2025/01/44-1.jpg"><span class="piece__frame"><img src="https://www.fineartbyscotty.com/wp-content/uploads/2025/01/44-1-768x432.jpg" alt="Body Shot" width="768" height="432" loading="lazy"></span><span class="piece__cap"><span class="label">Body Shot</span><span>by Scotty</span></span></button>
+          <button class="piece" type="button" data-full="https://www.fineartbyscotty.com/wp-content/uploads/2025/01/54-1.jpg"><span class="piece__frame"><img src="https://www.fineartbyscotty.com/wp-content/uploads/2025/01/54-1-768x1365.jpg" alt="Chrome Legs" width="768" height="1365" loading="lazy"></span><span class="piece__cap"><span class="label">Chrome Legs</span><span>by Scotty</span></span></button>
+          <button class="piece" type="button" data-full="https://www.fineartbyscotty.com/wp-content/uploads/2025/01/28.jpg"><span class="piece__frame"><img src="https://www.fineartbyscotty.com/wp-content/uploads/2025/01/28-768x432.jpg" alt="Key to My Cuffs" width="768" height="432" loading="lazy"></span><span class="piece__cap"><span class="label">Key to My Cuffs</span><span>by Scotty</span></span></button>
+          <button class="piece" type="button" data-full="https://www.fineartbyscotty.com/wp-content/uploads/2020/09/Impact_1920px.jpg"><span class="piece__frame"><img src="https://www.fineartbyscotty.com/wp-content/uploads/2020/09/Impact_1920px-768x1055.jpg" alt="Impact" width="768" height="1055" loading="lazy"></span><span class="piece__cap"><span class="label">Impact</span><span>by Scotty</span></span></button>
+          <button class="piece" type="button" data-full="https://www.fineartbyscotty.com/wp-content/uploads/2025/01/34-1.jpg"><span class="piece__frame"><img src="https://www.fineartbyscotty.com/wp-content/uploads/2025/01/34-1-768x432.jpg" alt="Fifth and Ariel" width="768" height="432" loading="lazy"></span><span class="piece__cap"><span class="label">Fifth and Ariel</span><span>by Scotty</span></span></button>
+          <button class="piece" type="button" data-full="https://www.fineartbyscotty.com/wp-content/uploads/2025/01/49.jpg"><span class="piece__frame"><img src="https://www.fineartbyscotty.com/wp-content/uploads/2025/01/49-768x1365.jpg" alt="Decisions" width="768" height="1365" loading="lazy"></span><span class="piece__cap"><span class="label">Decisions</span><span>by Scotty</span></span></button>
+          <button class="piece" type="button" data-full="https://www.fineartbyscotty.com/wp-content/uploads/2025/01/43.jpg"><span class="piece__frame"><img src="https://www.fineartbyscotty.com/wp-content/uploads/2025/01/43-768x432.jpg" alt="Boys and Their Toys" width="768" height="432" loading="lazy"></span><span class="piece__cap"><span class="label">Boys and Their Toys</span><span>by Scotty</span></span></button>
+          <button class="piece" type="button" data-full="https://www.fineartbyscotty.com/wp-content/uploads/2025/01/24-1.jpg"><span class="piece__frame"><img src="https://www.fineartbyscotty.com/wp-content/uploads/2025/01/24-1-768x1365.jpg" alt="No Strings Attached" width="768" height="1365" loading="lazy"></span><span class="piece__cap"><span class="label">No Strings Attached</span><span>by Scotty</span></span></button>
+          <button class="piece" type="button" data-full="https://www.fineartbyscotty.com/wp-content/uploads/2025/01/8-1.jpg"><span class="piece__frame"><img src="https://www.fineartbyscotty.com/wp-content/uploads/2025/01/8-1-768x432.jpg" alt="Surrender" width="768" height="432" loading="lazy"></span><span class="piece__cap"><span class="label">Surrender</span><span>by Scotty</span></span></button>
+          <button class="piece" type="button" data-full="https://www.fineartbyscotty.com/wp-content/uploads/2025/01/18.jpg"><span class="piece__frame"><img src="https://www.fineartbyscotty.com/wp-content/uploads/2025/01/18-768x1365.jpg" alt="Save a Horse" width="768" height="1365" loading="lazy"></span><span class="piece__cap"><span class="label">Save a Horse</span><span>by Scotty</span></span></button>
+          <button class="piece" type="button" data-full="https://www.fineartbyscotty.com/wp-content/uploads/2020/09/Winners-Circle_1920px.jpg"><span class="piece__frame"><img src="https://www.fineartbyscotty.com/wp-content/uploads/2020/09/Winners-Circle_1920px-768x1018.jpg" alt="Winner's Circle" width="768" height="1018" loading="lazy"></span><span class="piece__cap"><span class="label">Winner's Circle</span><span>by Scotty</span></span></button>
+          <button class="piece" type="button" data-full="https://www.fineartbyscotty.com/wp-content/uploads/2025/01/26.jpg"><span class="piece__frame"><img src="https://www.fineartbyscotty.com/wp-content/uploads/2025/01/26-768x1365.jpg" alt="Night Cap" width="768" height="1365" loading="lazy"></span><span class="piece__cap"><span class="label">Night Cap</span><span>by Scotty</span></span></button>
+        </div>
+
+        <div class="collection__foot">
+          <a class="btn btn--gold" href="https://www.fineartbyscotty.com/fine-art/">See all 140 works <span class="arrow" aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section toybox" aria-labelledby="toybox-title">
+      <div class="wrap">
+        <div class="toybox__img">
+          <img src="https://www.fineartbyscotty.com/wp-content/uploads/2024/12/image-42.png" alt="Custom chopper with copper and chrome finish" width="874" height="607" loading="lazy">
+        </div>
+        <div class="toybox__text">
+          <p class="label label--gold">Beyond the canvas</p>
+          <h2 id="toybox-title">The Toy <em>Box.</em></h2>
+          <p class="lede">Horsepower, chrome and custom finishes. The art doesn't stop at the frame.</p>
+          <div class="btns"><a class="btn btn--ghost" href="https://www.fineartbyscotty.com/toy-box/">Explore the Toy Box <span class="arrow" aria-hidden="true">→</span></a></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section quote" id="quote" aria-labelledby="quote-title">
+      <div class="wrap">
+        <div class="quote__text">
+          <p class="label label--gold">Private acquisitions</p>
+          <h2 id="quote-title">Request your <em>personal</em> quote.</h2>
+          <p class="lede">Every piece is crafted to bring elegance and inspiration into your space. Tell us which work caught your eye and how you'd like it, and we'll come back to you with a personalized quote.</p>
+          <ul class="contact-list">
+            <li><span class="label">Office</span><a href="tel:+16194408525">(619) 440-8525</a></li>
+            <li><span class="label">Phone</span><a href="tel:+16198903330">(619) 890-3330</a></li>
+            <li><span class="label">Email</span><a href="mailto:info@fineartbyscotty.com">info@fineartbyscotty.com</a></li>
+          </ul>
+        </div>
+
+        <form class="quote-form" id="quote-form" novalidate>
+          <div class="field"><label for="q-first">First name</label><input id="q-first" name="first_name" type="text" autocomplete="given-name" required></div>
+          <div class="field"><label for="q-last">Last name</label><input id="q-last" name="last_name" type="text" autocomplete="family-name" required></div>
+          <div class="field"><label for="q-phone">Phone</label><input id="q-phone" name="phone" type="tel" autocomplete="tel" required></div>
+          <div class="field"><label for="q-email">Email</label><input id="q-email" name="email" type="email" autocomplete="email" required></div>
+          <div class="field full"><label for="q-art">Which piece are you interested in?</label><input id="q-art" name="artwork" type="text" placeholder="e.g. Captivated" required></div>
+          <div class="field full"><label for="q-notes">Size, framing or anything else (optional)</label><textarea id="q-notes" name="notes" rows="3"></textarea></div>
+          <div class="full"><button class="btn btn--gold" type="submit">Request my quote <span class="arrow" aria-hidden="true">→</span></button></div>
+          <p class="form-note full">All fields except the last are required.</p>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-top">
+        <img src="https://www.fineartbyscotty.com/wp-content/uploads/2025/01/image-49.png" alt="Fine Art by Scotty logo" width="273" height="253" loading="lazy">
+        <nav class="footer-nav" aria-label="Footer">
+          <ul>
+            <li><a href="https://www.fineartbyscotty.com/fine-art/">The Art</a></li>
+            <li><a href="https://www.fineartbyscotty.com/about-us/">The Artist</a></li>
+            <li><a href="https://www.fineartbyscotty.com/toy-box/">Toy Box</a></li>
+            <li><a href="https://www.fineartbyscotty.com/videos/">Videos</a></li>
+            <li><a href="https://www.fineartbyscotty.com/news/">News</a></li>
+            <li><a href="https://www.fineartbyscotty.com/contact/">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Fine Art by Scotty. Tastefully Edgy.</span>
+        <a href="#top">Back to top ↑</a>
+      </div>
+    </div>
+  </footer>
+
+  <dialog class="fas-lightbox" id="lightbox" aria-label="Artwork viewer">
+    <div class="lb">
+      <figure><img id="lb-img" src="" alt=""></figure>
+      <div class="lb__bar">
+        <h3 id="lb-title"></h3>
+        <div class="lb__ctrl">
+          <button class="icon-btn" type="button" id="lb-prev" aria-label="Previous piece"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12.5 4 6.5 10l6 6"/></svg></button>
+          <button class="icon-btn" type="button" id="lb-next" aria-label="Next piece"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m7.5 4 6 6-6 6"/></svg></button>
+          <a class="btn btn--gold" href="#quote" id="lb-quote">Request a quote</a>
+          <button class="icon-btn" type="button" id="lb-close" aria-label="Close"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m5 5 10 10M15 5 5 15"/></svg></button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+</div>
+
+<script>
+(function () {
+  // Mobile menu
+  var btn = document.querySelector('.fas .menu-btn');
+  var nav = document.getElementById('site-nav');
+  if (btn && nav) {
+    btn.addEventListener('click', function () {
+      var open = nav.classList.toggle('is-open');
+      btn.setAttribute('aria-expanded', String(open));
+      btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    });
+    nav.addEventListener('click', function (e) {
+      if (e.target.closest('a')) { nav.classList.remove('is-open'); btn.setAttribute('aria-expanded', 'false'); }
+    });
+  }
+
+  // Lightbox
+  var pieces = Array.prototype.slice.call(document.querySelectorAll('#gallery .piece'));
+  var dlg = document.getElementById('lightbox');
+  var img = document.getElementById('lb-img');
+  var title = document.getElementById('lb-title');
+  var idx = 0;
+  function show(i) {
+    idx = (i + pieces.length) % pieces.length;
+    var p = pieces[idx], thumb = p.querySelector('img');
+    img.src = p.getAttribute('data-full') || thumb.src;
+    img.alt = thumb.alt + ' by Scotty';
+    title.textContent = thumb.alt;
+  }
+  pieces.forEach(function (p, i) {
+    p.addEventListener('click', function () {
+      show(i);
+      if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
+    });
+  });
+  function close() { if (dlg.close) dlg.close(); else dlg.removeAttribute('open'); }
+  document.getElementById('lb-prev').addEventListener('click', function () { show(idx - 1); });
+  document.getElementById('lb-next').addEventListener('click', function () { show(idx + 1); });
+  document.getElementById('lb-close').addEventListener('click', close);
+  dlg.addEventListener('click', function (e) { if (e.target === dlg || e.target.tagName === 'FIGURE') close(); });
+  dlg.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowLeft') show(idx - 1);
+    if (e.key === 'ArrowRight') show(idx + 1);
+  });
+  document.getElementById('lb-quote').addEventListener('click', function () {
+    var f = document.getElementById('q-art');
+    if (f) f.value = title.textContent;
+    close();
+  });
+
+  // Quote form (preview only: in WordPress this is wired to the real form handler)
+  var form = document.getElementById('quote-form');
+  if (form) form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+    var name = form.first_name.value.trim();
+    form.innerHTML = '<div class="form-done"><p class="label label--gold">Request received</p>' +
+      '<h3>Thank you, ' + name.replace(/[<>&"]/g, '') + '.</h3>' +
+      '<p>This is a preview, so nothing was sent. On the live site this goes straight to the studio.</p></div>';
+  });
+})();
+</script>

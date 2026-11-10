@@ -1,0 +1,183 @@
+/* Fine Art by Scotty — shared site styles
+   Layout: a private gallery after hours. Art sits on near-black, type is
+   quiet and high-contrast, champagne gold marks actions. One look, on purpose. */
+:root {
+  --ink: #0d0a0b;        /* gallery wall */
+  --panel: #171214;      /* raised surfaces: header, form, cards */
+  --line: #2e2528;       /* hairlines */
+  --bone: #efe8e3;       /* primary text */
+  --smoke: #a89d9a;      /* secondary text */
+  --gold: #c9a86a;       /* champagne gold: actions and rare accents */
+  --gold-hi: #e3c68e;    /* action hover */
+  --wine: #7d1622;       /* deep red glow, borrowed from the paintings */
+  --chrome: linear-gradient(100deg, #f4f1ee 0%, #9c9692 38%, #f7f5f2 55%, #8a8480 80%, #e9e6e2 100%);
+
+  --f-display: "Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
+  --f-body: "Manrope", "Helvetica Neue", Arial, sans-serif;
+  --f-label: "Syncopate", "Arial Black", "Helvetica Neue", sans-serif;
+
+  --step--1: 0.8125rem;
+  --step-0: 1rem;
+  --step-1: 1.25rem;
+  --step-2: clamp(1.6rem, 1.2rem + 1.6vw, 2.4rem);
+  --step-3: clamp(2.2rem, 1.4rem + 3.4vw, 3.8rem);
+  --step-4: clamp(3rem, 1.6rem + 6.4vw, 6.6rem);
+
+  --wrap: 1240px;
+  --gutter: max(16px, env(safe-area-inset-left, 0px));
+  --gutter-r: max(16px, env(safe-area-inset-right, 0px));
+  color-scheme: dark;
+}
+
+.fas, .fas *, .fas *::before, .fas *::after { box-sizing: border-box; }
+body { background: var(--ink); color: var(--bone); margin: 0; }
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px);
+  z-index: 60; background: var(--ink);
+}
+.fas {
+  background: var(--ink); color: var(--bone);
+  font-family: var(--f-body); font-size: var(--step-0); line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+.fas img { max-width: 100%; height: auto; display: block; }
+.fas a { color: inherit; }
+.fas :focus-visible { outline: 2px solid var(--gold-hi); outline-offset: 3px; }
+
+.fas .wrap {
+  max-width: var(--wrap); margin-inline: auto;
+  padding-left: var(--gutter); padding-right: var(--gutter-r);
+}
+.fas .section { padding-block: clamp(4rem, 3rem + 5vw, 8rem); }
+
+/* Type */
+.fas h1, .fas h2, .fas h3 {
+  font-family: var(--f-display); font-weight: 500; line-height: 1.02;
+  letter-spacing: -0.01em; margin: 0; text-wrap: balance;
+}
+.fas h2 { font-size: var(--step-3); }
+.fas h2 em, .fas h1 em { font-style: italic; font-weight: 400; }
+.fas p { margin: 0; max-width: 62ch; }
+.fas .lede { font-size: var(--step-1); color: var(--smoke); line-height: 1.55; }
+.fas .label {
+  font-family: var(--f-label); font-weight: 700; font-size: 0.6875rem;
+  letter-spacing: 0.22em; text-transform: uppercase; color: var(--smoke);
+}
+.fas .label--gold { color: var(--gold); }
+
+/* Buttons */
+.fas .btns { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+.fas .btn {
+  display: inline-flex; align-items: center; gap: 0.6em;
+  font-family: var(--f-label); font-weight: 700; font-size: 0.6875rem;
+  letter-spacing: 0.2em; text-transform: uppercase; text-decoration: none;
+  padding: 1.15em 1.9em; border: 1px solid transparent; cursor: pointer;
+  transition: background-color .2s, border-color .2s, color .2s;
+}
+.fas .btn--gold { background: var(--gold); color: var(--ink); }
+.fas .btn--gold:hover { background: var(--gold-hi); }
+.fas .btn--ghost { border-color: rgba(239, 232, 227, .45); color: var(--bone); background: transparent; }
+.fas .btn--ghost:hover { border-color: var(--bone); background: rgba(239, 232, 227, .06); }
+.fas .btn .arrow { transition: transform .2s; }
+.fas .btn:hover .arrow { transform: translateX(3px); }
+
+/* Header */
+.fas .site-header {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50;
+  background: rgba(13, 10, 11, .86); backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--line);
+}
+.fas .site-header .wrap {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1.5rem; min-height: 76px;
+}
+.fas .brand { display: flex; align-items: center; gap: 0.85rem; text-decoration: none; }
+.fas .brand img { width: 52px; height: auto; }
+.fas .brand span {
+  font-family: var(--f-display); font-size: 1.2rem; font-style: italic; line-height: 1;
+}
+.fas .nav { display: flex; align-items: center; gap: 1.75rem; }
+.fas .nav ul { list-style: none; margin: 0; padding: 0; display: flex; gap: 1.6rem; align-items: center; }
+.fas .nav a, .fas .nav .sub-toggle {
+  font-family: var(--f-label); font-weight: 700; font-size: 0.625rem;
+  letter-spacing: 0.2em; text-transform: uppercase; text-decoration: none;
+  color: var(--smoke); background: none; border: 0; padding: 0.5rem 0; cursor: pointer;
+  transition: color .2s;
+}
+.fas .nav a:hover, .fas .nav .sub-toggle:hover, .fas .nav a[aria-current="page"] { color: var(--bone); }
+.fas .nav .has-sub { position: relative; }
+.fas .nav .sub {
+  position: absolute; top: 100%; left: -1.25rem; min-width: 12rem;
+  flex-direction: column; align-items: stretch; gap: 0;
+  background: var(--panel); border: 1px solid var(--line); padding: 0.5rem 0;
+  opacity: 0; visibility: hidden; transform: translateY(6px);
+  transition: opacity .18s, transform .18s, visibility .18s;
+}
+.fas .nav .sub a { display: block; padding: 0.7rem 1.25rem; }
+.fas .nav .has-sub:hover .sub, .fas .nav .has-sub:focus-within .sub {
+  opacity: 1; visibility: visible; transform: none;
+}
+.fas .nav .btn { padding: 0.95em 1.4em; }
+.fas .menu-btn {
+  display: none; background: none; border: 1px solid var(--line); color: var(--bone);
+  width: 44px; height: 44px; cursor: pointer; padding: 0;
+}
+.fas .menu-btn svg { width: 20px; height: 20px; margin: auto; display: block; }
+
+@media (max-width: 1020px) {
+  .fas .menu-btn { display: block; }
+  .fas .nav {
+    position: fixed; inset: calc(77px + env(safe-area-inset-top, 0px)) 0 0 0;
+    background: var(--ink); flex-direction: column; align-items: stretch; gap: 2rem;
+    padding: 2rem var(--gutter-r) 3rem var(--gutter); overflow-y: auto;
+    display: none;
+  }
+  .fas .nav.is-open { display: flex; }
+  .fas .nav ul { flex-direction: column; align-items: stretch; gap: 0; }
+  .fas .nav > ul > li { border-bottom: 1px solid var(--line); }
+  .fas .nav a, .fas .nav .sub-toggle { display: block; padding: 1.1rem 0; font-size: 0.75rem; }
+  .fas .nav .sub-toggle { display: none; }
+  .fas .nav .sub {
+    position: static; opacity: 1; visibility: visible; transform: none;
+    background: none; border: 0; padding: 0; min-width: 0;
+  }
+  .fas .nav .sub a { padding: 1.1rem 0; }
+  .fas .nav .sub li { border-top: 1px solid var(--line); }
+  .fas .nav .btn { justify-content: center; }
+}
+
+/* Forms */
+.fas .field { display: grid; gap: 0.45rem; min-width: 0; }
+.fas .field label { font-size: var(--step--1); color: var(--smoke); font-weight: 600; }
+.fas .field input, .fas .field textarea {
+  width: 100%; font: inherit; color: var(--bone); background: var(--ink);
+  border: 1px solid var(--line); padding: 0.9rem 1rem; border-radius: 0;
+  transition: border-color .2s;
+}
+.fas .field input::placeholder { color: #6f6563; }
+.fas .field input:focus, .fas .field textarea:focus { outline: none; border-color: var(--gold); }
+
+/* Footer */
+.fas .site-footer { border-top: 1px solid var(--line); padding-block: 3.5rem 2.5rem; }
+.fas .site-footer .wrap { display: grid; gap: 2.5rem; }
+.fas .footer-top {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 2rem;
+}
+.fas .footer-top img { width: 96px; }
+.fas .footer-nav ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem 1.75rem; }
+.fas .footer-nav a {
+  font-family: var(--f-label); font-weight: 700; font-size: 0.625rem; letter-spacing: 0.2em;
+  text-transform: uppercase; text-decoration: none; color: var(--smoke);
+}
+.fas .footer-nav a:hover { color: var(--bone); }
+.fas .footer-bottom {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem;
+  border-top: 1px solid var(--line); padding-top: 1.5rem;
+  font-size: var(--step--1); color: var(--smoke);
+}
+.fas .footer-bottom a { text-decoration: none; }
+.fas .footer-bottom a:hover { color: var(--bone); }
+
+@media (prefers-reduced-motion: reduce) {
+  .fas *, .fas *::before, .fas *::after { transition: none !important; animation: none !important; }
+}
