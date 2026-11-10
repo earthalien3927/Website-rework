@@ -9,11 +9,18 @@ For every pages/<name>.html this writes:
                             downloaded once, resized to WebP and embedded in the page,
                             because preview pages can't load images from other sites.
 
+A page can contain a <!-- newest:start --> ... <!-- newest:end --> block inside
+an element with data-count="N". The build fills it with the N newest artworks
+from the site's artwork list, so the page shows real pieces even before (or
+without) the live refresh that runs on the real site.
+
 Usage: python3 tools/build.py [name ...]
 """
 import base64
 import hashlib
+import html as htmllib
 import io
+import json
 import pathlib
 import re
 import sys
@@ -30,6 +37,70 @@ UPLOAD_RE = re.compile(r'https://www\.fineartbyscotty\.com/wp-content/uploads/[^
 SIZE_RE = re.compile(r'-\d+x\d+(\.\w+)$')
 CSS_LINK = '<link rel="stylesheet" href="../assets/site.css">'
 MAX_EDGE = 1600
+
+
+SITE = "https://www.fineartbyscotty.com/wp-json/wp/v2/"
+NEWEST_RE = re.compile(r'(data-count="(\d+)">\s*<!-- newest:start -->).*?(<!-- newest:end -->)', re.S)
+
+
+def get_json(path: str):
+    req = urllib.request.Request(SITE + path, headers={"User-Agent": "Mozilla/5.0 (site build)"})
+    with urllib.request.urlopen(req, timeout=60) as r:
+        return json.load(r), int(r.headers.get("X-WP-TotalPages") or 1)
+
+
+def nice_title(raw: str):
+    """'SPOILED KITTEN SZ136' -> ('Spoiled Kitten', '136'). Mirrors niceTitle() in the page."""
+    t = htmllib.unescape(raw).strip()
+    m = re.search(r"\s+SZ\s*(\d+)\s*$", t, re.I)
+    num = m.group(1) if m else ""
+    if m:
+        t = t[: m.start()]
+    t = re.sub(r"(^|[\s(/-])([a-z])", lambda x: x.group(1) + x.group(2).upper(), t.lower())
+    return t, num
+
+
+def newest_key(post):
+    """Newest first: piece number (SZ###) decides; unnumbered pieces follow, by date.
+    Mirrors newestFirst() in the page."""
+    num = nice_title(post["title"]["rendered"])[1]
+    return (int(num) if num else 0, post["date"])
+
+
+def piece_html(post, media) -> str:
+    if not media or not media.get("source_url"):
+        return ""
+    details = media.get("media_details", {})
+    sizes = details.get("sizes", {})
+    thumb = sizes.get("medium_large") or sizes.get("large") or {
+        "source_url": media["source_url"], "width": details.get("width", ""), "height": details.get("height", "")}
+    title, num = nice_title(post["title"]["rendered"])
+    e = lambda v: htmllib.escape(str(v), quote=True)
+    return (
+        f'          <button class="piece" type="button" data-full="{e(media["source_url"])}" data-link="{e(post["link"])}">'
+        f'<span class="piece__frame"><img src="{e(thumb["source_url"])}" alt="{e(title)}" width="{e(thumb.get("width", ""))}" height="{e(thumb.get("height", ""))}" loading="lazy"></span>'
+        f'<span class="piece__cap"><span class="label">{e(title)}</span><span>{"No. " + e(num) if num else "by Scotty"}</span></span></button>\n'
+    )
+
+
+def newest_pieces(count: int):
+    fields = "per_page=100&_fields=id,date,title,link,featured_media&page="
+    posts, pages = get_json("fine-art?" + fields + "1")
+    for pg in range(2, pages + 1):
+        posts += get_json("fine-art?" + fields + str(pg))[0]
+    top = sorted((p for p in posts if p.get("featured_media")), key=newest_key, reverse=True)[:count]
+    media, _ = get_json("media?_fields=id,source_url,media_details&per_page=100&include="
+                        + ",".join(str(p["featured_media"]) for p in top))
+    by_id = {m["id"]: m for m in media}
+    return [(p, by_id.get(p["featured_media"])) for p in top]
+
+
+def fill_newest(html: str) -> str:
+    def repl(m):
+        pieces = newest_pieces(int(m.group(2)))
+        print("newest:  " + ", ".join(nice_title(p["title"]["rendered"])[0] for p, _ in pieces))
+        return m.group(1) + "\n" + "".join(piece_html(p, md) for p, md in pieces) + m.group(3)
+    return NEWEST_RE.sub(repl, html)
 
 
 def inline_css(html: str) -> str:
@@ -91,7 +162,7 @@ def main(names):
     DIST.mkdir(exist_ok=True)
     pages = [PAGES / f"{n}.html" for n in names] if names else sorted(PAGES.glob("*.html"))
     for page in pages:
-        html = inline_css(page.read_text())
+        html = fill_newest(inline_css(page.read_text()))
         (DIST / page.name).write_text(wordpress_version(html))
         print(f"dist:    dist/{page.name}")
         preview_version(page.stem, html)
