@@ -1,6 +1,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=Manrope:wght@400;500;600;700&family=Syncopate:wght@700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@400;500;600;700&family=Syncopate:wght@700&display=swap">
 <style>
 /* Fine Art by Scotty — shared site styles
    Layout: a private gallery after hours. Art sits on near-black, type is
@@ -16,7 +16,7 @@
   --wine: #7d1622;       /* deep red glow, borrowed from the paintings */
   --chrome: linear-gradient(100deg, #f4f1ee 0%, #9c9692 38%, #f7f5f2 55%, #8a8480 80%, #e9e6e2 100%);
 
-  --f-display: "Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
+  --f-display: "DM Serif Display", Georgia, "Times New Roman", serif;
   --f-body: "Manrope", "Helvetica Neue", Arial, sans-serif;
   --f-label: "Syncopate", "Arial Black", "Helvetica Neue", sans-serif;
 
@@ -56,11 +56,11 @@ body::before {
 
 /* Type */
 .fas h1, .fas h2, .fas h3 {
-  font-family: var(--f-display); font-weight: 500; line-height: 1.02;
-  letter-spacing: -0.01em; margin: 0; text-wrap: balance;
+  font-family: var(--f-display); font-weight: 400; line-height: 1.05;
+  letter-spacing: 0; margin: 0; text-wrap: balance;
 }
 .fas h2 { font-size: var(--step-3); }
-.fas h2 em, .fas h1 em { font-style: italic; font-weight: 400; }
+.fas h2 em, .fas h1 em { font-style: italic; }
 .fas p { margin: 0; max-width: 62ch; }
 .fas .lede { font-size: var(--step-1); color: var(--smoke); line-height: 1.55; }
 .fas .label {
@@ -122,6 +122,8 @@ body::before {
   opacity: 1; visibility: visible; transform: none;
 }
 .fas .nav .btn { padding: 0.95em 1.4em; }
+.fas .nav .btn--gold { background: var(--gold); color: var(--ink); }
+.fas .nav .btn--gold:hover { background: var(--gold-hi); color: var(--ink); }
 .fas .menu-btn {
   display: none; background: none; border: 1px solid var(--line); color: var(--bone);
   width: 44px; height: 44px; cursor: pointer; padding: 0;
@@ -205,7 +207,7 @@ body::before {
 }
 .fas .hero .wrap { width: 100%; padding-block: 0 clamp(3rem, 2rem + 4vw, 5.5rem); }
 .fas .hero__copy { display: grid; gap: 1.6rem; max-width: 46rem; animation: fas-rise 1.6s .2s cubic-bezier(.2,.7,.2,1) both; }
-.fas .hero h1 { font-size: var(--step-4); line-height: .95; letter-spacing: -0.02em; }
+.fas .hero h1 { font-size: var(--step-4); line-height: 1; }
 .fas .chrome {
   background: var(--chrome); -webkit-background-clip: text; background-clip: text;
   color: transparent; padding-right: .08em;
@@ -229,12 +231,8 @@ body::before {
   display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
   gap: clamp(2.5rem, 1rem + 6vw, 7rem); align-items: center;
 }
-.fas .statement__art { position: relative; padding: 0 12% 14% 0; }
+.fas .statement__art { position: relative; max-width: 560px; }
 .fas .statement__art img { width: 100%; box-shadow: 0 40px 80px -30px rgba(0,0,0,.9); }
-.fas .statement__art .inset {
-  position: absolute; right: 0; bottom: 0; width: 46%;
-  border: 6px solid var(--ink); box-shadow: 0 30px 60px -20px rgba(0,0,0,.95);
-}
 .fas .statement__art::before {
   content: ""; position: absolute; left: -10%; top: 10%; width: 80%; height: 80%; z-index: -1;
   background: radial-gradient(closest-side, rgba(125,22,34,.55), transparent);
@@ -419,7 +417,6 @@ body::before {
       <div class="wrap">
         <div class="statement__art">
           <img src="https://www.fineartbyscotty.com/wp-content/uploads/2020/09/Winners-Circle_1920px-768x1018.jpg" alt="Winner's Circle by Scotty" width="768" height="1018" loading="lazy">
-          <img class="inset" src="https://www.fineartbyscotty.com/wp-content/uploads/2025/01/26-768x1365.jpg" alt="Night Cap by Scotty" width="768" height="1365" loading="lazy">
         </div>
         <div class="statement__text">
           <p class="label label--gold">For the private collection</p>

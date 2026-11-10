@@ -12,7 +12,7 @@
   --wine: #7d1622;       /* deep red glow, borrowed from the paintings */
   --chrome: linear-gradient(100deg, #f4f1ee 0%, #9c9692 38%, #f7f5f2 55%, #8a8480 80%, #e9e6e2 100%);
 
-  --f-display: "Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
+  --f-display: "DM Serif Display", Georgia, "Times New Roman", serif;
   --f-body: "Manrope", "Helvetica Neue", Arial, sans-serif;
   --f-label: "Syncopate", "Arial Black", "Helvetica Neue", sans-serif;
 
@@ -52,11 +52,11 @@ body::before {
 
 /* Type */
 .fas h1, .fas h2, .fas h3 {
-  font-family: var(--f-display); font-weight: 500; line-height: 1.02;
-  letter-spacing: -0.01em; margin: 0; text-wrap: balance;
+  font-family: var(--f-display); font-weight: 400; line-height: 1.05;
+  letter-spacing: 0; margin: 0; text-wrap: balance;
 }
 .fas h2 { font-size: var(--step-3); }
-.fas h2 em, .fas h1 em { font-style: italic; font-weight: 400; }
+.fas h2 em, .fas h1 em { font-style: italic; }
 .fas p { margin: 0; max-width: 62ch; }
 .fas .lede { font-size: var(--step-1); color: var(--smoke); line-height: 1.55; }
 .fas .label {
@@ -118,6 +118,8 @@ body::before {
   opacity: 1; visibility: visible; transform: none;
 }
 .fas .nav .btn { padding: 0.95em 1.4em; }
+.fas .nav .btn--gold { background: var(--gold); color: var(--ink); }
+.fas .nav .btn--gold:hover { background: var(--gold-hi); color: var(--ink); }
 .fas .menu-btn {
   display: none; background: none; border: 1px solid var(--line); color: var(--bone);
   width: 44px; height: 44px; cursor: pointer; padding: 0;
