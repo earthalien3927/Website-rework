@@ -42,6 +42,7 @@ MAX_EDGE = 1600
 SITE = "https://www.fineartbyscotty.com/wp-json/wp/v2/"
 NEWEST_RE = re.compile(r'(data-count="(\d+)"(?: data-exclude="([^"]*)")?>\s*<!-- newest:start -->).*?(<!-- newest:end -->)', re.S)
 ASSET_URL_RE = re.compile(r'url\("\.\./assets/([^"]+)"\)')
+ART_URL_RE = re.compile(r'\.\./assets/(art-new/[A-Za-z0-9._-]+)')   # new artwork not on the site yet
 
 
 def get_json(path: str):
@@ -68,29 +69,38 @@ def newest_key(post):
     return (int(num) if num else 0, post["date"])
 
 
-def work_html(post, media, cat_name) -> str:
-    """One framed piece + placard. Mirrors workHTML() in the page."""
+def work_html(w) -> str:
+    """One framed piece + placard from {title, num, meta, img, width, height, full}.
+    Mirrors workHTML() in the page."""
+    orient = "portrait" if int(w.get("height") or 0) > int(w.get("width") or 0) else "landscape"
+    meta = " · ".join(x for x in ("No. " + w["num"] if w.get("num") else "", w.get("meta") or "") if x) or "by Scotty"
+    e = lambda v: htmllib.escape(str(v), quote=True)
+    return (
+        f'          <article class="work work--{orient}">'
+        f'<button class="frame" type="button" data-full="{e(w.get("full") or w["img"])}" aria-label="View {e(w["title"])} full size">'
+        f'<span class="frame__mat"><img src="{e(w["img"])}" alt="{e(w["title"])}" width="{e(w.get("width", ""))}" height="{e(w.get("height", ""))}" loading="lazy"></span></button>'
+        f'<div class="placard"><p class="label label--gold">{e(meta)}</p><h3>{e(w["title"])}</h3>'
+        f'<div class="placard__links"><button type="button" class="link-view">View full size</button>'
+        f'<a href="#quote" class="link-quote" data-title="{e(w["title"])}">Request a quote →</a></div></div></article>\n'
+    )
+
+
+def from_site(post, media, cat_name):
     if not media or not media.get("source_url"):
-        return ""
+        return None
     details = media.get("media_details", {})
     sizes = details.get("sizes", {})
     img = sizes.get("1536x1536") or sizes.get("large") or {
         "source_url": media["source_url"], "width": details.get("width", ""), "height": details.get("height", "")}
     title, num = nice_title(post["title"]["rendered"])
-    orient = "portrait" if int(img.get("height") or 0) > int(img.get("width") or 0) else "landscape"
-    meta = " · ".join(x for x in ("No. " + num if num else "", cat_name or "") if x) or "by Scotty"
-    e = lambda v: htmllib.escape(str(v), quote=True)
-    return (
-        f'          <article class="work work--{orient}">'
-        f'<button class="frame" type="button" data-full="{e(media["source_url"])}" aria-label="View {e(title)} full size">'
-        f'<span class="frame__mat"><img src="{e(img["source_url"])}" alt="{e(title)}" width="{e(img.get("width", ""))}" height="{e(img.get("height", ""))}" loading="lazy"></span></button>'
-        f'<div class="placard"><p class="label label--gold">{e(meta)}</p><h3>{e(title)}</h3>'
-        f'<div class="placard__links"><button type="button" class="link-view">View full size</button>'
-        f'<a href="#quote" class="link-quote" data-title="{e(title)}">Request a quote →</a></div></div></article>\n'
-    )
+    return {"title": title, "num": num, "meta": cat_name, "img": img["source_url"],
+            "width": img.get("width"), "height": img.get("height"), "full": media["source_url"]}
 
 
-def newest_pieces(count: int, exclude: set):
+key = lambda t: re.sub(r"[^a-z0-9]", "", str(t).lower())
+
+
+def newest_pieces(count: int, exclude: set, skip_titles: set):
     cats, _ = get_json("fine-art-category?per_page=100&_fields=id,name,slug")
     names = {c["id"]: htmllib.unescape(c["name"]) for c in cats}
     skip = {c["id"] for c in cats if c["slug"] in exclude}
@@ -98,30 +108,49 @@ def newest_pieces(count: int, exclude: set):
     posts, pages = get_json("fine-art?" + fields + "1")
     for pg in range(2, pages + 1):
         posts += get_json("fine-art?" + fields + str(pg))[0]
-    keep = [p for p in posts if p.get("featured_media") and not skip & set(p.get("fine-art-category", []))]
+    keep = [p for p in posts if p.get("featured_media") and not skip & set(p.get("fine-art-category", []))
+            and key(nice_title(p["title"]["rendered"])[0]) not in skip_titles]
     top = sorted(keep, key=newest_key, reverse=True)[:count]
     media, _ = get_json("media?_fields=id,source_url,media_details&per_page=100&include="
                         + ",".join(str(p["featured_media"]) for p in top))
     by_id = {m["id"]: m for m in media}
-    return [(p, by_id.get(p["featured_media"]), names.get((p.get("fine-art-category") or [None])[0])) for p in top]
+    out = [from_site(p, by_id.get(p["featured_media"]), names.get((p.get("fine-art-category") or [None])[0])) for p in top]
+    return [w for w in out if w]
+
+
+PICKS_RE = re.compile(r'<script type="application/json" id="gallery-picks">(.*?)</script>', re.S)
 
 
 def fill_newest(html: str) -> str:
+    pm = PICKS_RE.search(html)
+    picks = json.loads(pm.group(1)) if pm else {}
+
     def repl(m):
         exclude = {x.strip() for x in (m.group(3) or "").split(",") if x.strip()}
-        pieces = newest_pieces(int(m.group(2)), exclude)
-        print("newest:  " + ", ".join(nice_title(p["title"]["rendered"])[0] for p, _, _ in pieces))
-        return m.group(1) + "\n" + "".join(work_html(*x) for x in pieces) + m.group(4)
+        count = int(m.group(2))
+        live = newest_pieces(count, exclude, {key(t) for t in picks.get("skip", [])})
+        live_keys = {key(w["title"]) for w in live}
+        pinned = [w for w in picks.get("pinned", []) if key(w["title"]) not in live_keys]
+        works = (pinned + live)[:count]
+        print("gallery: " + ", ".join(w["title"] + (" (pinned)" if w in pinned else "") for w in works))
+        return m.group(1) + "\n" + "".join(work_html(w) for w in works) + m.group(4)
     return NEWEST_RE.sub(repl, html)
 
 
 def inline_assets(html: str) -> str:
-    """Embed local assets referenced from CSS (e.g. the pebble texture) as data: URIs."""
+    """Embed local assets as data: URIs: CSS backgrounds (the pebble texture) and
+    new artwork in assets/art-new/ that isn't on the site yet."""
     def repl(m):
         f = ROOT / "assets" / m.group(1)
         mime = {"webp": "image/webp", "png": "image/png", "jpg": "image/jpeg", "svg": "image/svg+xml"}[f.suffix[1:]]
         return f'url("data:{mime};base64,{base64.b64encode(f.read_bytes()).decode()}")'
-    return ASSET_URL_RE.sub(repl, html)
+    html = ASSET_URL_RE.sub(repl, html)
+
+    def repl_art(m):
+        f = ROOT / "assets" / m.group(1)
+        mime = {"jpg": "image/jpeg", "jpeg": "image/jpeg", "png": "image/png", "webp": "image/webp"}[f.suffix[1:].lower()]
+        return f"data:{mime};base64,{base64.b64encode(f.read_bytes()).decode()}"
+    return ART_URL_RE.sub(repl_art, html)
 
 
 def inline_css(html: str) -> str:

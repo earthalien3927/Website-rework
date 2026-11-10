@@ -381,6 +381,18 @@
         <!-- The newest paintings. The build fills this block with a snapshot from the
              site's artwork list (newest first, skipping the categories in data-exclude). On the live site the script below
              refreshes it on every visit, so new uploads appear here by themselves. -->
+        <!-- Pinned pieces show first (e.g. new work not on the site yet); "skip"
+             leaves pieces out. Everything else fills in from the site, newest first.
+             When a pinned piece is added to the site, the site's copy is used. -->
+        <script type="application/json" id="gallery-picks">
+{
+  "pinned": [
+    { "title": "Community Property", "num": "144", "meta": "New for 2026",
+      "img": "../assets/art-new/community-property-sz144.jpg", "width": 1208, "height": 1600 }
+  ],
+  "skip": ["Pre Flight"]
+}
+        </script>
         <div class="works" id="gallery" data-count="6" data-exclude="sculpture,uncategorized">
 <!-- newest:start -->
 <!-- newest:end -->
@@ -509,23 +521,32 @@
     return a.date < b.date ? 1 : a.date > b.date ? -1 : 0;
   }
   function getJSON(url) { return fetch(url).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json().then(function (d) { return { data: d, pages: +r.headers.get('X-WP-TotalPages') || 1 }; }); }); }
-  function workHTML(post, media, catName) {
-    if (!media || !media.source_url) return '';
+  // One framed piece + placard, from {title, num, meta, img, width, height, full}.
+  function workHTML(w) {
+    var orient = (+w.height > +w.width) ? 'portrait' : 'landscape';
+    var meta = [w.num ? 'No. ' + w.num : '', w.meta || ''].filter(Boolean).join(' · ') || 'by Scotty';
+    return '<article class="work work--' + orient + '">' +
+      '<button class="frame" type="button" data-full="' + esc(w.full || w.img) + '" aria-label="View ' + esc(w.title) + ' full size">' +
+      '<span class="frame__mat"><img src="' + esc(w.img) + '" alt="' + esc(w.title) + '" width="' + (w.width || '') + '" height="' + (w.height || '') + '" loading="lazy"></span></button>' +
+      '<div class="placard"><p class="label label--gold">' + esc(meta) + '</p><h3>' + esc(w.title) + '</h3>' +
+      '<div class="placard__links"><button type="button" class="link-view">View full size</button>' +
+      '<a href="#quote" class="link-quote" data-title="' + esc(w.title) + '">Request a quote →</a></div></div></article>';
+  }
+  function fromSite(post, media, catName) {
+    if (!media || !media.source_url) return null;
     var d = media.media_details || {}, sizes = d.sizes || {};
     var img = sizes['1536x1536'] || sizes.large || { source_url: media.source_url, width: d.width, height: d.height };
     var n = niceTitle(post.title.rendered);
-    var orient = (+img.height > +img.width) ? 'portrait' : 'landscape';
-    var meta = [n.num ? 'No. ' + n.num : '', catName || ''].filter(Boolean).join(' · ') || 'by Scotty';
-    return '<article class="work work--' + orient + '">' +
-      '<button class="frame" type="button" data-full="' + esc(media.source_url) + '" aria-label="View ' + esc(n.title) + ' full size">' +
-      '<span class="frame__mat"><img src="' + esc(img.source_url) + '" alt="' + esc(n.title) + '" width="' + (img.width || '') + '" height="' + (img.height || '') + '" loading="lazy"></span></button>' +
-      '<div class="placard"><p class="label label--gold">' + esc(meta) + '</p><h3>' + esc(n.title) + '</h3>' +
-      '<div class="placard__links"><button type="button" class="link-view">View full size</button>' +
-      '<a href="#quote" class="link-quote" data-title="' + esc(n.title) + '">Request a quote →</a></div></div></article>';
+    return { title: n.title, num: n.num, meta: catName, img: img.source_url, width: img.width, height: img.height, full: media.source_url };
   }
+  var picks = { pinned: [], skip: [] };
+  try { var pj = document.getElementById('gallery-picks'); if (pj) picks = JSON.parse(pj.textContent); } catch (e) {}
+  function key(t) { return String(t).toLowerCase().replace(/[^a-z0-9]/g, ''); }
   if (gallery && /(^|\.)fineartbyscotty\.com$/.test(location.hostname) && window.fetch && window.Promise) {
     var count = +gallery.getAttribute('data-count') || 6;
     var skip = (gallery.getAttribute('data-exclude') || '').split(',');
+    var skipTitles = {};
+    (picks.skip || []).forEach(function (t) { skipTitles[key(t)] = 1; });
     Promise.all([getJSON(CATS), getJSON(LIST + 1)]).then(function (res) {
       var cats = {}, skipIds = {};
       res[0].data.forEach(function (c) { cats[c.id] = decode(c.name); if (skip.indexOf(c.slug) > -1) skipIds[c.id] = 1; });
@@ -535,11 +556,14 @@
         var posts = rest.reduce(function (all, r) { return all.concat(r.data); }, first.data);
         var top = posts.filter(function (p) {
           var c = p['fine-art-category'] || [];
-          return p.featured_media && !c.some(function (id) { return skipIds[id]; });
+          return p.featured_media && !c.some(function (id) { return skipIds[id]; }) && !skipTitles[key(niceTitle(p.title.rendered).title)];
         }).sort(newestFirst).slice(0, count);
         return getJSON(MEDIA + top.map(function (p) { return p.featured_media; }).join(',')).then(function (m) {
           var byId = {}; m.data.forEach(function (x) { byId[x.id] = x; });
-          var html = top.map(function (p) { return workHTML(p, byId[p.featured_media], cats[(p['fine-art-category'] || [])[0]]); }).join('');
+          var live = top.map(function (p) { return fromSite(p, byId[p.featured_media], cats[(p['fine-art-category'] || [])[0]]); }).filter(Boolean);
+          var liveKeys = {}; live.forEach(function (w) { liveKeys[key(w.title)] = 1; });
+          var pinned = (picks.pinned || []).filter(function (w) { return !liveKeys[key(w.title)]; });
+          var html = pinned.concat(live).slice(0, count).map(workHTML).join('');
           if (html) { gallery.innerHTML = html; trimAll(); }
         });
       });
