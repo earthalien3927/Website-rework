@@ -76,7 +76,7 @@ def work_html(w) -> str:
     meta = " · ".join(x for x in ("No. " + w["num"] if w.get("num") else "", w.get("meta") or "") if x) or "by Scotty"
     e = lambda v: htmllib.escape(str(v), quote=True)
     return (
-        f'          <article class="work work--{orient}{" work--large" if w.get("large") else ""}">'
+        f'          <article class="work work--{orient}{" work--large" if w.get("large") else ""}{" work--fill" if w.get("fill") else ""}">'
         f'<button class="frame" type="button" data-full="{e(w.get("full") or w["img"])}" aria-label="View {e(w["title"])} full size">'
         f'<span class="frame__mat"><img src="{e(w["img"])}" alt="{e(w["title"])}" width="{e(w.get("width", ""))}" height="{e(w.get("height", ""))}" loading="lazy"></span></button>'
         f'<div class="placard"><p class="label label--gold">{e(meta)}</p><h3>{e(w["title"])}</h3>'
@@ -138,8 +138,10 @@ def fill_newest(html: str) -> str:
             order.index(key(w["title"])) if key(w["title"]) in order else 1000)
         works = sorted(works, key=rank)           # stable: ties keep newest-first
         large = {key(t) for t in picks.get("large", [])}
+        fill = {key(t) for t in picks.get("fill", [])}
         for w in works:
-            w["large"] = key(w["title"]) in large
+            w["fill"] = key(w["title"]) in fill
+            w["large"] = key(w["title"]) in large or w["fill"]
         print("gallery: " + ", ".join(w["title"] + (" (pinned)" if w in pinned else "") for w in works))
         return m.group(1) + "\n" + "".join(work_html(w) for w in works) + m.group(4)
     return NEWEST_RE.sub(repl, html)

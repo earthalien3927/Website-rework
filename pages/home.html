@@ -143,6 +143,11 @@
 .fas .work--large:nth-child(even) { grid-template-columns: minmax(0, 15rem) minmax(0, 1fr); }
 .fas .work--large.work--landscape .frame { width: 100%; }
 .fas .work--large.work--portrait .frame { width: min(100%, 560px); }
+/* Fill: as large as the column allows while the whole framed piece still fits
+   on screen below the header */
+.fas .work--fill .frame, .fas .work--fill.work--portrait .frame { width: auto; max-width: 100%; justify-self: center; }
+.fas .work--fill .frame__mat img { width: auto; max-width: 100%; max-height: calc(100vh - 76px - 9rem); }
+.fas .work--fill .frame__mat .crop { width: auto; height: calc(100vh - 76px - 9rem); max-width: 100%; }
 .fas .work:nth-child(even).work--portrait .frame { justify-self: center; }
 
 /* Frame: brushed charcoal metal moulding with a fine horizontal grain and
@@ -388,7 +393,7 @@
              refreshes it on every visit, so new uploads appear here by themselves. -->
         <!-- Pinned pieces show first (e.g. new work not on the site yet); "skip"
              leaves pieces out; "order" puts pieces first in that order; "last" moves
-             pieces to the bottom; "large" shows a piece bigger. Everything else
+             pieces to the bottom; "large" shows a piece bigger; "fill" makes it as big as the screen allows. Everything else
              fills in from the site, newest first, up to data-count pieces.
              When a pinned piece is added to the site, the site's copy is used. -->
         <script type="application/json" id="gallery-picks">
@@ -400,7 +405,8 @@
   "skip": ["Pre Flight", "Trouble", "Power Ball"],
   "order": ["Community Property", "Spoiled Kitten"],
   "last": ["Soul Keeper"],
-  "large": ["Spoiled Kitten"]
+  "large": ["Spoiled Kitten"],
+  "fill": ["Community Property"]
 }
         </script>
         <div class="works" id="gallery" data-count="4" data-exclude="sculpture,uncategorized">
@@ -535,7 +541,8 @@
   function workHTML(w) {
     var orient = (+w.height > +w.width) ? 'portrait' : 'landscape';
     var meta = [w.num ? 'No. ' + w.num : '', w.meta || ''].filter(Boolean).join(' · ') || 'by Scotty';
-    var big = (picks.large || []).map(key).indexOf(key(w.title)) > -1 ? ' work--large' : '';
+    var big = ((picks.fill || []).map(key).indexOf(key(w.title)) > -1 ? ' work--large work--fill' : '') ||
+      ((picks.large || []).map(key).indexOf(key(w.title)) > -1 ? ' work--large' : '');
     return '<article class="work work--' + orient + big + '">' +
       '<button class="frame" type="button" data-full="' + esc(w.full || w.img) + '" aria-label="View ' + esc(w.title) + ' full size">' +
       '<span class="frame__mat"><img src="' + esc(w.img) + '" alt="' + esc(w.title) + '" width="' + (w.width || '') + '" height="' + (w.height || '') + '" loading="lazy"></span></button>' +
