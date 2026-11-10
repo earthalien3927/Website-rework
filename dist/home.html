@@ -323,21 +323,30 @@ body::before {
 .fas .work--portrait .frame { width: min(100%, 440px); justify-self: center; }
 .fas .work:nth-child(even).work--portrait .frame { justify-self: center; }
 
-/* Frame: black moulding with a bevelled edge, a black mat, and a long shadow */
+/* Frame: brushed charcoal metal moulding with a fine horizontal grain and
+   a darker inner lip, then a black mat, and a long shadow */
 .fas .frame {
-  display: block; padding: clamp(10px, .5rem + .8vw, 20px); border: 0; cursor: zoom-in;
-  background: linear-gradient(135deg, #3a393c 0%, #141315 14%, #08080a 48%, #121113 84%, #2c2b2e 100%);
+  display: block; position: relative; padding: clamp(12px, .6rem + .9vw, 22px); border: 0; cursor: zoom-in;
+  background:
+    repeating-linear-gradient(0deg, rgba(255,255,255,.035) 0 1px, transparent 1px 2px, rgba(0,0,0,.06) 2px 3px, transparent 3px 5px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.025) 0 1px, transparent 1px 3px),
+    linear-gradient(135deg, #8a8d91 0%, #4a4c50 14%, #2b2d30 32%, #5e6165 50%, #313337 68%, #24262a 84%, #74777b 100%);
   box-shadow:
-    inset 0 0 0 1px rgba(255,255,255,.08),
-    inset 1px 1px 0 2px rgba(255,255,255,.05),
-    inset 0 0 0 5px #0a090b,
+    inset 0 0 0 1px rgba(255,255,255,.22),
+    inset 1px 1px 0 1px rgba(255,255,255,.12),
+    inset -1px -1px 0 1px rgba(0,0,0,.35),
     0 60px 90px -35px rgba(0,0,0,1),
     0 30px 45px -15px rgba(0,0,0,.9),
     0 0 0 1px rgba(0,0,0,.8);
   transition: transform .5s cubic-bezier(.2,.7,.2,1), box-shadow .5s;
 }
+.fas .frame::after {                     /* inner lip where the moulding meets the mat */
+  content: ""; position: absolute; pointer-events: none;
+  inset: calc(clamp(12px, .6rem + .9vw, 22px) - 3px);
+  border: 3px solid; border-color: #1c1d20 #6b6e72 #8c8f93 #2a2c2f;
+}
 .fas .frame:hover { transform: translateY(-6px); box-shadow:
-    inset 0 0 0 1px rgba(255,255,255,.1), inset 1px 1px 0 2px rgba(255,255,255,.06), inset 0 0 0 5px #0a090b,
+    inset 0 0 0 1px rgba(255,255,255,.26), inset 1px 1px 0 1px rgba(255,255,255,.14), inset -1px -1px 0 1px rgba(0,0,0,.35),
     0 80px 110px -35px rgba(0,0,0,1), 0 40px 60px -15px rgba(0,0,0,.9), 0 0 0 1px rgba(0,0,0,.8); }
 .fas .frame__mat {
   display: block; padding: clamp(12px, .5rem + 1.8vw, 36px); background: #0b0a0b;
