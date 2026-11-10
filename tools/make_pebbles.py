@@ -18,6 +18,8 @@ OUT = ROOT / "assets" / "onyx-pebbles.webp"
 SIZE = 720            # tile size in px
 STONE = (26, 50)      # stone radius range in px (about 1-inch stones on screen)
 SEED = 7
+BODY = 0.75            # stone brightness (1 = original; 0.75 = 25% darker)
+HIGHLIGHT = 0.90       # shine/sheen brightness (0.90 = 10% dimmer)
 
 rng = np.random.default_rng(SEED)
 H = np.zeros((SIZE, SIZE), np.float32)       # height map
@@ -88,7 +90,7 @@ base = np.where(ID >= 0, tone[np.clip(ID, 0, None)], 0.0)
 grain = rng.normal(0, 1, (SIZE, SIZE)).astype(np.float32)
 grain = np.asarray(Image.fromarray(((grain * 18) + 128).clip(0, 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(1.2)), np.float32) / 255 - 0.5
 
-lum = (0.035 + 0.07 * diff * base + grain * 0.02) * ao + (spec + sheen) * (ID >= 0) * (0.6 + 0.4 * ao)
+lum = BODY * (0.035 + 0.07 * diff * base + grain * 0.02) * ao + HIGHLIGHT * (spec + sheen) * (ID >= 0) * (0.6 + 0.4 * ao)
 lum = np.clip(lum, 0, 1)
 
 # Onyx is black with the faintest cool-warm shift; the highlight stays neutral.
