@@ -194,16 +194,21 @@ body::before {
   position: relative; isolation: isolate; overflow: hidden;
   min-height: clamp(560px, 82vh, 860px); display: flex; align-items: flex-end;
 }
+/* Spoiled Kitten, blurred. The source file has black bars on both sides
+   (the painting is the middle ~78%), so the image box is widened past the
+   hero edges to push the bars out of view. */
+.fas .hero__bg { position: absolute; inset: 0; z-index: -2; overflow: hidden; }
 .fas .hero__img {
-  position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%;
-  object-fit: cover; object-position: 42% 50%;
+  position: absolute; top: 0; left: -15%; width: 130%; height: 100%; max-width: none;
+  object-fit: cover; object-position: 50% 45%;
+  filter: blur(7px) brightness(.78) saturate(1.1);
   animation: fas-settle 3.2s cubic-bezier(.2,.7,.2,1) both;
 }
 .fas .hero::after {
   content: ""; position: absolute; inset: 0; z-index: -1;
   background:
-    radial-gradient(120% 90% at 85% 10%, transparent 0 40%, rgba(13,10,11,.55) 75%),
-    linear-gradient(180deg, rgba(13,10,11,.15) 0%, rgba(13,10,11,0) 35%, rgba(13,10,11,.92) 100%);
+    linear-gradient(90deg, rgba(13,10,11,.72) 0%, rgba(13,10,11,.2) 55%, rgba(13,10,11,0) 100%),
+    linear-gradient(180deg, rgba(13,10,11,.35) 0%, rgba(13,10,11,0) 30%, rgba(13,10,11,.95) 100%);
 }
 .fas .hero .wrap { width: 100%; padding-block: 0 clamp(3rem, 2rem + 4vw, 5.5rem); }
 .fas .hero__copy { display: grid; gap: 1.6rem; max-width: 46rem; animation: fas-rise 1.6s .2s cubic-bezier(.2,.7,.2,1) both; }
@@ -223,7 +228,7 @@ body::before {
   font-family: var(--f-display); font-weight: 400; font-size: var(--step-2); line-height: 1;
   font-variant-numeric: lining-nums tabular-nums;
 }
-@keyframes fas-settle { from { transform: scale(1.09); } to { transform: scale(1); } }
+@keyframes fas-settle { from { transform: scale(1.14); } to { transform: scale(1.04); } }
 @keyframes fas-rise { from { transform: translateY(28px); } to { transform: none; } }
 
 /* Statement */
@@ -346,7 +351,6 @@ body::before {
   .fas .statement .wrap, .fas .toybox .wrap, .fas .quote .wrap { grid-template-columns: minmax(0, 1fr); }
   .fas .toybox__img::after { background: linear-gradient(0deg, var(--ink), transparent 45%); }
   .fas .hero { min-height: 640px; }
-  .fas .hero__img { object-position: 46% 50%; }
 }
 @media (max-width: 520px) {
   .fas .hero__facts { grid-template-columns: minmax(0, 1fr); gap: 1rem; }
@@ -394,7 +398,7 @@ body::before {
   <main>
 
     <section class="hero" aria-labelledby="hero-title">
-      <img class="hero__img" src="https://www.fineartbyscotty.com/wp-content/uploads/2025/01/Group-1000001932.png" alt="" width="1920" height="691">
+      <div class="hero__bg"><img class="hero__img" src="https://www.fineartbyscotty.com/wp-content/uploads/2026/01/6973eac242517-51-1024x576.png" alt="" width="1024" height="576"></div>
       <div class="wrap">
         <div class="hero__copy">
           <p class="label label--gold">Fine Art by Scotty · Tastefully Edgy</p>
