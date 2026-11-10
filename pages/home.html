@@ -73,31 +73,91 @@
 .fas .subjects li { font-family: var(--f-display); font-style: italic; font-size: 1.15rem; color: var(--smoke); }
 .fas .subjects li:not(:last-child)::after { content: "·"; margin-inline: .6rem; color: var(--gold); font-style: normal; }
 
-/* Collection */
-.fas .collection { background: linear-gradient(180deg, var(--ink), var(--panel) 30%, var(--ink)); }
+/* Collection: framed works floating over polished black onyx pebbles.
+   The stones come from tools/make_pebbles.py; two slow light layers on top
+   read as water moving across wet stone. */
+.fas .collection { position: relative; isolation: isolate; overflow: hidden; background: #050505; }
+.fas .collection::before, .fas .collection::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+}
+.fas .collection::before {
+  background:
+    linear-gradient(180deg, var(--ink) 0, rgba(13,10,11,.55) 280px, rgba(13,10,11,.15) 520px, rgba(13,10,11,.15) calc(100% - 320px), var(--ink) 100%),
+    url("../assets/onyx-pebbles.webp") 0 0 / 520px 520px repeat;
+}
+.fas .collection::after {
+  background:
+    radial-gradient(38% 22% at 30% 40%, rgba(220,225,235,.10), transparent 70%),
+    radial-gradient(30% 18% at 70% 65%, rgba(220,225,235,.08), transparent 70%),
+    repeating-linear-gradient(115deg, transparent 0 46px, rgba(255,255,255,.022) 46px 50px, transparent 50px 120px);
+  background-size: 140% 140%, 140% 140%, 200% 200%;
+  mix-blend-mode: screen;
+  animation: fas-water 26s ease-in-out infinite alternate;
+}
+@keyframes fas-water {
+  0%   { background-position: 0% 0%, 100% 0%, 0% 0%; }
+  50%  { background-position: 40% 60%, 60% 40%, 50% 100%; }
+  100% { background-position: 100% 100%, 0% 100%, 100% 0%; }
+}
 .fas .collection__head {
   display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end;
-  gap: 1.5rem 3rem; margin-bottom: clamp(2.5rem, 2rem + 2vw, 4rem);
+  gap: 1.5rem 3rem; margin-bottom: clamp(3rem, 2rem + 4vw, 6rem);
 }
 .fas .collection__head > div { display: grid; gap: 1.25rem; min-width: 0; }
-.fas .grid { columns: 3 280px; column-gap: clamp(1rem, .5rem + 1.5vw, 2rem); }
-.fas .piece {
-  break-inside: avoid; margin: 0 0 clamp(1rem, .5rem + 1.5vw, 2rem);
-  display: block; width: 100%; padding: 0; border: 0; background: none; color: inherit;
-  text-align: left; cursor: zoom-in;
+.fas .works { display: grid; gap: clamp(4.5rem, 3rem + 7vw, 10rem); }
+.fas .work {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 18rem);
+  gap: clamp(1.5rem, 1rem + 3vw, 4.5rem); align-items: end;
 }
-.fas .piece__frame { position: relative; overflow: hidden; background: #000; }
-.fas .piece img { width: 100%; transition: transform .8s cubic-bezier(.2,.7,.2,1), opacity .4s; }
-.fas .piece:hover img { transform: scale(1.035); }
-.fas .piece__frame::after {
-  content: ""; position: absolute; inset: 0; border: 1px solid rgba(201,168,106,0);
-  transition: border-color .4s;
+.fas .work:nth-child(even) { grid-template-columns: minmax(0, 18rem) minmax(0, 1fr); }
+.fas .work:nth-child(even) .frame { order: 2; justify-self: end; }
+.fas .work:nth-child(even) .placard { order: 1; }
+.fas .work--landscape .frame { width: min(100%, 860px); }
+.fas .work--portrait .frame { width: min(100%, 440px); justify-self: center; }
+.fas .work:nth-child(even).work--portrait .frame { justify-self: center; }
+
+/* Frame: black moulding with a bevelled edge, a black mat, and a long shadow */
+.fas .frame {
+  display: block; padding: clamp(10px, .5rem + .8vw, 20px); border: 0; cursor: zoom-in;
+  background: linear-gradient(135deg, #3a393c 0%, #141315 14%, #08080a 48%, #121113 84%, #2c2b2e 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.08),
+    inset 1px 1px 0 2px rgba(255,255,255,.05),
+    inset 0 0 0 5px #0a090b,
+    0 60px 90px -35px rgba(0,0,0,1),
+    0 30px 45px -15px rgba(0,0,0,.9),
+    0 0 0 1px rgba(0,0,0,.8);
+  transition: transform .5s cubic-bezier(.2,.7,.2,1), box-shadow .5s;
 }
-.fas .piece:hover .piece__frame::after, .fas .piece:focus-visible .piece__frame::after { border-color: rgba(201,168,106,.7); }
-.fas .piece__cap { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding-top: .8rem; }
-.fas .piece__cap .label { color: var(--bone); }
-.fas .piece__cap span:last-child { font-family: var(--f-display); font-style: italic; color: var(--smoke); font-size: .95rem; }
-.fas .collection__foot { display: flex; justify-content: center; margin-top: clamp(2rem, 1.5rem + 2vw, 3.5rem); }
+.fas .frame:hover { transform: translateY(-6px); box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.1), inset 1px 1px 0 2px rgba(255,255,255,.06), inset 0 0 0 5px #0a090b,
+    0 80px 110px -35px rgba(0,0,0,1), 0 40px 60px -15px rgba(0,0,0,.9), 0 0 0 1px rgba(0,0,0,.8); }
+.fas .frame__mat {
+  display: block; padding: clamp(12px, .5rem + 1.8vw, 36px); background: #0b0a0b;
+  box-shadow: inset 0 3px 8px rgba(0,0,0,.95), inset 0 -1px 0 rgba(255,255,255,.04);
+}
+.fas .frame__mat img { width: 100%; }
+.fas .frame__mat img, .fas .frame__mat .crop { box-shadow: 0 0 0 1px rgba(255,255,255,.07), 0 0 0 5px #070607, 0 0 0 6px rgba(255,255,255,.035); }
+.fas .frame__mat .crop img { box-shadow: none; position: absolute; max-width: none; height: auto; }
+/* Black bars baked into an image file are trimmed by script; this box shows only the painting */
+.fas .crop { display: block; position: relative; overflow: hidden; }
+
+/* Placard: a museum label beside each piece */
+.fas .placard {
+  display: grid; gap: .9rem; min-width: 0; padding: 1.5rem 1.6rem;
+  background: rgba(13,10,11,.88); border: 1px solid var(--line);
+  box-shadow: 0 20px 40px -20px rgba(0,0,0,.9);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+}
+.fas .placard h3 { font-size: var(--step-2); }
+.fas .placard__links { display: flex; flex-wrap: wrap; gap: .5rem 1.25rem; padding-top: .9rem; border-top: 1px solid var(--line); }
+.fas .placard__links a, .fas .placard__links button {
+  font-family: var(--f-label); font-weight: 700; font-size: .625rem; letter-spacing: .2em; text-transform: uppercase;
+  background: none; border: 0; padding: .35rem 0; color: var(--smoke); cursor: pointer; text-decoration: none;
+}
+.fas .placard__links a { color: var(--gold); }
+.fas .placard__links a:hover, .fas .placard__links button:hover { color: var(--bone); }
+.fas .collection__foot { display: flex; justify-content: center; margin-top: clamp(4rem, 3rem + 4vw, 7rem); }
 
 /* Toy Box */
 .fas .toybox { position: relative; isolation: isolate; overflow: hidden; border-block: 1px solid var(--line); }
@@ -174,6 +234,10 @@
 @media (max-width: 860px) {
   .fas .statement .wrap, .fas .toybox .wrap, .fas .quote .wrap { grid-template-columns: minmax(0, 1fr); }
   .fas .toybox__img::after { background: linear-gradient(0deg, var(--ink), transparent 45%); }
+  .fas .work, .fas .work:nth-child(even) { grid-template-columns: minmax(0, 1fr); gap: 1.75rem; }
+  .fas .work:nth-child(even) .frame, .fas .work:nth-child(even) .placard { order: 0; }
+  .fas .work .frame { justify-self: center; }
+  .fas .placard { justify-self: center; width: min(100%, 30rem); }
   .fas .hero { min-height: 640px; }
   .fas .hero__img--soft {
     -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 70%, transparent 100%);
@@ -187,9 +251,6 @@
   .fas .hero__facts { grid-template-columns: minmax(0, 1fr); gap: 1rem; }
   .fas .hero__facts div { grid-template-columns: 6.5rem minmax(0, 1fr); align-items: baseline; }
   .fas .quote-form { grid-template-columns: minmax(0, 1fr); }
-  .fas .grid { columns: 2 140px; }
-  .fas .piece__cap { flex-direction: column; gap: .2rem; }
-  .fas .piece__cap .label { font-size: .5625rem; }
 }
 </style>
 
@@ -281,13 +342,13 @@
             <p class="label label--gold">The Collection</p>
             <h2 id="collection-title">Explore the <em>collection.</em></h2>
           </div>
-          <p class="lede">The newest work from the studio, first. Select any piece to see it in full.</p>
+          <p class="lede">The newest work from the studio, first.</p>
         </div>
 
-        <!-- The newest pieces. The build fills this block with a snapshot from the
-             site's artwork list (newest first). On the live site the script below
+        <!-- The newest paintings. The build fills this block with a snapshot from the
+             site's artwork list (newest first, skipping the categories in data-exclude). On the live site the script below
              refreshes it on every visit, so new uploads appear here by themselves. -->
-        <div class="grid" id="gallery" data-count="15">
+        <div class="works" id="gallery" data-count="6" data-exclude="sculpture,uncategorized">
 <!-- newest:start -->
 <!-- newest:end -->
         </div>
@@ -397,8 +458,9 @@
   // Newest pieces: refresh from the site's artwork list when running on the
   // live site. Elsewhere (and if the request fails) the built-in snapshot stays.
   var gallery = document.getElementById('gallery');
-  var LIST = '/wp-json/wp/v2/fine-art?per_page=100&_fields=id,date,title,link,featured_media&page=';
+  var LIST = '/wp-json/wp/v2/fine-art?per_page=100&_fields=id,date,title,link,featured_media,fine-art-category&page=';
   var MEDIA = '/wp-json/wp/v2/media?_fields=id,source_url,media_details&per_page=100&include=';
+  var CATS = '/wp-json/wp/v2/fine-art-category?per_page=100&_fields=id,name,slug';
   function esc(t) { return String(t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function decode(t) { var el = document.createElement('textarea'); el.innerHTML = t; return el.value; }
   function niceTitle(raw) {
@@ -414,50 +476,96 @@
     return a.date < b.date ? 1 : a.date > b.date ? -1 : 0;
   }
   function getJSON(url) { return fetch(url).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json().then(function (d) { return { data: d, pages: +r.headers.get('X-WP-TotalPages') || 1 }; }); }); }
-  function pieceHTML(post, media) {
+  function workHTML(post, media, catName) {
     if (!media || !media.source_url) return '';
     var d = media.media_details || {}, sizes = d.sizes || {};
-    var thumb = sizes.medium_large || sizes.large || { source_url: media.source_url, width: d.width, height: d.height };
+    var img = sizes['1536x1536'] || sizes.large || { source_url: media.source_url, width: d.width, height: d.height };
     var n = niceTitle(post.title.rendered);
-    return '<button class="piece" type="button" data-full="' + esc(media.source_url) + '" data-link="' + esc(post.link) + '">' +
-      '<span class="piece__frame"><img src="' + esc(thumb.source_url) + '" alt="' + esc(n.title) + '" width="' + (thumb.width || '') + '" height="' + (thumb.height || '') + '" loading="lazy"></span>' +
-      '<span class="piece__cap"><span class="label">' + esc(n.title) + '</span><span>' + (n.num ? 'No. ' + esc(n.num) : 'by Scotty') + '</span></span></button>';
+    var orient = (+img.height > +img.width) ? 'portrait' : 'landscape';
+    var meta = [n.num ? 'No. ' + n.num : '', catName || ''].filter(Boolean).join(' · ') || 'by Scotty';
+    return '<article class="work work--' + orient + '">' +
+      '<button class="frame" type="button" data-full="' + esc(media.source_url) + '" aria-label="View ' + esc(n.title) + ' full size">' +
+      '<span class="frame__mat"><img src="' + esc(img.source_url) + '" alt="' + esc(n.title) + '" width="' + (img.width || '') + '" height="' + (img.height || '') + '" loading="lazy"></span></button>' +
+      '<div class="placard"><p class="label label--gold">' + esc(meta) + '</p><h3>' + esc(n.title) + '</h3>' +
+      '<div class="placard__links"><button type="button" class="link-view">View full size</button>' +
+      '<a href="#quote" class="link-quote" data-title="' + esc(n.title) + '">Request a quote →</a></div></div></article>';
   }
   if (gallery && /(^|\.)fineartbyscotty\.com$/.test(location.hostname) && window.fetch && window.Promise) {
-    var count = +gallery.getAttribute('data-count') || 15;
-    getJSON(LIST + 1).then(function (first) {
-      var more = [];
+    var count = +gallery.getAttribute('data-count') || 6;
+    var skip = (gallery.getAttribute('data-exclude') || '').split(',');
+    Promise.all([getJSON(CATS), getJSON(LIST + 1)]).then(function (res) {
+      var cats = {}, skipIds = {};
+      res[0].data.forEach(function (c) { cats[c.id] = decode(c.name); if (skip.indexOf(c.slug) > -1) skipIds[c.id] = 1; });
+      var first = res[1], more = [];
       for (var pg = 2; pg <= first.pages; pg++) more.push(getJSON(LIST + pg));
       return Promise.all(more).then(function (rest) {
-        return rest.reduce(function (all, r) { return all.concat(r.data); }, first.data);
-      });
-    }).then(function (posts) {
-      var top = posts.filter(function (p) { return p.featured_media; }).sort(newestFirst).slice(0, count);
-      return getJSON(MEDIA + top.map(function (p) { return p.featured_media; }).join(',')).then(function (m) {
-        var byId = {}; m.data.forEach(function (x) { byId[x.id] = x; });
-        var html = top.map(function (p) { return pieceHTML(p, byId[p.featured_media]); }).join('');
-        if (html) gallery.innerHTML = html;
+        var posts = rest.reduce(function (all, r) { return all.concat(r.data); }, first.data);
+        var top = posts.filter(function (p) {
+          var c = p['fine-art-category'] || [];
+          return p.featured_media && !c.some(function (id) { return skipIds[id]; });
+        }).sort(newestFirst).slice(0, count);
+        return getJSON(MEDIA + top.map(function (p) { return p.featured_media; }).join(',')).then(function (m) {
+          var byId = {}; m.data.forEach(function (x) { byId[x.id] = x; });
+          var html = top.map(function (p) { return workHTML(p, byId[p.featured_media], cats[(p['fine-art-category'] || [])[0]]); }).join('');
+          if (html) { gallery.innerHTML = html; trimAll(); }
+        });
       });
     }).catch(function () { /* keep the snapshot */ });
   }
+
+  // Trim black bars that are baked into some image files, so each painting
+  // sits evenly in its mat. Reads the pixels once the image loads.
+  function trimBars(img) {
+    if (img.closest('.crop')) return;
+    if (!img.complete || !img.naturalWidth) { img.addEventListener('load', function () { trimBars(img); }, { once: true }); return; }
+    var W = 240, H = Math.round(W * img.naturalHeight / img.naturalWidth), c = document.createElement('canvas');
+    c.width = W; c.height = H;
+    var ctx = c.getContext('2d'), px;
+    try { ctx.drawImage(img, 0, 0, W, H); px = ctx.getImageData(0, 0, W, H).data; } catch (e) { return; }
+    function dark(x0, y0, x1, y1) {           // is this strip near-uniform black?
+      var sum = 0, n = 0, max = 0;
+      for (var y = y0; y < y1; y++) for (var x = x0; x < x1; x++) {
+        var i = (y * W + x) * 4, l = (px[i] * 3 + px[i + 1] * 6 + px[i + 2]) / 10;
+        sum += l; n++; if (l > max) max = l;
+      }
+      return sum / n < 14 && max < 40;
+    }
+    var t = 0, b = H, l = 0, r = W;
+    while (t < H * .3 && dark(0, t, W, t + 1)) t++;
+    while (b > H * .7 && dark(0, b - 1, W, b)) b--;
+    while (l < W * .3 && dark(l, t, l + 1, b)) l++;
+    while (r > W * .7 && dark(r - 1, t, r, b)) r--;
+    if (t + (H - b) < H * .02 && l + (W - r) < W * .02) return;   // nothing worth trimming
+    var cw = (r - l) / W, ch = (b - t) / H, box = document.createElement('span');
+    box.className = 'crop';
+    box.style.aspectRatio = (cw * img.naturalWidth) + ' / ' + (ch * img.naturalHeight);
+    img.parentNode.insertBefore(box, img); box.appendChild(img);
+    img.style.width = (100 / cw) + '%';
+    img.style.left = (-l / W / cw * 100) + '%';
+    img.style.top = (-t / H / ch * 100) + '%';
+  }
+  function trimAll() { Array.prototype.forEach.call(gallery.querySelectorAll('.frame__mat img'), trimBars); }
+  if (gallery) trimAll();
 
   // Lightbox (works for pieces added after page load)
   var dlg = document.getElementById('lightbox');
   var img = document.getElementById('lb-img');
   var title = document.getElementById('lb-title');
   var idx = 0;
-  function pieces() { return Array.prototype.slice.call(gallery.querySelectorAll('.piece')); }
+  function pieces() { return Array.prototype.slice.call(gallery.querySelectorAll('.work')); }
   function show(i) {
     var list = pieces(); if (!list.length) return;
     idx = (i + list.length) % list.length;
-    var p = list[idx], thumb = p.querySelector('img');
+    var p = list[idx].querySelector('.frame'), thumb = p.querySelector('img');
     img.src = p.getAttribute('data-full') || thumb.src;
     img.alt = thumb.alt + ' by Scotty';
     title.textContent = thumb.alt;
   }
   gallery.addEventListener('click', function (e) {
-    var p = e.target.closest('.piece'); if (!p) return;
-    show(pieces().indexOf(p));
+    var q = e.target.closest('.link-quote');
+    if (q) { var f = document.getElementById('q-art'); if (f) f.value = q.getAttribute('data-title'); return; }
+    if (!e.target.closest('.frame, .link-view')) return;
+    show(pieces().indexOf(e.target.closest('.work')));
     if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
   });
   function close() { if (dlg.close) dlg.close(); else dlg.removeAttribute('open'); }

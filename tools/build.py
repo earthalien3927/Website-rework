@@ -40,7 +40,8 @@ MAX_EDGE = 1600
 
 
 SITE = "https://www.fineartbyscotty.com/wp-json/wp/v2/"
-NEWEST_RE = re.compile(r'(data-count="(\d+)">\s*<!-- newest:start -->).*?(<!-- newest:end -->)', re.S)
+NEWEST_RE = re.compile(r'(data-count="(\d+)"(?: data-exclude="([^"]*)")?>\s*<!-- newest:start -->).*?(<!-- newest:end -->)', re.S)
+ASSET_URL_RE = re.compile(r'url\("\.\./assets/([^"]+)"\)')
 
 
 def get_json(path: str):
@@ -67,40 +68,60 @@ def newest_key(post):
     return (int(num) if num else 0, post["date"])
 
 
-def piece_html(post, media) -> str:
+def work_html(post, media, cat_name) -> str:
+    """One framed piece + placard. Mirrors workHTML() in the page."""
     if not media or not media.get("source_url"):
         return ""
     details = media.get("media_details", {})
     sizes = details.get("sizes", {})
-    thumb = sizes.get("medium_large") or sizes.get("large") or {
+    img = sizes.get("1536x1536") or sizes.get("large") or {
         "source_url": media["source_url"], "width": details.get("width", ""), "height": details.get("height", "")}
     title, num = nice_title(post["title"]["rendered"])
+    orient = "portrait" if int(img.get("height") or 0) > int(img.get("width") or 0) else "landscape"
+    meta = " · ".join(x for x in ("No. " + num if num else "", cat_name or "") if x) or "by Scotty"
     e = lambda v: htmllib.escape(str(v), quote=True)
     return (
-        f'          <button class="piece" type="button" data-full="{e(media["source_url"])}" data-link="{e(post["link"])}">'
-        f'<span class="piece__frame"><img src="{e(thumb["source_url"])}" alt="{e(title)}" width="{e(thumb.get("width", ""))}" height="{e(thumb.get("height", ""))}" loading="lazy"></span>'
-        f'<span class="piece__cap"><span class="label">{e(title)}</span><span>{"No. " + e(num) if num else "by Scotty"}</span></span></button>\n'
+        f'          <article class="work work--{orient}">'
+        f'<button class="frame" type="button" data-full="{e(media["source_url"])}" aria-label="View {e(title)} full size">'
+        f'<span class="frame__mat"><img src="{e(img["source_url"])}" alt="{e(title)}" width="{e(img.get("width", ""))}" height="{e(img.get("height", ""))}" loading="lazy"></span></button>'
+        f'<div class="placard"><p class="label label--gold">{e(meta)}</p><h3>{e(title)}</h3>'
+        f'<div class="placard__links"><button type="button" class="link-view">View full size</button>'
+        f'<a href="#quote" class="link-quote" data-title="{e(title)}">Request a quote →</a></div></div></article>\n'
     )
 
 
-def newest_pieces(count: int):
-    fields = "per_page=100&_fields=id,date,title,link,featured_media&page="
+def newest_pieces(count: int, exclude: set):
+    cats, _ = get_json("fine-art-category?per_page=100&_fields=id,name,slug")
+    names = {c["id"]: htmllib.unescape(c["name"]) for c in cats}
+    skip = {c["id"] for c in cats if c["slug"] in exclude}
+    fields = "per_page=100&_fields=id,date,title,link,featured_media,fine-art-category&page="
     posts, pages = get_json("fine-art?" + fields + "1")
     for pg in range(2, pages + 1):
         posts += get_json("fine-art?" + fields + str(pg))[0]
-    top = sorted((p for p in posts if p.get("featured_media")), key=newest_key, reverse=True)[:count]
+    keep = [p for p in posts if p.get("featured_media") and not skip & set(p.get("fine-art-category", []))]
+    top = sorted(keep, key=newest_key, reverse=True)[:count]
     media, _ = get_json("media?_fields=id,source_url,media_details&per_page=100&include="
                         + ",".join(str(p["featured_media"]) for p in top))
     by_id = {m["id"]: m for m in media}
-    return [(p, by_id.get(p["featured_media"])) for p in top]
+    return [(p, by_id.get(p["featured_media"]), names.get((p.get("fine-art-category") or [None])[0])) for p in top]
 
 
 def fill_newest(html: str) -> str:
     def repl(m):
-        pieces = newest_pieces(int(m.group(2)))
-        print("newest:  " + ", ".join(nice_title(p["title"]["rendered"])[0] for p, _ in pieces))
-        return m.group(1) + "\n" + "".join(piece_html(p, md) for p, md in pieces) + m.group(3)
+        exclude = {x.strip() for x in (m.group(3) or "").split(",") if x.strip()}
+        pieces = newest_pieces(int(m.group(2)), exclude)
+        print("newest:  " + ", ".join(nice_title(p["title"]["rendered"])[0] for p, _, _ in pieces))
+        return m.group(1) + "\n" + "".join(work_html(*x) for x in pieces) + m.group(4)
     return NEWEST_RE.sub(repl, html)
+
+
+def inline_assets(html: str) -> str:
+    """Embed local assets referenced from CSS (e.g. the pebble texture) as data: URIs."""
+    def repl(m):
+        f = ROOT / "assets" / m.group(1)
+        mime = {"webp": "image/webp", "png": "image/png", "jpg": "image/jpeg", "svg": "image/svg+xml"}[f.suffix[1:]]
+        return f'url("data:{mime};base64,{base64.b64encode(f.read_bytes()).decode()}")'
+    return ASSET_URL_RE.sub(repl, html)
 
 
 def inline_css(html: str) -> str:
@@ -162,7 +183,7 @@ def main(names):
     DIST.mkdir(exist_ok=True)
     pages = [PAGES / f"{n}.html" for n in names] if names else sorted(PAGES.glob("*.html"))
     for page in pages:
-        html = fill_newest(inline_css(page.read_text()))
+        html = inline_assets(fill_newest(inline_css(page.read_text())))
         (DIST / page.name).write_text(wordpress_version(html))
         print(f"dist:    dist/{page.name}")
         preview_version(page.stem, html)
