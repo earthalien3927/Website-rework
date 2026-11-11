@@ -243,15 +243,16 @@ body::before {
   display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
   gap: clamp(2.5rem, 1rem + 6vw, 7rem); align-items: center;
 }
-.fas .statement__art { position: relative; max-width: 460px; justify-self: center; width: 100%; }
+.fas .statement__art { position: relative; max-width: 540px; justify-self: center; width: 100%; }
+@media (min-width: 861px) { .fas .statement__art { left: clamp(1.25rem, 4.5vw, 4.5rem); } }
 .fas .statement__art { isolation: isolate; }
 .fas .statement { overflow-x: clip; }
 /* Dark emerald glow spilling out from behind the frame, bottom right */
 .fas .statement__art::before {
   content: ""; position: absolute; left: -32%; right: -22%; bottom: -26%; height: 85%; z-index: -1;
   background:
-    radial-gradient(ellipse 44% 60% at 66% 55%, rgba(22,140,88,.95), rgba(10,92,58,.7) 45%, rgba(6,60,38,.3) 75%, transparent),
-    radial-gradient(ellipse 55% 48% at 34% 62%, rgba(12,100,62,.7), rgba(6,60,38,.35) 55%, transparent);
+    radial-gradient(ellipse 44% 60% at 66% 55%, rgba(22,140,88,.95), rgba(10,92,58,.58) 45%, rgba(6,60,38,.2) 75%, transparent),
+    radial-gradient(ellipse 55% 48% at 34% 62%, rgba(12,100,62,.52), rgba(6,60,38,.24) 55%, transparent);
   filter: blur(40px);
 }
 .fas .statement__text { display: grid; gap: 1.75rem; min-width: 0; }
