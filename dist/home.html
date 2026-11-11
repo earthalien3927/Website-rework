@@ -85,35 +85,10 @@ body::before {
 .fas .btn .arrow { transition: transform .2s; }
 .fas .btn:hover .arrow { transform: translateX(3px); }
 
-/* Masthead: the logo and name, large, in brushed stainless steel. It scrolls
-   away; the menu bar below stays pinned and picks up a small logo. */
+/* Brushed stainless steel, for the logo and name in the header */
 .fas { --steel:
     repeating-linear-gradient(90deg, rgba(255,255,255,.08) 0 1px, transparent 1px 2px, rgba(0,0,0,.09) 2px 3px, transparent 3px 5px),
     linear-gradient(180deg, #fdfdfd 0%, #d6d9dd 20%, #9ba0a6 46%, #c8cbd0 56%, #f0f2f4 76%, #a6aab0 100%); }
-.fas .masthead {
-  display: grid; justify-items: center; gap: .55rem; text-align: center;
-  padding: clamp(1.25rem, 1rem + 1.5vw, 2.25rem) var(--gutter-r) clamp(1rem, .75rem + 1vw, 1.75rem) var(--gutter);
-  background: radial-gradient(60% 120% at 50% 0%, rgba(255,255,255,.05), transparent 70%), var(--ink);
-}
-.fas .masthead__link {
-  display: inline-flex; align-items: center; gap: clamp(.8rem, .4rem + 1.5vw, 1.75rem);
-  text-decoration: none; max-width: 100%;
-  filter: drop-shadow(0 2px 2px rgba(0,0,0,.7)) drop-shadow(0 0 18px rgba(255,255,255,.06));
-}
-.fas .masthead__logo {
-  flex: none; display: block; width: clamp(56px, 2.5rem + 4.5vw, 120px); aspect-ratio: 1;
-  background: var(--steel);
-  -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
-  -webkit-mask-position: center; mask-position: center;
-}
-.fas .masthead__name {
-  font-family: var(--f-display); font-size: clamp(1.75rem, .9rem + 4.2vw, 4.6rem); line-height: 1.05;
-  white-space: nowrap; background: var(--steel); -webkit-background-clip: text; background-clip: text; color: transparent;
-}
-.fas .masthead__name em { font-style: italic; }
-.fas .masthead__tag { letter-spacing: .5em; margin-right: -.5em; }
-.fas .masthead ~ .site-header .brand { transition: opacity .3s, visibility .3s; }
-.fas .masthead ~ .site-header:not(.show-brand) .brand { opacity: 0; visibility: hidden; }
 
 /* Header */
 .fas .site-header {
@@ -123,13 +98,28 @@ body::before {
 }
 .fas .site-header .wrap {
   display: flex; align-items: center; justify-content: space-between;
-  gap: 1.5rem; min-height: 76px;
+  gap: 1.5rem; min-height: 76px; padding-block: .6rem;
 }
-.fas .brand { display: flex; align-items: center; gap: 0.85rem; text-decoration: none; }
-.fas .brand img { width: 52px; height: auto; }
-.fas .brand span {
-  font-family: var(--f-display); font-size: 1.2rem; font-style: italic; line-height: 1;
+/* Brand: logo and name in brushed stainless, menu beside it on the same row */
+.fas .brand {
+  display: flex; align-items: center; gap: clamp(.6rem, .3rem + .8vw, 1.1rem); text-decoration: none; flex: none;
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,.7));
 }
+.fas .brand__logo {
+  flex: none; display: block; width: clamp(44px, 1.6rem + 2.6vw, 74px); aspect-ratio: 1; background: var(--steel);
+  -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+  -webkit-mask-position: center; mask-position: center; transition: width .3s;
+}
+.fas .brand__text { display: grid; gap: .3rem; }
+.fas .brand__name {
+  font-family: var(--f-display); font-size: clamp(1.3rem, .55rem + 1.55vw, 2.35rem); line-height: 1; white-space: nowrap;
+  background: var(--steel); -webkit-background-clip: text; background-clip: text; color: transparent; transition: font-size .3s;
+}
+.fas .brand__name em { font-style: italic; }
+.fas .brand__tag { font-size: .5625rem; letter-spacing: .42em; transition: opacity .3s; }
+.fas .site-header.is-compact .brand__logo { width: clamp(40px, 1.4rem + 1.6vw, 52px); }
+.fas .site-header.is-compact .brand__name { font-size: clamp(1.2rem, .55rem + 1.1vw, 1.75rem); }
+.fas .site-header.is-compact .brand__tag { display: none; }
 .fas .nav { display: flex; align-items: center; gap: 1.75rem; }
 .fas .nav ul { list-style: none; margin: 0; padding: 0; display: flex; gap: 1.6rem; align-items: center; }
 .fas .nav a, .fas .nav .sub-toggle {
@@ -514,19 +504,11 @@ body::before {
 
 <div class="fas" id="top">
 
-  <div class="masthead">
-    <a class="masthead__link" href="https://www.fineartbyscotty.com/" aria-label="Fine Art by Scotty, home">
-      <span class="masthead__logo" aria-hidden="true" style="-webkit-mask-image: url('https://www.fineartbyscotty.com/wp-content/uploads/2016/12/cropped-Fine-Art-by-Scotty-Logo-Black-Michael-Cropped-2.png'); mask-image: url('https://www.fineartbyscotty.com/wp-content/uploads/2016/12/cropped-Fine-Art-by-Scotty-Logo-Black-Michael-Cropped-2.png');"></span>
-      <span class="masthead__name">Fine Art <em>by Scotty</em></span>
-    </a>
-    <p class="label masthead__tag">Tastefully Edgy</p>
-  </div>
-
   <header class="site-header">
     <div class="wrap">
-      <a class="brand" href="https://www.fineartbyscotty.com/">
-        <img src="https://www.fineartbyscotty.com/wp-content/uploads/2025/01/image-49.png" alt="Fine Art by Scotty logo" width="273" height="253">
-        <span>Fine Art by Scotty</span>
+      <a class="brand" href="https://www.fineartbyscotty.com/" aria-label="Fine Art by Scotty, home">
+        <span class="brand__logo" aria-hidden="true" style="-webkit-mask-image: url('https://www.fineartbyscotty.com/wp-content/uploads/2016/12/cropped-Fine-Art-by-Scotty-Logo-Black-Michael-Cropped-2.png'); mask-image: url('https://www.fineartbyscotty.com/wp-content/uploads/2016/12/cropped-Fine-Art-by-Scotty-Logo-Black-Michael-Cropped-2.png');"></span>
+        <span class="brand__text"><span class="brand__name">Fine Art <em>by Scotty</em></span><span class="label brand__tag">Tastefully Edgy</span></span>
       </a>
       <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
         <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 6h16M2 14h16"/></svg>
@@ -908,11 +890,12 @@ body::before {
     });
   }
 
-  // Show the small logo in the pinned menu bar only once the big masthead has scrolled away.
-  var mast = document.querySelector('.fas .masthead'), bar = document.querySelector('.fas .site-header');
-  if (mast && bar && window.IntersectionObserver) {
-    new IntersectionObserver(function (es) { bar.classList.toggle('show-brand', !es[0].isIntersecting); }).observe(mast);
-  } else if (bar) { bar.classList.add('show-brand'); }
+  // Slim the pinned header down a little once the page is scrolled.
+  var bar = document.querySelector('.fas .site-header');
+  if (bar) {
+    var compact = function () { bar.classList.toggle('is-compact', window.scrollY > 40); };
+    window.addEventListener('scroll', compact, { passive: true }); compact();
+  }
 
   // Newest pieces: refresh from the site's artwork list when running on the
   // live site. Elsewhere (and if the request fails) the built-in snapshot stays.

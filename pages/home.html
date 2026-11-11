@@ -291,19 +291,11 @@
 
 <div class="fas" id="top">
 
-  <div class="masthead">
-    <a class="masthead__link" href="https://www.fineartbyscotty.com/" aria-label="Fine Art by Scotty, home">
-      <span class="masthead__logo" aria-hidden="true" style="-webkit-mask-image: url('https://www.fineartbyscotty.com/wp-content/uploads/2016/12/cropped-Fine-Art-by-Scotty-Logo-Black-Michael-Cropped-2.png'); mask-image: url('https://www.fineartbyscotty.com/wp-content/uploads/2016/12/cropped-Fine-Art-by-Scotty-Logo-Black-Michael-Cropped-2.png');"></span>
-      <span class="masthead__name">Fine Art <em>by Scotty</em></span>
-    </a>
-    <p class="label masthead__tag">Tastefully Edgy</p>
-  </div>
-
   <header class="site-header">
     <div class="wrap">
-      <a class="brand" href="https://www.fineartbyscotty.com/">
-        <img src="https://www.fineartbyscotty.com/wp-content/uploads/2025/01/image-49.png" alt="Fine Art by Scotty logo" width="273" height="253">
-        <span>Fine Art by Scotty</span>
+      <a class="brand" href="https://www.fineartbyscotty.com/" aria-label="Fine Art by Scotty, home">
+        <span class="brand__logo" aria-hidden="true" style="-webkit-mask-image: url('https://www.fineartbyscotty.com/wp-content/uploads/2016/12/cropped-Fine-Art-by-Scotty-Logo-Black-Michael-Cropped-2.png'); mask-image: url('https://www.fineartbyscotty.com/wp-content/uploads/2016/12/cropped-Fine-Art-by-Scotty-Logo-Black-Michael-Cropped-2.png');"></span>
+        <span class="brand__text"><span class="brand__name">Fine Art <em>by Scotty</em></span><span class="label brand__tag">Tastefully Edgy</span></span>
       </a>
       <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
         <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 6h16M2 14h16"/></svg>
@@ -531,11 +523,12 @@
     });
   }
 
-  // Show the small logo in the pinned menu bar only once the big masthead has scrolled away.
-  var mast = document.querySelector('.fas .masthead'), bar = document.querySelector('.fas .site-header');
-  if (mast && bar && window.IntersectionObserver) {
-    new IntersectionObserver(function (es) { bar.classList.toggle('show-brand', !es[0].isIntersecting); }).observe(mast);
-  } else if (bar) { bar.classList.add('show-brand'); }
+  // Slim the pinned header down a little once the page is scrolled.
+  var bar = document.querySelector('.fas .site-header');
+  if (bar) {
+    var compact = function () { bar.classList.toggle('is-compact', window.scrollY > 40); };
+    window.addEventListener('scroll', compact, { passive: true }); compact();
+  }
 
   // Newest pieces: refresh from the site's artwork list when running on the
   // live site. Elsewhere (and if the request fails) the built-in snapshot stays.
