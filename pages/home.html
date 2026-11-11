@@ -61,26 +61,6 @@
   gap: clamp(2.5rem, 1rem + 6vw, 7rem); align-items: center;
 }
 .fas .statement__art { position: relative; max-width: 460px; justify-self: center; width: 100%; }
-/* Brushed metal frame: a polished chrome moulding with a fine brushed grain,
-   a bright inner lip, and a long shadow so it floats off the wall. */
-.fas .metal-frame {
-  display: block; position: relative; padding: clamp(14px, .6rem + 1vw, 24px);
-  background:
-    repeating-linear-gradient(90deg, rgba(255,255,255,.05) 0 1px, transparent 1px 3px),
-    linear-gradient(135deg, #f2f2f0 0%, #9a9a98 16%, #e4e4e1 30%, #6e6e6c 48%, #d8d8d5 64%, #8b8b88 80%, #f0f0ee 100%);
-  box-shadow:
-    inset 0 0 0 1px rgba(255,255,255,.65),
-    inset 0 0 0 2px rgba(0,0,0,.25),
-    0 60px 90px -35px rgba(0,0,0,1),
-    0 30px 45px -15px rgba(0,0,0,.9),
-    0 0 0 1px rgba(0,0,0,.6);
-}
-.fas .metal-frame::after {             /* inner lip where the moulding meets the art */
-  content: ""; position: absolute; inset: calc(clamp(14px, .6rem + 1vw, 24px) - 4px); pointer-events: none;
-  border: 4px solid; border-color: #5d5d5b #cfcfcc #efefec #7a7a78;
-}
-.fas .metal-frame img, .fas .metal-frame .crop { display: block; width: 100%; }
-.fas .metal-frame .crop img { position: absolute; max-width: none; height: auto; }
 .fas .statement__art { isolation: isolate; }
 .fas .statement { overflow-x: clip; }
 /* Dark emerald glow spilling out from behind the frame, bottom right */
@@ -146,26 +126,8 @@
 /* Fill: as large as the column allows while the whole framed piece still fits
    on screen below the header */
 .fas .work--fill .frame, .fas .work--fill.work--portrait .frame { width: auto; max-width: 100%; justify-self: center; }
-.fas .work--fill .frame__mat img { width: auto; max-width: 100%; max-height: calc((100vh - 76px - 9rem) * .95 + 3.75rem); }
+.fas .work--fill .frame__mat img { width: auto; max-width: 100%; max-height: calc((100vh - 76px - 9rem) * .95 + 3.75rem - 2 * var(--liner)); }
 .fas .work--fill .frame__mat .crop { width: auto; height: calc((100vh - 76px - 9rem) * .95); max-width: 100%; }
-/* Community Property's frame, built the way the studio builds them: a heavier
-   charcoal outer tube with a brighter brushed-metal liner set right inside it,
-   against the painting. No mat. */
-.fas .work--fill .frame { padding: calc(clamp(12px, .6rem + .9vw, 22px) * 1.3); }
-.fas .work--fill .frame::after {          /* just a fine seam where the two metals meet */
-  inset: calc(clamp(12px, .6rem + .9vw, 22px) * 1.3 - 1px);
-  border-width: 1px; border-color: rgba(0,0,0,.6) rgba(0,0,0,.35) rgba(255,255,255,.18) rgba(0,0,0,.45);
-}
-.fas .work--fill .frame__mat { padding: 0; background: none; box-shadow: none; }
-.fas .work--fill .frame__mat > img {
-  padding: clamp(6px, .3rem + .4vw, 12px);
-  background:
-    repeating-linear-gradient(0deg, rgba(255,255,255,.05) 0 1px, transparent 1px 2px, rgba(0,0,0,.07) 2px 3px, transparent 3px 5px),
-    linear-gradient(135deg, #c9ccd0 0%, #7b7e83 16%, #a4a7ac 34%, #66696d 52%, #b3b6bb 70%, #74777b 86%, #d2d5d9 100%);
-  box-shadow:
-    inset 1px 1px 0 rgba(255,255,255,.55), inset -1px -1px 0 rgba(0,0,0,.45),
-    0 0 0 1px rgba(0,0,0,.5);
-}
 /* Centre the piece between the page content edge and its placard (shift by
    half the column gap toward the placard). Wide screens only. */
 @media (min-width: 861px) {
@@ -174,10 +136,12 @@
 }
 .fas .work:nth-child(even).work--portrait .frame { justify-self: center; }
 
-/* Frame: brushed charcoal metal moulding with a fine horizontal grain and
-   a darker inner lip, then a black mat, and a long shadow */
+/* Frame, built the way the studio builds them: a charcoal brushed-metal outer
+   tube, a brighter brushed-metal liner set right inside it against the
+   painting (no mat), and a long shadow so it floats off the wall. */
+.fas .frame, .fas .frame__mat { --tube: calc(clamp(12px, .6rem + .9vw, 22px) * 1.3); --liner: clamp(6px, .3rem + .4vw, 12px); }
 .fas .frame {
-  display: block; position: relative; padding: clamp(12px, .6rem + .9vw, 22px); border: 0; cursor: zoom-in;
+  display: block; position: relative; padding: var(--tube); border: 0; cursor: zoom-in;
   background:
     repeating-linear-gradient(0deg, rgba(255,255,255,.035) 0 1px, transparent 1px 2px, rgba(0,0,0,.06) 2px 3px, transparent 3px 5px),
     repeating-linear-gradient(90deg, rgba(255,255,255,.025) 0 1px, transparent 1px 3px),
@@ -191,20 +155,23 @@
     0 0 0 1px rgba(0,0,0,.8);
   transition: transform .5s cubic-bezier(.2,.7,.2,1), box-shadow .5s;
 }
-.fas .frame::after {                     /* inner lip where the moulding meets the mat */
-  content: ""; position: absolute; pointer-events: none;
-  inset: calc(clamp(12px, .6rem + .9vw, 22px) - 3px);
-  border: 3px solid; border-color: #1c1d20 #6b6e72 #8c8f93 #2a2c2f;
+.fas .frame::after {                     /* fine seam where the two metals meet */
+  content: ""; position: absolute; pointer-events: none; inset: calc(var(--tube) - 1px);
+  border: 1px solid; border-color: rgba(0,0,0,.6) rgba(0,0,0,.35) rgba(255,255,255,.18) rgba(0,0,0,.45);
 }
-.fas .frame:hover { transform: translateY(-6px); box-shadow:
+.fas button.frame:hover { transform: translateY(-6px); box-shadow:
     inset 0 0 0 1px rgba(255,255,255,.26), inset 1px 1px 0 1px rgba(255,255,255,.14), inset -1px -1px 0 1px rgba(0,0,0,.35),
     0 80px 110px -35px rgba(0,0,0,1), 0 40px 60px -15px rgba(0,0,0,.9), 0 0 0 1px rgba(0,0,0,.8); }
-.fas .frame__mat {
-  display: block; padding: clamp(12px, .5rem + 1.8vw, 36px); background: #0b0a0b;
-  box-shadow: inset 0 3px 8px rgba(0,0,0,.95), inset 0 -1px 0 rgba(255,255,255,.04);
+.fas .frame--static { cursor: default; }
+.fas .frame__mat {                       /* the bright brushed-metal liner */
+  display: block; padding: var(--liner);
+  background:
+    repeating-linear-gradient(0deg, rgba(255,255,255,.05) 0 1px, transparent 1px 2px, rgba(0,0,0,.07) 2px 3px, transparent 3px 5px),
+    linear-gradient(135deg, #c9ccd0 0%, #7b7e83 16%, #a4a7ac 34%, #66696d 52%, #b3b6bb 70%, #74777b 86%, #d2d5d9 100%);
+  box-shadow: inset 1px 1px 0 rgba(255,255,255,.55), inset -1px -1px 0 rgba(0,0,0,.45), 0 0 0 1px rgba(0,0,0,.5);
 }
-.fas .frame__mat img { width: 100%; }
-.fas .frame__mat img, .fas .frame__mat .crop { box-shadow: 0 0 0 1px rgba(255,255,255,.07), 0 0 0 5px #070607, 0 0 0 6px rgba(255,255,255,.035); }
+.fas .frame__mat img { display: block; width: 100%; }
+.fas .frame__mat img, .fas .frame__mat .crop { box-shadow: 0 0 0 1px rgba(0,0,0,.55); }
 .fas .frame__mat .crop img { box-shadow: none; position: absolute; max-width: none; height: auto; }
 /* Black bars baked into an image file are trimmed by script; this box shows only the painting */
 .fas .crop { display: block; position: relative; overflow: hidden; }
@@ -382,7 +349,7 @@
     <section class="section statement" aria-labelledby="statement-title">
       <div class="wrap">
         <div class="statement__art">
-          <span class="metal-frame"><img src="https://www.fineartbyscotty.com/wp-content/uploads/2025/01/9-768x1365.jpg" alt="Sunday Morning by Scotty" width="768" height="1365" loading="lazy"></span>
+          <span class="frame frame--static"><span class="frame__mat"><img src="https://www.fineartbyscotty.com/wp-content/uploads/2025/01/9-768x1365.jpg" alt="Sunday Morning by Scotty" width="768" height="1365" loading="lazy"></span></span>
         </div>
         <div class="statement__text">
           <p class="label label--gold">For the private collection</p>
@@ -652,7 +619,7 @@
     img.style.left = (-l / W / cw * 100) + '%';
     img.style.top = (-t / H / ch * 100) + '%';
   }
-  function trimAll() { Array.prototype.forEach.call(document.querySelectorAll('.fas .frame__mat img, .fas .metal-frame img'), trimBars); }
+  function trimAll() { Array.prototype.forEach.call(document.querySelectorAll('.fas .frame__mat img'), trimBars); }
   trimAll();
 
   // Lightbox (works for pieces added after page load)
