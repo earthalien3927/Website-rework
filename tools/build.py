@@ -104,10 +104,7 @@ def newest_pieces(count: int, exclude: set, skip_titles: set):
     cats, _ = get_json("fine-art-category?per_page=100&_fields=id,name,slug")
     names = {c["id"]: htmllib.unescape(c["name"]) for c in cats}
     skip = {c["id"] for c in cats if c["slug"] in exclude}
-    fields = "per_page=100&_fields=id,date,title,link,featured_media,fine-art-category&page="
-    posts, pages = get_json("fine-art?" + fields + "1")
-    for pg in range(2, pages + 1):
-        posts += get_json("fine-art?" + fields + str(pg))[0]
+    posts = all_posts()
     keep = [p for p in posts if p.get("featured_media") and not skip & set(p.get("fine-art-category", []))
             and key(nice_title(p["title"]["rendered"])[0]) not in skip_titles]
     top = sorted(keep, key=newest_key, reverse=True)[:count]
@@ -116,6 +113,43 @@ def newest_pieces(count: int, exclude: set, skip_titles: set):
     by_id = {m["id"]: m for m in media}
     out = [from_site(p, by_id.get(p["featured_media"]), names.get((p.get("fine-art-category") or [None])[0])) for p in top]
     return [w for w in out if w]
+
+
+_POSTS = None
+
+
+def all_posts():
+    """Every artwork post on the site (cached for the build)."""
+    global _POSTS
+    if _POSTS is None:
+        fields = "per_page=100&_fields=id,date,title,link,featured_media,fine-art-category&page="
+        posts, pages = get_json("fine-art?" + fields + "1")
+        for pg in range(2, pages + 1):
+            posts += get_json("fine-art?" + fields + str(pg))[0]
+        _POSTS = posts
+    return _POSTS
+
+
+PIECES_RE = re.compile(r"<!-- pieces:start -->.*?<!-- pieces:end -->", re.S)
+
+
+def fill_pieces(html: str, picks: dict) -> str:
+    """The quote form's dropdown: newest 8 by number, then everything A-Z.
+    Mirrors fillPieces() in the page."""
+    seen, pieces = set(), []
+    for n in [(w["title"], w.get("num", "")) for w in picks.get("pinned", [])] + \
+             [nice_title(p["title"]["rendered"]) for p in all_posts()]:
+        if key(n[0]) and key(n[0]) not in seen:
+            seen.add(key(n[0])); pieces.append(n)
+    e = lambda v: htmllib.escape(str(v), quote=True)
+    opt = lambda n: f'                <option value="{e(n[0])}">{e(n[0])}{f" (No. {n[1]})" if n[1] else ""}</option>\n'
+    newest = sorted([n for n in pieces if n[1]], key=lambda n: -int(n[1]))[:8]
+    az = sorted(pieces, key=lambda n: n[0].lower())
+    block = ("<!-- pieces:start -->\n              <optgroup label=\"Newest work\">\n" + "".join(map(opt, newest)) +
+             "              </optgroup>\n              <optgroup label=\"Full collection, A–Z\">\n" + "".join(map(opt, az)) +
+             "              </optgroup>\n<!-- pieces:end -->")
+    print(f"pieces:  {len(az)} in the quote form list")
+    return PIECES_RE.sub(lambda m: block, html)
 
 
 PICKS_RE = re.compile(r'<script type="application/json" id="gallery-picks">(.*?)</script>', re.S)
@@ -144,7 +178,7 @@ def fill_newest(html: str) -> str:
             w["large"] = key(w["title"]) in large or w["fill"]
         print("gallery: " + ", ".join(w["title"] + (" (pinned)" if w in pinned else "") for w in works))
         return m.group(1) + "\n" + "".join(work_html(w) for w in works) + m.group(4)
-    return NEWEST_RE.sub(repl, html)
+    return fill_pieces(NEWEST_RE.sub(repl, html), picks)
 
 
 def inline_assets(html: str) -> str:

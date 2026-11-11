@@ -85,6 +85,36 @@ body::before {
 .fas .btn .arrow { transition: transform .2s; }
 .fas .btn:hover .arrow { transform: translateX(3px); }
 
+/* Masthead: the logo and name, large, in brushed stainless steel. It scrolls
+   away; the menu bar below stays pinned and picks up a small logo. */
+.fas { --steel:
+    repeating-linear-gradient(90deg, rgba(255,255,255,.08) 0 1px, transparent 1px 2px, rgba(0,0,0,.09) 2px 3px, transparent 3px 5px),
+    linear-gradient(180deg, #fdfdfd 0%, #d6d9dd 20%, #9ba0a6 46%, #c8cbd0 56%, #f0f2f4 76%, #a6aab0 100%); }
+.fas .masthead {
+  display: grid; justify-items: center; gap: .55rem; text-align: center;
+  padding: clamp(1.25rem, 1rem + 1.5vw, 2.25rem) var(--gutter-r) clamp(1rem, .75rem + 1vw, 1.75rem) var(--gutter);
+  background: radial-gradient(60% 120% at 50% 0%, rgba(255,255,255,.05), transparent 70%), var(--ink);
+}
+.fas .masthead__link {
+  display: inline-flex; align-items: center; gap: clamp(.8rem, .4rem + 1.5vw, 1.75rem);
+  text-decoration: none; max-width: 100%;
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,.7)) drop-shadow(0 0 18px rgba(255,255,255,.06));
+}
+.fas .masthead__logo {
+  flex: none; display: block; width: clamp(56px, 2.5rem + 4.5vw, 120px); aspect-ratio: 1;
+  background: var(--steel);
+  -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+  -webkit-mask-position: center; mask-position: center;
+}
+.fas .masthead__name {
+  font-family: var(--f-display); font-size: clamp(1.75rem, .9rem + 4.2vw, 4.6rem); line-height: 1.05;
+  white-space: nowrap; background: var(--steel); -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.fas .masthead__name em { font-style: italic; }
+.fas .masthead__tag { letter-spacing: .5em; margin-right: -.5em; }
+.fas .masthead ~ .site-header .brand { transition: opacity .3s, visibility .3s; }
+.fas .masthead ~ .site-header:not(.show-brand) .brand { opacity: 0; visibility: hidden; }
+
 /* Header */
 .fas .site-header {
   position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50;
@@ -161,7 +191,17 @@ body::before {
   transition: border-color .2s;
 }
 .fas .field input::placeholder { color: #6f6563; }
-.fas .field input:focus, .fas .field textarea:focus { outline: none; border-color: var(--gold); }
+.fas .field input:focus, .fas .field textarea:focus, .fas .field select:focus { outline: none; border-color: var(--gold); }
+.fas .field select {
+  width: 100%; font: inherit; color: var(--bone); border: 1px solid var(--line); border-radius: 0;
+  padding: 0.9rem 2.6rem 0.9rem 1rem; -webkit-appearance: none; appearance: none; cursor: pointer;
+  background:
+    linear-gradient(45deg, transparent 50%, var(--gold) 50%) calc(100% - 1.25rem) 55% / 6px 6px no-repeat,
+    linear-gradient(-45deg, transparent 50%, var(--gold) 50%) calc(100% - 1.25rem + 6px) 55% / 6px 6px no-repeat,
+    var(--ink);
+}
+.fas .field select:invalid { color: #8a7f7c; }
+.fas .field select option, .fas .field select optgroup { color: var(--bone); background: var(--panel); }
 
 /* Footer */
 .fas .site-footer { border-top: 1px solid var(--line); padding-block: 3.5rem 2.5rem; }
@@ -474,6 +514,14 @@ body::before {
 
 <div class="fas" id="top">
 
+  <div class="masthead">
+    <a class="masthead__link" href="https://www.fineartbyscotty.com/" aria-label="Fine Art by Scotty, home">
+      <span class="masthead__logo" aria-hidden="true" style="-webkit-mask-image: url('https://www.fineartbyscotty.com/wp-content/uploads/2016/12/cropped-Fine-Art-by-Scotty-Logo-Black-Michael-Cropped-2.png'); mask-image: url('https://www.fineartbyscotty.com/wp-content/uploads/2016/12/cropped-Fine-Art-by-Scotty-Logo-Black-Michael-Cropped-2.png');"></span>
+      <span class="masthead__name">Fine Art <em>by Scotty</em></span>
+    </a>
+    <p class="label masthead__tag">Tastefully Edgy</p>
+  </div>
+
   <header class="site-header">
     <div class="wrap">
       <a class="brand" href="https://www.fineartbyscotty.com/">
@@ -514,7 +562,7 @@ body::before {
       </div>
       <div class="wrap">
         <div class="hero__copy">
-          <p class="label label--gold">Fine Art by Scotty · Tastefully Edgy</p>
+          <p class="label label--gold">Original paintings · Signed by the artist</p>
           <h1 id="hero-title">Own the <em class="chrome">room.</em></h1>
           <p class="lede">Original works by Scotty. Champagne, chrome, red heels and late nights, painted for the people who set the tone the moment they walk in.</p>
           <div class="btns">
@@ -626,15 +674,176 @@ body::before {
           </ul>
         </div>
 
-        <form class="quote-form" id="quote-form" novalidate>
+        <!-- On the live site this sends through the existing Elementor form on the
+             old homepage (page 4676, form dfb2b92), so requests reach the same inbox.
+             Keep that page published (it just isn't the front page any more). -->
+        <form class="quote-form" id="quote-form" novalidate data-post-id="4676" data-form-id="dfb2b92">
           <div class="field"><label for="q-first">First name</label><input id="q-first" name="first_name" type="text" autocomplete="given-name" required></div>
           <div class="field"><label for="q-last">Last name</label><input id="q-last" name="last_name" type="text" autocomplete="family-name" required></div>
           <div class="field"><label for="q-phone">Phone</label><input id="q-phone" name="phone" type="tel" autocomplete="tel" required></div>
           <div class="field"><label for="q-email">Email</label><input id="q-email" name="email" type="email" autocomplete="email" required></div>
-          <div class="field full"><label for="q-art">Which piece are you interested in?</label><input id="q-art" name="artwork" type="text" placeholder="e.g. Captivated" required></div>
+          <div class="field full"><label for="q-art">Which piece are you interested in?</label>
+            <select id="q-art" name="artwork" required>
+              <option value="">Choose a piece…</option>
+<!-- pieces:start -->
+              <optgroup label="Newest work">
+                <option value="Community Property">Community Property (No. 144)</option>
+                <option value="Pre Flight">Pre Flight (No. 139)</option>
+                <option value="Intake">Intake (No. 138)</option>
+                <option value="Soul Keeper">Soul Keeper (No. 137)</option>
+                <option value="Spoiled Kitten">Spoiled Kitten (No. 136)</option>
+              </optgroup>
+              <optgroup label="Full collection, A–Z">
+                <option value="1/4 Turn">1/4 Turn</option>
+                <option value="2020 Vision">2020 Vision</option>
+                <option value="6 Carats">6 Carats</option>
+                <option value="A Long Way To Go">A Long Way To Go</option>
+                <option value="Abs Of Steel">Abs Of Steel</option>
+                <option value="Amber">Amber</option>
+                <option value="Aventador">Aventador</option>
+                <option value="Birds Of Paradise">Birds Of Paradise</option>
+                <option value="Blocked Shot">Blocked Shot</option>
+                <option value="Body Shot">Body Shot</option>
+                <option value="Bottle Service">Bottle Service</option>
+                <option value="Boys And Their Toys">Boys And Their Toys</option>
+                <option value="Breast Stroke">Breast Stroke</option>
+                <option value="Bump Her">Bump Her</option>
+                <option value="Cancelled">Cancelled</option>
+                <option value="Captivated">Captivated</option>
+                <option value="Car Show">Car Show</option>
+                <option value="Catch Of The Day">Catch Of The Day</option>
+                <option value="Champagne Shadows">Champagne Shadows</option>
+                <option value="Chrome Legs">Chrome Legs</option>
+                <option value="Clown Of Hearts">Clown Of Hearts</option>
+                <option value="Clown Ride">Clown Ride</option>
+                <option value="Cock A Doodle">Cock A Doodle</option>
+                <option value="Cold Shoulder">Cold Shoulder</option>
+                <option value="Color Me Ready">Color Me Ready</option>
+                <option value="Community Property">Community Property (No. 144)</option>
+                <option value="Couple Of Clowns">Couple Of Clowns</option>
+                <option value="Crack Of Dawn">Crack Of Dawn</option>
+                <option value="Custom Cuff By Scotty">Custom Cuff By Scotty</option>
+                <option value="Dealer’s Choice">Dealer’s Choice</option>
+                <option value="Decisions">Decisions</option>
+                <option value="Depth Perception">Depth Perception</option>
+                <option value="Distracted">Distracted</option>
+                <option value="Dock Master">Dock Master</option>
+                <option value="Double Dipping">Double Dipping</option>
+                <option value="Drawing Out The Night">Drawing Out The Night</option>
+                <option value="Drinking The Clown Away">Drinking The Clown Away</option>
+                <option value="Extra Olive Please">Extra Olive Please</option>
+                <option value="Fallen Angel">Fallen Angel</option>
+                <option value="Fifth And Ariel">Fifth And Ariel</option>
+                <option value="Finish Line">Finish Line</option>
+                <option value="Flamingo Happy Hour">Flamingo Happy Hour</option>
+                <option value="Girl Crush">Girl Crush</option>
+                <option value="Good Afternoon">Good Afternoon</option>
+                <option value="Good Evening">Good Evening</option>
+                <option value="Good Morning">Good Morning</option>
+                <option value="Good Vibes">Good Vibes</option>
+                <option value="Green Envy">Green Envy</option>
+                <option value="Hands On">Hands On</option>
+                <option value="Harbor Cruise">Harbor Cruise</option>
+                <option value="High Maintenance">High Maintenance</option>
+                <option value="Hindsight">Hindsight</option>
+                <option value="Hot Rod Shop">Hot Rod Shop</option>
+                <option value="I Bite">I Bite</option>
+                <option value="I Eat Ferrari">I Eat Ferrari</option>
+                <option value="If You See Kay">If You See Kay</option>
+                <option value="Impact">Impact</option>
+                <option value="Intake">Intake (No. 138)</option>
+                <option value="It’s All In The Eyes">It’s All In The Eyes</option>
+                <option value="It’s Complicated">It’s Complicated</option>
+                <option value="Jingle This">Jingle This</option>
+                <option value="Key To My Cuffs">Key To My Cuffs</option>
+                <option value="Last Call">Last Call</option>
+                <option value="Last Drop">Last Drop</option>
+                <option value="Locals Only">Locals Only</option>
+                <option value="Man Eater">Man Eater</option>
+                <option value="Mandos Chick">Mandos Chick</option>
+                <option value="Mermaid Tail Pendant">Mermaid Tail Pendant</option>
+                <option value="Messy Perfection">Messy Perfection</option>
+                <option value="Moon Shine">Moon Shine</option>
+                <option value="Moon Tale">Moon Tale</option>
+                <option value="Musical Chairs">Musical Chairs</option>
+                <option value="My Caddy">My Caddy</option>
+                <option value="Night And Day">Night And Day</option>
+                <option value="Night Cap">Night Cap</option>
+                <option value="Night Crew">Night Crew</option>
+                <option value="Night Golf">Night Golf</option>
+                <option value="Night Reflections">Night Reflections</option>
+                <option value="No Reserve">No Reserve</option>
+                <option value="No Stock Bikes">No Stock Bikes</option>
+                <option value="No Strings Attached">No Strings Attached</option>
+                <option value="Olive">Olive</option>
+                <option value="Penrose Beach Party">Penrose Beach Party</option>
+                <option value="Perfect Finish">Perfect Finish</option>
+                <option value="Perfect Night’s Sleep">Perfect Night’s Sleep</option>
+                <option value="Perfect Rack">Perfect Rack</option>
+                <option value="Pick Me">Pick Me</option>
+                <option value="Playing Koi">Playing Koi</option>
+                <option value="Power Ball">Power Ball</option>
+                <option value="Pre Flight">Pre Flight (No. 139)</option>
+                <option value="Princess Norma Jean">Princess Norma Jean</option>
+                <option value="Purple Reign">Purple Reign</option>
+                <option value="Purrrfect Curves">Purrrfect Curves</option>
+                <option value="Quick Change">Quick Change</option>
+                <option value="Reverence">Reverence</option>
+                <option value="Rubber Knucky">Rubber Knucky</option>
+                <option value="Ruffle My Feathers">Ruffle My Feathers</option>
+                <option value="Rule Breaker">Rule Breaker</option>
+                <option value="Rustic Elegance">Rustic Elegance</option>
+                <option value="Sabrina">Sabrina</option>
+                <option value="Save A Horse">Save A Horse</option>
+                <option value="Save For Sunday">Save For Sunday</option>
+                <option value="Second Round">Second Round</option>
+                <option value="Selfie">Selfie</option>
+                <option value="Sexy Legs">Sexy Legs</option>
+                <option value="She Blushed">She Blushed</option>
+                <option value="Sheer Pleasure">Sheer Pleasure</option>
+                <option value="Shift Work">Shift Work</option>
+                <option value="Side Show">Side Show</option>
+                <option value="Sixth And Ariel">Sixth And Ariel</option>
+                <option value="Skinny Dipping">Skinny Dipping</option>
+                <option value="Sneak Peak">Sneak Peak</option>
+                <option value="Soul Keeper">Soul Keeper (No. 137)</option>
+                <option value="Spoiled Kitten">Spoiled Kitten (No. 136)</option>
+                <option value="Squadron Leader">Squadron Leader</option>
+                <option value="Still Thirsty">Still Thirsty</option>
+                <option value="Strawberry Blonde">Strawberry Blonde</option>
+                <option value="Strike A Chord">Strike A Chord</option>
+                <option value="Sun Kissed">Sun Kissed</option>
+                <option value="Sundae Funday">Sundae Funday</option>
+                <option value="Sunday Morning">Sunday Morning</option>
+                <option value="Surrender">Surrender</option>
+                <option value="Tail Spin">Tail Spin</option>
+                <option value="The Negotiation">The Negotiation</option>
+                <option value="Traction Control">Traction Control</option>
+                <option value="Trouble">Trouble</option>
+                <option value="Turn Me On">Turn Me On</option>
+                <option value="Turn Up The Heat">Turn Up The Heat</option>
+                <option value="Twisted Cinnamon">Twisted Cinnamon</option>
+                <option value="Twisted Clown">Twisted Clown</option>
+                <option value="Un-Done">Un-Done</option>
+                <option value="Under My Spell">Under My Spell</option>
+                <option value="Wanna Ride?">Wanna Ride?</option>
+                <option value="Washing The Clown Away">Washing The Clown Away</option>
+                <option value="Weekend Therapy">Weekend Therapy</option>
+                <option value="What Storm?">What Storm?</option>
+                <option value="Wine Me Up">Wine Me Up</option>
+                <option value="Wine Roper">Wine Roper</option>
+                <option value="Winner’s Circle">Winner’s Circle</option>
+                <option value="Wisher’s Remorse">Wisher’s Remorse</option>
+                <option value="You Should See Elvis">You Should See Elvis</option>
+              </optgroup>
+<!-- pieces:end -->
+              <option value="__other">Something else / not sure</option>
+            </select>
+          </div>
+          <div class="field full" id="q-other-wrap" hidden><label for="q-other">Tell us which piece</label><input id="q-other" name="artwork_other" type="text" placeholder="The title, or describe it"></div>
           <div class="field full"><label for="q-notes">Size, framing or anything else (optional)</label><textarea id="q-notes" name="notes" rows="3"></textarea></div>
           <div class="full"><button class="btn btn--gold" type="submit">Request my quote <span class="arrow" aria-hidden="true">→</span></button></div>
-          <p class="form-note full">All fields except the last are required.</p>
+          <p class="form-note full" id="q-status" role="status">All fields except the last are required.</p>
         </form>
       </div>
     </section>
@@ -690,10 +899,21 @@ body::before {
       btn.setAttribute('aria-expanded', String(open));
       btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
     });
+    // The menu panel opens just below the bar, wherever the bar is on screen.
+    btn.addEventListener('click', function () {
+      var bar = btn.closest('.site-header');
+      if (bar) nav.style.top = Math.round(bar.getBoundingClientRect().bottom) + 'px';
+    });
     nav.addEventListener('click', function (e) {
       if (e.target.closest('a')) { nav.classList.remove('is-open'); btn.setAttribute('aria-expanded', 'false'); }
     });
   }
+
+  // Show the small logo in the pinned menu bar only once the big masthead has scrolled away.
+  var mast = document.querySelector('.fas .masthead'), bar = document.querySelector('.fas .site-header');
+  if (mast && bar && window.IntersectionObserver) {
+    new IntersectionObserver(function (es) { bar.classList.toggle('show-brand', !es[0].isIntersecting); }).observe(mast);
+  } else if (bar) { bar.classList.add('show-brand'); }
 
   // Newest pieces: refresh from the site's artwork list when running on the
   // live site. Elsewhere (and if the request fails) the built-in snapshot stays.
@@ -826,7 +1046,7 @@ body::before {
   }
   gallery.addEventListener('click', function (e) {
     var q = e.target.closest('.link-quote');
-    if (q) { var f = document.getElementById('q-art'); if (f) f.value = q.getAttribute('data-title'); return; }
+    if (q) { selectPiece(q.getAttribute('data-title')); return; }
     if (!e.target.closest('.frame, .link-view')) return;
     show(pieces().indexOf(e.target.closest('.work')));
     if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
@@ -841,20 +1061,88 @@ body::before {
     if (e.key === 'ArrowRight') show(idx + 1);
   });
   document.getElementById('lb-quote').addEventListener('click', function () {
-    var f = document.getElementById('q-art');
-    if (f) f.value = title.textContent;
+    selectPiece(title.textContent);
     close();
   });
 
-  // Quote form (preview only: in WordPress this is wired to the real form handler)
+  // Quote form. The piece list is a dropdown (newest first, then A-Z), with
+  // "Something else" opening a text box.
   var form = document.getElementById('quote-form');
+  var artSel = document.getElementById('q-art');
+  var otherWrap = document.getElementById('q-other-wrap');
+  var otherIn = document.getElementById('q-other');
+  function syncOther() {
+    var on = artSel.value === '__other';
+    otherWrap.hidden = !on; otherIn.required = on;
+  }
+  function selectPiece(t) {
+    var k = key(t), hit = '';
+    Array.prototype.forEach.call(artSel.options, function (o) { if (!hit && o.value && key(o.value) === k) hit = o.value; });
+    if (hit) { artSel.value = hit; } else { artSel.value = '__other'; otherIn.value = t; }
+    syncOther();
+  }
+  if (artSel) artSel.addEventListener('change', function () { syncOther(); if (artSel.value === '__other') otherIn.focus(); });
+  function fillPieces(posts) {               // live site: rebuild the list from the artwork posts
+    var seen = {}, all = [];
+    (picks.pinned || []).concat(posts.map(function (p) { return niceTitle(p.title.rendered); }))
+      .forEach(function (n) { var k = key(n.title); if (k && !seen[k]) { seen[k] = 1; all.push(n); } });
+    var newest = all.filter(function (n) { return +n.num; }).sort(function (a, b) { return b.num - a.num; }).slice(0, 8);
+    var az = all.slice().sort(function (a, b) { return a.title.localeCompare(b.title); });
+    function opt(n) { return '<option value="' + esc(n.title) + '">' + esc(n.title) + (+n.num ? ' (No. ' + n.num + ')' : '') + '</option>'; }
+    var keep = artSel.value;
+    artSel.innerHTML = '<option value="">Choose a piece…</option>' +
+      '<optgroup label="Newest work">' + newest.map(opt).join('') + '</optgroup>' +
+      '<optgroup label="Full collection, A–Z">' + az.map(opt).join('') + '</optgroup>' +
+      '<option value="__other">Something else / not sure</option>';
+    artSel.value = keep; if (artSel.value !== keep) artSel.value = '';
+    syncOther();
+  }
+  var LIVE = /(^|\.)fineartbyscotty\.com$/.test(location.hostname);
+  if (LIVE && artSel && window.fetch) {
+    getJSON(LIST + 1).then(function (first) {
+      var more = [];
+      for (var pg = 2; pg <= first.pages; pg++) more.push(getJSON(LIST + pg));
+      return Promise.all(more).then(function (rest) { fillPieces(rest.reduce(function (a, r) { return a.concat(r.data); }, first.data)); });
+    }).catch(function () { /* keep the built-in list */ });
+  }
+  function done(html) { form.innerHTML = '<div class="form-done">' + html + '</div>'; }
   if (form) form.addEventListener('submit', function (e) {
     e.preventDefault();
     if (!form.checkValidity()) { form.reportValidity(); return; }
     var name = form.first_name.value.trim();
-    form.innerHTML = '<div class="form-done"><p class="label label--gold">Request received</p>' +
-      '<h3>Thank you, ' + name.replace(/[<>&"]/g, '') + '.</h3>' +
-      '<p>This is a preview, so nothing was sent. On the live site this goes straight to the studio.</p></div>';
+    var piece = artSel.value === '__other' ? otherIn.value.trim() : artSel.value;
+    var notes = form.notes.value.trim();
+    if (!LIVE) {
+      done('<p class="label label--gold">Request received</p><h3>Thank you, ' + esc(name) + '.</h3>' +
+        '<p>This is a preview, so nothing was sent. On the live site this goes straight to the studio.</p>');
+      return;
+    }
+    var pid = form.getAttribute('data-post-id');
+    var fd = new FormData();
+    fd.append('action', 'elementor_pro_forms_send_form');
+    fd.append('post_id', pid);
+    fd.append('form_id', form.getAttribute('data-form-id'));
+    fd.append('queried_id', pid);
+    fd.append('referer_title', document.title);
+    fd.append('form_fields[name]', name);
+    fd.append('form_fields[field_c866b88]', form.last_name.value.trim());
+    fd.append('form_fields[field_995725c]', form.phone.value.replace(/[^0-9()#&+*\-=.]/g, ''));
+    fd.append('form_fields[email]', form.email.value.trim());
+    fd.append('form_fields[field_3e4d9c0]', piece + (notes ? ' | Notes: ' + notes : ''));
+    var btn = form.querySelector('button[type=submit]'), status = document.getElementById('q-status');
+    btn.disabled = true; status.textContent = 'Sending…';
+    fetch('/wp-admin/admin-ajax.php', { method: 'POST', body: fd, credentials: 'same-origin' })
+      .then(function (r) { return r.json(); })
+      .then(function (res) {
+        if (!res || !res.success) throw new Error('rejected');
+        done('<p class="label label--gold">Request received</p><h3>Thank you, ' + esc(name) + '.</h3>' +
+          '<p>We\'ll be in touch about ' + esc(piece) + ' with your personal quote.</p>');
+      })
+      .catch(function () {
+        btn.disabled = false;
+        status.textContent = 'That didn\'t go through. Please try again, or call (619) 890-3330 or email info@fineartbyscotty.com.';
+      });
   });
+  syncOther();
 })();
 </script>

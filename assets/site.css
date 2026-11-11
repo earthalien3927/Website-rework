@@ -81,6 +81,36 @@ body::before {
 .fas .btn .arrow { transition: transform .2s; }
 .fas .btn:hover .arrow { transform: translateX(3px); }
 
+/* Masthead: the logo and name, large, in brushed stainless steel. It scrolls
+   away; the menu bar below stays pinned and picks up a small logo. */
+.fas { --steel:
+    repeating-linear-gradient(90deg, rgba(255,255,255,.08) 0 1px, transparent 1px 2px, rgba(0,0,0,.09) 2px 3px, transparent 3px 5px),
+    linear-gradient(180deg, #fdfdfd 0%, #d6d9dd 20%, #9ba0a6 46%, #c8cbd0 56%, #f0f2f4 76%, #a6aab0 100%); }
+.fas .masthead {
+  display: grid; justify-items: center; gap: .55rem; text-align: center;
+  padding: clamp(1.25rem, 1rem + 1.5vw, 2.25rem) var(--gutter-r) clamp(1rem, .75rem + 1vw, 1.75rem) var(--gutter);
+  background: radial-gradient(60% 120% at 50% 0%, rgba(255,255,255,.05), transparent 70%), var(--ink);
+}
+.fas .masthead__link {
+  display: inline-flex; align-items: center; gap: clamp(.8rem, .4rem + 1.5vw, 1.75rem);
+  text-decoration: none; max-width: 100%;
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,.7)) drop-shadow(0 0 18px rgba(255,255,255,.06));
+}
+.fas .masthead__logo {
+  flex: none; display: block; width: clamp(56px, 2.5rem + 4.5vw, 120px); aspect-ratio: 1;
+  background: var(--steel);
+  -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+  -webkit-mask-position: center; mask-position: center;
+}
+.fas .masthead__name {
+  font-family: var(--f-display); font-size: clamp(1.75rem, .9rem + 4.2vw, 4.6rem); line-height: 1.05;
+  white-space: nowrap; background: var(--steel); -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.fas .masthead__name em { font-style: italic; }
+.fas .masthead__tag { letter-spacing: .5em; margin-right: -.5em; }
+.fas .masthead ~ .site-header .brand { transition: opacity .3s, visibility .3s; }
+.fas .masthead ~ .site-header:not(.show-brand) .brand { opacity: 0; visibility: hidden; }
+
 /* Header */
 .fas .site-header {
   position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50;
@@ -157,7 +187,17 @@ body::before {
   transition: border-color .2s;
 }
 .fas .field input::placeholder { color: #6f6563; }
-.fas .field input:focus, .fas .field textarea:focus { outline: none; border-color: var(--gold); }
+.fas .field input:focus, .fas .field textarea:focus, .fas .field select:focus { outline: none; border-color: var(--gold); }
+.fas .field select {
+  width: 100%; font: inherit; color: var(--bone); border: 1px solid var(--line); border-radius: 0;
+  padding: 0.9rem 2.6rem 0.9rem 1rem; -webkit-appearance: none; appearance: none; cursor: pointer;
+  background:
+    linear-gradient(45deg, transparent 50%, var(--gold) 50%) calc(100% - 1.25rem) 55% / 6px 6px no-repeat,
+    linear-gradient(-45deg, transparent 50%, var(--gold) 50%) calc(100% - 1.25rem + 6px) 55% / 6px 6px no-repeat,
+    var(--ink);
+}
+.fas .field select:invalid { color: #8a7f7c; }
+.fas .field select option, .fas .field select optgroup { color: var(--bone); background: var(--panel); }
 
 /* Footer */
 .fas .site-footer { border-top: 1px solid var(--line); padding-block: 3.5rem 2.5rem; }
