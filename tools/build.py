@@ -181,6 +181,78 @@ def fill_newest(html: str) -> str:
     return fill_pieces(NEWEST_RE.sub(repl, html), picks)
 
 
+# ---- Art page: every piece, filterable ------------------------------------
+# A page can contain <!-- all:start --> ... <!-- all:end --> inside an element
+# with data-all. The build fills it with every artwork, newest first (pinned
+# pieces from the page's gallery-picks first), and fills <!-- cats:start -->
+# ... <!-- cats:end --> with one filter button per category and
+# <span data-total>N</span> with the number of pieces.
+ALL_RE = re.compile(r'(data-all[^>]*>\s*<!-- all:start -->).*?(<!-- all:end -->)', re.S)
+CATS_RE = re.compile(r'<!-- cats:start -->.*?<!-- cats:end -->', re.S)
+TOTAL_RE = re.compile(r'(<span data-total>)[^<]*(</span>)')
+HIDDEN_CATS = {"uncategorized"}        # no filter button; those pieces still show under All
+
+
+def card_html(w) -> str:
+    """One framed piece + name plate for the art page. Mirrors cardHTML() in the page."""
+    e = lambda v: htmllib.escape(str(v), quote=True)
+    wd, ht = int(w.get("width") or 1), int(w.get("height") or 1)
+    orient = "portrait" if ht > wd else "landscape"
+    meta = " · ".join(x for x in ("No. " + w["num"] if w.get("num") else "", w.get("meta") or "") if x) or "by Scotty"
+    details = (f'<a href="{e(w["link"])}" class="link-details">Details</a>') if w.get("link") else ""
+    return (
+        f'<article class="work work--{orient}" data-cats="{e(" ".join(w.get("cats", [])))}">'
+        f'<div class="work__art"><button class="frame" type="button" style="--ar:{wd / ht:.4f}" data-full="{e(w.get("full") or w["img"])}" aria-label="View {e(w["title"])} full size">'
+        f'<span class="frame__mat"><img src="{e(w["img"])}" alt="{e(w["title"])}" width="{wd}" height="{ht}" loading="lazy"></span></button></div>'
+        f'<div class="placard"><p class="label label--gold">{e(meta)}</p><h3>{e(w["title"])}</h3>'
+        f'<div class="placard__links"><button type="button" class="link-view">View</button>{details}'
+        f'<a href="#quote" class="link-quote" data-title="{e(w["title"])}">Request a quote →</a></div></div></article>\n'
+    )
+
+
+def fill_all(html: str) -> str:
+    if not ALL_RE.search(html):
+        return html
+    pm = PICKS_RE.search(html)
+    picks = json.loads(pm.group(1)) if pm else {}
+    skip = {key(t) for t in picks.get("skip", [])}
+    cats, _ = get_json("fine-art-category?per_page=100&_fields=id,name,slug,count")
+    by_id = {c["id"]: c for c in cats}
+    posts = sorted((p for p in all_posts() if p.get("featured_media")
+                    and key(nice_title(p["title"]["rendered"])[0]) not in skip), key=newest_key, reverse=True)
+    media = {}
+    ids = [p["featured_media"] for p in posts]
+    for i in range(0, len(ids), 100):
+        got, _ = get_json("media?_fields=id,source_url,media_details&per_page=100&include=" + ",".join(map(str, ids[i:i + 100])))
+        media.update({m["id"]: m for m in got})
+    works, counts = [], {}
+    for p in posts:
+        pc = [by_id[c] for c in p.get("fine-art-category", []) if c in by_id]
+        w = from_site(p, media.get(p["featured_media"]), htmllib.unescape(pc[0]["name"]) if pc else "")
+        if not w:
+            continue
+        sizes = media[p["featured_media"]].get("media_details", {}).get("sizes", {})
+        img = sizes.get("medium_large") or sizes.get("large")
+        if img:                                   # a lighter file for the wall; full size opens in the viewer
+            w.update(img=img["source_url"], width=img["width"], height=img["height"])
+        w["cats"] = [c["slug"] for c in pc]
+        w["link"] = p.get("link", "")
+        for c in pc:
+            counts[c["slug"]] = counts.get(c["slug"], 0) + 1
+        works.append(w)
+    live_keys = {key(w["title"]) for w in works}
+    pinned = [dict(w, cats=w.get("cats", [])) for w in picks.get("pinned", []) if key(w["title"]) not in live_keys]
+    works = pinned + works
+    e = lambda v: htmllib.escape(str(v), quote=True)
+    chips = "".join(
+        f'<button type="button" class="chip" data-cat="{e(c["slug"])}" aria-pressed="false">{e(htmllib.unescape(c["name"]))} <span>{counts[c["slug"]]}</span></button>\n'
+        for c in sorted(cats, key=lambda c: c["name"].lower()) if counts.get(c["slug"]) and c["slug"] not in HIDDEN_CATS)
+    html = CATS_RE.sub(lambda m: "<!-- cats:start -->\n" + chips + "<!-- cats:end -->", html)
+    html = TOTAL_RE.sub(lambda m: m.group(1) + str(len(works)) + m.group(2), html)
+    print(f"wall:    {len(works)} pieces ({len(pinned)} pinned), {chips.count('<button')} filters")
+    return ALL_RE.sub(lambda m: m.group(1) + "\n" + "".join(card_html(w) for w in works) + m.group(2), html)
+
+
 def inline_assets(html: str) -> str:
     """Embed local assets as data: URIs: CSS backgrounds (the pebble texture) and
     new artwork in assets/art-new/ that isn't on the site yet."""
@@ -244,12 +316,12 @@ def source_bytes(url: str) -> bytes:
     return buf.getvalue()
 
 
-def to_webp(data: bytes, dest: pathlib.Path) -> None:
+def to_webp(data: bytes, dest: pathlib.Path, edge: int = MAX_EDGE, quality: int = 82) -> None:
     from PIL import Image
     im = Image.open(io.BytesIO(data))
     im = im.convert("RGBA" if im.mode in ("RGBA", "LA", "P") else "RGB")
-    im.thumbnail((MAX_EDGE, MAX_EDGE))
-    im.save(dest, "WEBP", quality=82, method=6)
+    im.thumbnail((edge, edge))
+    im.save(dest, "WEBP", quality=quality, method=6)
 
 
 def preview_version(name: str, html: str) -> None:
@@ -257,12 +329,16 @@ def preview_version(name: str, html: str) -> None:
     (out / "img").mkdir(parents=True, exist_ok=True)
     urls = sorted(set(UPLOAD_RE.findall(html)))
     sized = {SIZE_RE.sub(r"\1", u): u for u in urls if SIZE_RE.search(u)}
+    # A page with many images can ask for smaller preview copies so the preview
+    # stays under its size limit: <meta name="claude:preview-edge" content="640">
+    em = re.search(r'<meta name="claude:preview-edge" content="(\d+)">', html)
+    edge = int(em.group(1)) if em else MAX_EDGE
     mapping = {}
     for u in urls:
         src = sized.get(u, u)  # full-size originals reuse their resized copy
         local = "img/" + re.sub(r"[^a-zA-Z0-9]+", "-", src.split("/uploads/")[1].rsplit(".", 1)[0]).strip("-") + ".webp"
         if not (out / local).exists():
-            to_webp(source_bytes(src), out / local)
+            to_webp(source_bytes(src), out / local, edge, 82 if edge == MAX_EDGE else 74)
         mapping[u] = local
     # The lightbox falls back to the thumbnail, so drop the full-size links
     # rather than embedding every artwork twice.
@@ -280,7 +356,7 @@ def main(names):
     DIST.mkdir(exist_ok=True)
     pages = [PAGES / f"{n}.html" for n in names] if names else sorted(PAGES.glob("*.html"))
     for page in pages:
-        html = inline_assets(fill_newest(inline_css(page.read_text())))
+        html = inline_assets(fill_newest(fill_all(inline_css(page.read_text()))))
         (DIST / page.name).write_text(wordpress_version(html))
         print(f"dist:    dist/{page.name}")
         preview_version(page.stem, html)

@@ -1,0 +1,688 @@
+<title>The Art · Fine Art by Scotty</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="claude:preview-edge" content="560">
+<meta name="description" content="Every original work by Scotty, framed. Browse the full collection by subject and request a personal quote.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@400;500;600;700&family=Syncopate:wght@700&display=swap">
+<link rel="stylesheet" href="../assets/site.css">
+<style>
+/* Art page. The frame, name plate, pebble wall, viewer and quote form below
+   are copied from the homepage so the two pages match exactly. */
+/* Collection: framed works floating over polished black onyx pebbles.
+   The stones come from tools/make_pebbles.py; two slow light layers on top
+   read as water moving across wet stone. */
+.fas .collection { position: relative; isolation: isolate; overflow: hidden; background: #050505; }
+.fas .collection::before, .fas .collection::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+}
+.fas .collection::before {
+  background:
+    linear-gradient(180deg, var(--ink) 0, rgba(13,10,11,.55) 280px, rgba(13,10,11,.15) 520px, rgba(13,10,11,.15) calc(100% - 320px), var(--ink) 100%),
+    url("../assets/onyx-pebbles.webp") 0 0 / 520px 520px repeat;
+}
+.fas .collection::after {
+  background:
+    radial-gradient(38% 22% at 30% 40%, rgba(220,225,235,.10), transparent 70%),
+    radial-gradient(30% 18% at 70% 65%, rgba(220,225,235,.08), transparent 70%),
+    repeating-linear-gradient(115deg, transparent 0 46px, rgba(255,255,255,.022) 46px 50px, transparent 50px 120px);
+  background-size: 140% 140%, 140% 140%, 200% 200%;
+  mix-blend-mode: screen;
+  animation: fas-water 26s ease-in-out infinite alternate;
+}
+@keyframes fas-water {
+  0%   { background-position: 0% 0%, 100% 0%, 0% 0%; }
+  50%  { background-position: 40% 60%, 60% 40%, 50% 100%; }
+  100% { background-position: 100% 100%, 0% 100%, 100% 0%; }
+}
+.fas .collection__head {
+  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end;
+  gap: 1.5rem 3rem; margin-bottom: clamp(3rem, 2rem + 4vw, 6rem);
+}
+.fas .collection__head > div { display: grid; gap: 1.25rem; min-width: 0; }
+
+/* Frame, built the way the studio builds them: a charcoal brushed-metal outer
+   tube, a brighter brushed-metal liner set right inside it against the
+   painting (no mat), and a long shadow so it floats off the wall. */
+.fas .frame, .fas .frame__mat { --tube: calc(clamp(12px, .6rem + .9vw, 22px) * 1.3); --liner: clamp(6px, .3rem + .4vw, 12px); }
+.fas .frame {
+  display: block; position: relative; padding: var(--tube); border: 0; cursor: zoom-in;
+  background:
+    repeating-linear-gradient(0deg, rgba(255,255,255,.035) 0 1px, transparent 1px 2px, rgba(0,0,0,.06) 2px 3px, transparent 3px 5px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.025) 0 1px, transparent 1px 3px),
+    linear-gradient(135deg, #8a8d91 0%, #4a4c50 14%, #2b2d30 32%, #5e6165 50%, #313337 68%, #24262a 84%, #74777b 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.22),
+    inset 1px 1px 0 1px rgba(255,255,255,.12),
+    inset -1px -1px 0 1px rgba(0,0,0,.35),
+    0 60px 90px -35px rgba(0,0,0,1),
+    0 30px 45px -15px rgba(0,0,0,.9),
+    0 0 0 1px rgba(0,0,0,.8);
+  transition: transform .5s cubic-bezier(.2,.7,.2,1), box-shadow .5s;
+}
+.fas .frame::after {                     /* fine seam where the two metals meet */
+  content: ""; position: absolute; pointer-events: none; inset: calc(var(--tube) - 1px);
+  border: 1px solid; border-color: rgba(0,0,0,.6) rgba(0,0,0,.35) rgba(255,255,255,.18) rgba(0,0,0,.45);
+}
+.fas button.frame:hover { transform: translateY(-6px); box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.26), inset 1px 1px 0 1px rgba(255,255,255,.14), inset -1px -1px 0 1px rgba(0,0,0,.35),
+    0 80px 110px -35px rgba(0,0,0,1), 0 40px 60px -15px rgba(0,0,0,.9), 0 0 0 1px rgba(0,0,0,.8); }
+.fas .frame--static { cursor: default; }
+.fas .frame__mat {                       /* the bright brushed-metal liner */
+  display: block; padding: var(--liner);
+  background:
+    repeating-linear-gradient(0deg, rgba(255,255,255,.05) 0 1px, transparent 1px 2px, rgba(0,0,0,.07) 2px 3px, transparent 3px 5px),
+    linear-gradient(135deg, #c9ccd0 0%, #7b7e83 16%, #a4a7ac 34%, #66696d 52%, #b3b6bb 70%, #74777b 86%, #d2d5d9 100%);
+  box-shadow: inset 1px 1px 0 rgba(255,255,255,.55), inset -1px -1px 0 rgba(0,0,0,.45), 0 0 0 1px rgba(0,0,0,.5);
+}
+.fas .frame__mat img { display: block; width: 100%; }
+.fas .frame__mat img, .fas .frame__mat .crop { box-shadow: 0 0 0 1px rgba(0,0,0,.55); }
+.fas .frame__mat .crop img { box-shadow: none; position: absolute; max-width: none; height: auto; }
+/* Black bars baked into an image file are trimmed by script; this box shows only the painting */
+.fas .crop { display: block; position: relative; overflow: hidden; }
+
+/* Placard: a museum label beside each piece */
+.fas .placard {
+  display: grid; gap: .9rem; min-width: 0; padding: 1.5rem 1.6rem;
+  background: rgba(13,10,11,.88); border: 1px solid var(--line);
+  box-shadow: 0 20px 40px -20px rgba(0,0,0,.9);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+}
+.fas .placard h3 { font-size: var(--step-2); }
+.fas .placard__links { display: flex; flex-wrap: wrap; gap: .5rem 1.25rem; padding-top: .9rem; border-top: 1px solid var(--line); }
+.fas .placard__links a, .fas .placard__links button {
+  font-family: var(--f-label); font-weight: 700; font-size: .625rem; letter-spacing: .2em; text-transform: uppercase;
+  background: none; border: 0; padding: .35rem 0; color: var(--smoke); cursor: pointer; text-decoration: none;
+}
+.fas .placard__links a { color: var(--gold); }
+.fas .placard__links a:hover, .fas .placard__links button:hover { color: var(--bone); }
+
+/* Quote */
+.fas .quote .wrap {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: clamp(2.5rem, 1rem + 5vw, 6rem); align-items: start;
+}
+.fas .quote__text { display: grid; gap: 1.75rem; min-width: 0; }
+.fas .contact-list { list-style: none; margin: 1rem 0 0; padding: 0; display: grid; border-top: 1px solid var(--line); }
+.fas .contact-list li {
+  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: .25rem 1rem;
+  padding-block: 1.1rem; border-bottom: 1px solid var(--line);
+}
+.fas .contact-list a {
+  font-family: var(--f-display); font-size: 1.35rem; text-decoration: none; overflow-wrap: anywhere;
+  font-variant-numeric: lining-nums;
+}
+.fas .contact-list a:hover { color: var(--gold-hi); }
+.fas .quote-form {
+  background: var(--panel); border: 1px solid var(--line);
+  padding: clamp(1.5rem, 1rem + 2.5vw, 3rem);
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem;
+  position: relative;
+}
+.fas .quote-form::before {
+  content: ""; position: absolute; left: -1px; right: -1px; top: -1px; height: 2px; background: var(--gold);
+}
+.fas .quote-form .full { grid-column: 1 / -1; }
+.fas .quote-form .btn { justify-content: center; width: 100%; }
+.fas .form-note { font-size: var(--step--1); color: var(--smoke); }
+.fas .form-done { grid-column: 1 / -1; display: grid; gap: .75rem; padding-block: 2rem; }
+.fas .form-done h3 { font-size: var(--step-2); }
+
+/* Lightbox */
+.fas-lightbox {
+  border: 0; padding: 0; background: transparent; color: var(--bone);
+  max-width: 100vw; max-height: 100vh; width: 100%; height: 100%;
+}
+.fas-lightbox::backdrop { background: rgba(5,4,5,.94); }
+.fas-lightbox .lb {
+  height: 100%; display: grid; grid-template-rows: minmax(0, 1fr) auto;
+  padding: calc(1rem + env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) calc(1rem + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+  font-family: var(--f-body);
+}
+.fas-lightbox figure { margin: 0; min-height: 0; display: grid; place-items: center; }
+.fas-lightbox img { max-width: 100%; max-height: 100%; object-fit: contain; box-shadow: 0 30px 90px rgba(0,0,0,.8); }
+.fas-lightbox .lb__bar {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem;
+  padding-top: 1rem; max-width: var(--wrap); width: 100%; margin-inline: auto;
+}
+.fas-lightbox h3 { font-family: var(--f-display); font-weight: 400; font-style: italic; font-size: var(--step-2); margin: 0; }
+.fas-lightbox .lb__ctrl { display: flex; gap: .5rem; flex-wrap: wrap; }
+.fas-lightbox .icon-btn {
+  width: 48px; height: 48px; display: grid; place-items: center; cursor: pointer;
+  background: transparent; color: var(--bone); border: 1px solid rgba(239,232,227,.3);
+}
+.fas-lightbox .icon-btn:hover { border-color: var(--bone); }
+.fas-lightbox .icon-btn svg { width: 18px; height: 18px; }
+
+
+/* ---- Art page ---------------------------------------------------------- */
+.fas .collection { padding-top: clamp(2.5rem, 2rem + 3vw, 5rem); }
+.fas .collection__head { margin-bottom: clamp(2rem, 1.5rem + 2vw, 3.5rem); }
+.fas .collection h1 { font-size: var(--step-4); line-height: 1; }
+
+/* Filter bar: pinned under the header while you browse */
+.fas .filters {
+  position: sticky; top: var(--hdr, 76px); z-index: 5;
+  margin-inline: calc(-1 * var(--gutter, 16px)); padding: .9rem var(--gutter, 16px);
+  background: rgba(13,10,11,.9); border-block: 1px solid var(--line);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1.5rem;
+  margin-bottom: clamp(3rem, 2rem + 4vw, 6rem);
+}
+.fas .chips { display: flex; flex-wrap: wrap; gap: .5rem; flex: 1 1 32rem; min-width: 0; }
+.fas .chip, .fas .sort button {
+  font-family: var(--f-label); font-weight: 700; font-size: .625rem; letter-spacing: .18em; text-transform: uppercase;
+  background: transparent; color: var(--smoke); border: 1px solid rgba(239,232,227,.22);
+  padding: .55rem .85rem; min-height: 36px; cursor: pointer; white-space: nowrap;
+  transition: color .2s, border-color .2s, background .2s;
+}
+.fas .chip span { color: var(--gold); margin-left: .35em; }
+.fas .chip:hover, .fas .sort button:hover { color: var(--bone); border-color: rgba(239,232,227,.5); }
+.fas .chip[aria-pressed="true"], .fas .sort button[aria-pressed="true"] { color: var(--ink); background: var(--gold); border-color: var(--gold); }
+.fas .chip[aria-pressed="true"] span { color: var(--ink); }
+.fas .sort { display: flex; align-items: center; gap: .5rem; margin-left: auto; }
+.fas .sort .label { margin-right: .25rem; }
+
+/* The wall: framed pieces hung in rows. Every frame in a row sits on the same
+   line, so the name plates line up underneath. */
+.fas .wall {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(4rem, 3rem + 3vw, 7rem) clamp(1.5rem, 1rem + 2.5vw, 3.5rem);
+}
+.fas .work { display: flex; flex-direction: column; gap: 1.75rem; min-width: 0; }
+.fas .work[hidden] { display: none; }
+.fas .work__art { flex: 1; display: flex; align-items: flex-end; justify-content: center; }
+.fas .wall .frame, .fas .wall .frame__mat { --tube: calc(clamp(10px, .45rem + .6vw, 16px) * 1.3); --liner: clamp(5px, .25rem + .3vw, 9px); }
+/* Width follows the painting's shape so tall and wide pieces hang at a similar height */
+.fas .wall .frame { width: min(100%, calc(var(--art-h, 22rem) * var(--ar, .75) + 2 * (var(--tube) + var(--liner)))); }
+.fas .wall .placard { padding: 1.15rem 1.25rem; gap: .6rem; }
+.fas .wall .placard h3 { font-size: var(--step-1); }
+.fas .wall .placard__links { padding-top: .7rem; gap: .25rem 1.1rem; }
+
+.fas .wall__foot { display: grid; justify-items: center; gap: 1rem; margin-top: clamp(4rem, 3rem + 4vw, 7rem); }
+.fas .wall__empty { grid-column: 1 / -1; text-align: center; color: var(--smoke); }
+
+@media (max-width: 1080px) { .fas .wall { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 860px) {
+  .fas .quote .wrap { grid-template-columns: minmax(0, 1fr); }
+  .fas .sort { margin-left: 0; }
+  /* On small screens the categories scroll sideways in one line */
+  .fas .chips { flex-wrap: nowrap; overflow-x: auto; flex-basis: 100%; scrollbar-width: none; padding-bottom: 2px; }
+  .fas .chips::-webkit-scrollbar { display: none; }
+}
+@media (max-width: 600px) {
+  .fas .wall { grid-template-columns: minmax(0, 1fr); }
+  .fas .wall .frame { --art-h: 26rem; }
+  .fas .wall .placard { justify-self: center; width: min(100%, 30rem); }
+  .fas .quote-form { grid-template-columns: minmax(0, 1fr); }
+}
+</style>
+
+<div class="fas" id="top">
+
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="https://www.fineartbyscotty.com/" aria-label="Fine Art by Scotty, home">
+        <span class="brand__logo" aria-hidden="true" style="-webkit-mask-image: url('https://www.fineartbyscotty.com/wp-content/uploads/2016/12/cropped-Fine-Art-by-Scotty-Logo-Black-Michael-Cropped-2.png'); mask-image: url('https://www.fineartbyscotty.com/wp-content/uploads/2016/12/cropped-Fine-Art-by-Scotty-Logo-Black-Michael-Cropped-2.png');"></span>
+        <span class="brand__text"><span class="brand__name">Fine Art <em>by Scotty</em></span><span class="label brand__tag">Tastefully Edgy</span></span>
+      </a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 6h16M2 14h16"/></svg>
+      </button>
+      <nav class="nav" id="site-nav" aria-label="Main">
+        <ul>
+          <li><a href="https://www.fineartbyscotty.com/fine-art/" aria-current="page">The Art</a></li>
+          <li><a href="https://www.fineartbyscotty.com/about-us/">The Artist</a></li>
+          <li><a href="https://www.fineartbyscotty.com/toy-box/">Toy Box</a></li>
+          <li><a href="https://www.fineartbyscotty.com/videos/">Videos</a></li>
+          <li class="has-sub">
+            <button class="sub-toggle" type="button" aria-haspopup="true">News</button>
+            <ul class="sub">
+              <li><a href="https://www.fineartbyscotty.com/category/announcements/">Announcements</a></li>
+              <li><a href="https://www.fineartbyscotty.com/category/press/">Press</a></li>
+              <li><a href="https://www.fineartbyscotty.com/category/events/">Events</a></li>
+              <li><a href="https://www.fineartbyscotty.com/category/blog/">Blog</a></li>
+            </ul>
+          </li>
+          <li><a href="https://www.fineartbyscotty.com/contact/">Contact</a></li>
+        </ul>
+        <a class="btn btn--gold" href="#quote">Request a quote</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <section class="section collection" aria-labelledby="art-title">
+      <div class="wrap">
+        <div class="collection__head">
+          <div>
+            <p class="label label--gold">Fine Art</p>
+            <h1 id="art-title">The <em>collection.</em></h1>
+          </div>
+          <p class="lede"><span data-total>140</span> original works by Scotty, newest first. Choose a subject, or take in the whole wall.</p>
+        </div>
+
+        <div class="filters" role="group" aria-label="Filter the collection">
+          <div class="chips" id="chips">
+            <button type="button" class="chip" data-cat="" aria-pressed="true">All</button>
+<!-- cats:start -->
+<!-- cats:end -->
+          </div>
+          <div class="sort" role="group" aria-label="Sort">
+            <span class="label">Sort</span>
+            <button type="button" data-sort="newest" aria-pressed="true">Newest</button>
+            <button type="button" data-sort="az" aria-pressed="false">A–Z</button>
+          </div>
+        </div>
+
+        <!-- Pieces that aren't on the site yet show first ("pinned"); "skip" leaves
+             pieces out. Same format as the homepage's gallery-picks. -->
+        <script type="application/json" id="gallery-picks">
+{
+  "pinned": [
+    { "title": "Community Property", "num": "144", "meta": "New for 2026",
+      "img": "../assets/art-new/community-property-sz144.jpg", "width": 1208, "height": 1600 }
+  ],
+  "skip": []
+}
+        </script>
+        <!-- Every piece. The build fills this with a snapshot of the site's artwork
+             list (newest first); on the live site the script refreshes it on every
+             visit, so new uploads appear by themselves. -->
+        <div class="wall" id="wall" data-all>
+<!-- all:start -->
+<!-- all:end -->
+        </div>
+
+        <div class="wall__foot">
+          <p class="label" id="wall-count" aria-live="polite"></p>
+          <button class="btn btn--gold" type="button" id="wall-more">Show more <span class="arrow" aria-hidden="true">↓</span></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section quote" id="quote" aria-labelledby="quote-title">
+      <div class="wrap">
+        <div class="quote__text">
+          <p class="label label--gold">Private acquisitions</p>
+          <h2 id="quote-title">Request your <em>personal</em> quote.</h2>
+          <p class="lede">Every piece is crafted to bring elegance and inspiration into your space. Tell us which work caught your eye and how you'd like it, and we'll come back to you with a personalized quote.</p>
+          <ul class="contact-list">
+            <li><span class="label">Office</span><a href="tel:+16194408525">(619) 440-8525</a></li>
+            <li><span class="label">Phone</span><a href="tel:+16198903330">(619) 890-3330</a></li>
+            <li><span class="label">Email</span><a href="mailto:info@fineartbyscotty.com">info@fineartbyscotty.com</a></li>
+          </ul>
+        </div>
+
+        <!-- On the live site this sends through the existing Elementor form on the
+             old homepage (page 4676, form dfb2b92), so requests reach the same inbox.
+             Keep that page published (it just isn't the front page any more). -->
+        <form class="quote-form" id="quote-form" novalidate data-post-id="4676" data-form-id="dfb2b92">
+          <div class="field"><label for="q-first">First name</label><input id="q-first" name="first_name" type="text" autocomplete="given-name" required></div>
+          <div class="field"><label for="q-last">Last name</label><input id="q-last" name="last_name" type="text" autocomplete="family-name" required></div>
+          <div class="field"><label for="q-phone">Phone</label><input id="q-phone" name="phone" type="tel" autocomplete="tel" required></div>
+          <div class="field"><label for="q-email">Email</label><input id="q-email" name="email" type="email" autocomplete="email" required></div>
+          <div class="field full"><label for="q-art">Which piece are you interested in?</label>
+            <select id="q-art" name="artwork" required>
+              <option value="">Choose a piece…</option>
+<!-- pieces:start -->
+<!-- pieces:end -->
+              <option value="__other">Something else / not sure</option>
+            </select>
+          </div>
+          <div class="field full" id="q-other-wrap" hidden><label for="q-other">Tell us which piece</label><input id="q-other" name="artwork_other" type="text" placeholder="The title, or describe it"></div>
+          <div class="field full"><label for="q-notes">Size, framing or anything else (optional)</label><textarea id="q-notes" name="notes" rows="3"></textarea></div>
+          <div class="full"><button class="btn btn--gold" type="submit">Request my quote <span class="arrow" aria-hidden="true">→</span></button></div>
+          <p class="form-note full" id="q-status" role="status">All fields except the last are required.</p>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-top">
+        <img src="https://www.fineartbyscotty.com/wp-content/uploads/2025/01/image-49.png" alt="Fine Art by Scotty logo" width="273" height="253" loading="lazy">
+        <nav class="footer-nav" aria-label="Footer">
+          <ul>
+            <li><a href="https://www.fineartbyscotty.com/fine-art/">The Art</a></li>
+            <li><a href="https://www.fineartbyscotty.com/about-us/">The Artist</a></li>
+            <li><a href="https://www.fineartbyscotty.com/toy-box/">Toy Box</a></li>
+            <li><a href="https://www.fineartbyscotty.com/videos/">Videos</a></li>
+            <li><a href="https://www.fineartbyscotty.com/news/">News</a></li>
+            <li><a href="https://www.fineartbyscotty.com/contact/">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Fine Art by Scotty. Tastefully Edgy.</span>
+        <a href="#top">Back to top ↑</a>
+      </div>
+    </div>
+  </footer>
+
+  <dialog class="fas-lightbox" id="lightbox" aria-label="Artwork viewer">
+    <div class="lb">
+      <figure><img id="lb-img" src="" alt=""></figure>
+      <div class="lb__bar">
+        <h3 id="lb-title"></h3>
+        <div class="lb__ctrl">
+          <button class="icon-btn" type="button" id="lb-prev" aria-label="Previous piece"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12.5 4 6.5 10l6 6"/></svg></button>
+          <button class="icon-btn" type="button" id="lb-next" aria-label="Next piece"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m7.5 4 6 6-6 6"/></svg></button>
+          <a class="btn btn--gold" href="#quote" id="lb-quote">Request a quote</a>
+          <button class="icon-btn" type="button" id="lb-close" aria-label="Close"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m5 5 10 10M15 5 5 15"/></svg></button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+</div>
+
+<script>
+(function () {
+  // Mobile menu
+  var btn = document.querySelector('.fas .menu-btn');
+  var nav = document.getElementById('site-nav');
+  if (btn && nav) {
+    btn.addEventListener('click', function () {
+      var open = nav.classList.toggle('is-open');
+      btn.setAttribute('aria-expanded', String(open));
+      btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    });
+    // The menu panel opens just below the bar, wherever the bar is on screen.
+    btn.addEventListener('click', function () {
+      var bar = btn.closest('.site-header');
+      if (bar) nav.style.top = Math.round(bar.getBoundingClientRect().bottom) + 'px';
+    });
+    nav.addEventListener('click', function (e) {
+      if (e.target.closest('a')) { nav.classList.remove('is-open'); btn.setAttribute('aria-expanded', 'false'); }
+    });
+  }
+
+  // Slim the pinned header down a little once the page is scrolled.
+  var bar = document.querySelector('.fas .site-header');
+  if (bar) {
+    var compact = function () { bar.classList.toggle('is-compact', window.scrollY > 40); };
+    window.addEventListener('scroll', compact, { passive: true }); compact();
+  }
+
+  // ---- The wall --------------------------------------------------------
+  var gallery = document.getElementById('wall');
+  var LIST = '/wp-json/wp/v2/fine-art?per_page=100&_fields=id,date,title,link,featured_media,fine-art-category&page=';
+  var MEDIA = '/wp-json/wp/v2/media?_fields=id,source_url,media_details&per_page=100&include=';
+  var CATS = '/wp-json/wp/v2/fine-art-category?per_page=100&_fields=id,name,slug';
+  function esc(t) { return String(t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function decode(t) { var el = document.createElement('textarea'); el.innerHTML = t; return el.value; }
+  function niceTitle(raw) {
+    var t = decode(raw).trim(), m = t.match(/\s+SZ\s*(\d+)\s*$/i), num = m ? m[1] : '';
+    if (m) t = t.slice(0, m.index);
+    t = t.toLowerCase().replace(/(^|[\s(\/-])([a-z])/g, function (_, a, b) { return a + b.toUpperCase(); });
+    return { title: t, num: num };
+  }
+  // Newest first: the piece number (SZ###) decides; pieces without one follow, by publish date.
+  function newestFirst(a, b) {
+    var na = +niceTitle(a.title.rendered).num || 0, nb = +niceTitle(b.title.rendered).num || 0;
+    if (na !== nb) return nb - na;
+    return a.date < b.date ? 1 : a.date > b.date ? -1 : 0;
+  }
+  function getJSON(url) { return fetch(url).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json().then(function (d) { return { data: d, pages: +r.headers.get('X-WP-TotalPages') || 1 }; }); }); }
+  var picks = { pinned: [], skip: [] };
+  try { var pj = document.getElementById('gallery-picks'); if (pj) picks = JSON.parse(pj.textContent); } catch (e) {}
+  function key(t) { return String(t).toLowerCase().replace(/[^a-z0-9]/g, ''); }
+  // One framed piece + name plate. Mirrors card_html() in tools/build.py.
+  function cardHTML(w) {
+    var wd = +w.width || 1, ht = +w.height || 1, orient = ht > wd ? 'portrait' : 'landscape';
+    var meta = [w.num ? 'No. ' + w.num : '', w.meta || ''].filter(Boolean).join(' · ') || 'by Scotty';
+    return '<article class="work work--' + orient + '" data-cats="' + esc((w.cats || []).join(' ')) + '">' +
+      '<div class="work__art"><button class="frame" type="button" style="--ar:' + (wd / ht).toFixed(4) + '" data-full="' + esc(w.full || w.img) + '" aria-label="View ' + esc(w.title) + ' full size">' +
+      '<span class="frame__mat"><img src="' + esc(w.img) + '" alt="' + esc(w.title) + '" width="' + wd + '" height="' + ht + '" loading="lazy"></span></button></div>' +
+      '<div class="placard"><p class="label label--gold">' + esc(meta) + '</p><h3>' + esc(w.title) + '</h3>' +
+      '<div class="placard__links"><button type="button" class="link-view">View</button>' +
+      (w.link ? '<a href="' + esc(w.link) + '" class="link-details">Details</a>' : '') +
+      '<a href="#quote" class="link-quote" data-title="' + esc(w.title) + '">Request a quote →</a></div></div></article>';
+  }
+
+  var STEP = 24, shown = STEP, cat = '', sort = 'newest';
+  var chips = document.getElementById('chips');
+  var more = document.getElementById('wall-more');
+  var countEl = document.getElementById('wall-count');
+  function cards() { return Array.prototype.slice.call(gallery.querySelectorAll('.work')); }
+  function name(w) { return w.querySelector('h3').textContent; }
+  function numberCards() { cards().forEach(function (w, i) { w.setAttribute('data-order', i); }); }
+  function apply() {
+    var list = cards();
+    list.sort(sort === 'az' ? function (a, b) { return name(a).localeCompare(name(b)); }
+                            : function (a, b) { return a.getAttribute('data-order') - b.getAttribute('data-order'); });
+    list.forEach(function (w) { gallery.appendChild(w); });
+    var match = list.filter(function (w) { return !cat || (' ' + w.getAttribute('data-cats') + ' ').indexOf(' ' + cat + ' ') > -1; });
+    list.forEach(function (w) { w.hidden = true; });
+    match.slice(0, shown).forEach(function (w) { w.hidden = false; });
+    more.hidden = match.length <= shown;
+    countEl.textContent = match.length ? 'Showing ' + Math.min(shown, match.length) + ' of ' + match.length : 'Nothing here yet';
+    trimAll();
+  }
+  function press(group, btn) {
+    Array.prototype.forEach.call(group.querySelectorAll('button'), function (b) { b.setAttribute('aria-pressed', String(b === btn)); });
+  }
+  function backToWall() {          // after a filter change, bring the top of the wall into view
+    var bar = document.querySelector('.fas .filters'), y = gallery.getBoundingClientRect().top;
+    if (y < 0) window.scrollTo({ top: window.scrollY + y - (bar ? bar.offsetHeight + bar.getBoundingClientRect().top : 0) - 24, behavior: 'smooth' });
+  }
+  chips.addEventListener('click', function (e) {
+    var b = e.target.closest('.chip'); if (!b) return;
+    cat = b.getAttribute('data-cat') || ''; shown = STEP; press(chips, b); apply(); backToWall();
+  });
+  var sortBox = document.querySelector('.fas .sort');
+  sortBox.addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-sort]'); if (!b) return;
+    sort = b.getAttribute('data-sort'); shown = STEP; press(sortBox, b); apply(); backToWall();
+  });
+  more.addEventListener('click', function () { shown += STEP; apply(); });
+
+  // Keep the filter bar tucked right under the pinned header as it slims.
+  var hdr = document.querySelector('.fas .site-header'), root = document.querySelector('.fas');
+  function syncHdr() { if (hdr) root.style.setProperty('--hdr', Math.round(hdr.getBoundingClientRect().bottom) + 'px'); }
+  window.addEventListener('scroll', syncHdr, { passive: true }); window.addEventListener('resize', syncHdr);
+  setTimeout(syncHdr, 400); syncHdr();
+
+  // Live site: rebuild the wall and the filters from the site's artwork list.
+  // Elsewhere (and if a request fails) the built-in snapshot stays.
+  if (/(^|\.)fineartbyscotty\.com$/.test(location.hostname) && window.fetch && window.Promise) {
+    var skipTitles = {};
+    (picks.skip || []).forEach(function (t) { skipTitles[key(t)] = 1; });
+    Promise.all([getJSON(CATS), getJSON(LIST + 1)]).then(function (res) {
+      var cats = {};
+      res[0].data.forEach(function (c) { cats[c.id] = { name: decode(c.name), slug: c.slug }; });
+      var first = res[1], rest = [];
+      for (var pg = 2; pg <= first.pages; pg++) rest.push(getJSON(LIST + pg));
+      return Promise.all(rest).then(function (r) {
+        var posts = r.reduce(function (all, x) { return all.concat(x.data); }, first.data)
+          .filter(function (p) { return p.featured_media && !skipTitles[key(niceTitle(p.title.rendered).title)]; })
+          .sort(newestFirst);
+        var ids = posts.map(function (p) { return p.featured_media; }), batches = [];
+        for (var i = 0; i < ids.length; i += 100) batches.push(getJSON(MEDIA + ids.slice(i, i + 100).join(',')));
+        return Promise.all(batches).then(function (m) {
+          var byId = {}; m.forEach(function (x) { x.data.forEach(function (it) { byId[it.id] = it; }); });
+          var counts = {}, works = [];
+          posts.forEach(function (p) {
+            var media = byId[p.featured_media]; if (!media || !media.source_url) return;
+            var pc = (p['fine-art-category'] || []).map(function (id) { return cats[id]; }).filter(Boolean);
+            var d = media.media_details || {}, sizes = d.sizes || {};
+            var img = sizes.medium_large || sizes.large || { source_url: media.source_url, width: d.width, height: d.height };
+            var n = niceTitle(p.title.rendered);
+            pc.forEach(function (c) { counts[c.slug] = (counts[c.slug] || 0) + 1; });
+            works.push({ title: n.title, num: n.num, meta: pc.length ? pc[0].name : '', img: img.source_url, width: img.width, height: img.height,
+              full: media.source_url, link: p.link, cats: pc.map(function (c) { return c.slug; }) });
+          });
+          if (!works.length) return;
+          var keys = {}; works.forEach(function (w) { keys[key(w.title)] = 1; });
+          works = (picks.pinned || []).filter(function (w) { return !keys[key(w.title)]; }).concat(works);
+          gallery.innerHTML = works.map(cardHTML).join('');
+          var list = Object.keys(cats).map(function (id) { return cats[id]; })
+            .filter(function (c) { return counts[c.slug] && c.slug !== 'uncategorized'; })
+            .sort(function (a, b) { return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1; });
+          if (!list.some(function (c) { return c.slug === cat; })) cat = '';
+          chips.innerHTML = '<button type="button" class="chip" data-cat="" aria-pressed="' + !cat + '">All</button>' + list.map(function (c) {
+            return '<button type="button" class="chip" data-cat="' + esc(c.slug) + '" aria-pressed="' + (c.slug === cat) + '">' + esc(c.name) + ' <span>' + counts[c.slug] + '</span></button>';
+          }).join('');
+          Array.prototype.forEach.call(document.querySelectorAll('[data-total]'), function (el) { el.textContent = works.length; });
+          numberCards(); apply();
+        });
+      });
+    }).catch(function () { /* keep the snapshot */ });
+  }
+
+  // Trim black bars that are baked into some image files, so each painting
+  // sits evenly in its mat. Reads the pixels once the image loads.
+  function trimBars(img) {
+    if (img.closest('.crop')) return;
+    if (!img.complete || !img.naturalWidth) { img.addEventListener('load', function () { trimBars(img); }, { once: true }); return; }
+    var W = 240, H = Math.round(W * img.naturalHeight / img.naturalWidth), c = document.createElement('canvas');
+    c.width = W; c.height = H;
+    var ctx = c.getContext('2d'), px;
+    try { ctx.drawImage(img, 0, 0, W, H); px = ctx.getImageData(0, 0, W, H).data; } catch (e) { return; }
+    function dark(x0, y0, x1, y1) {           // is this strip near-uniform black?
+      var sum = 0, n = 0, max = 0;
+      for (var y = y0; y < y1; y++) for (var x = x0; x < x1; x++) {
+        var i = (y * W + x) * 4, l = (px[i] * 3 + px[i + 1] * 6 + px[i + 2]) / 10;
+        sum += l; n++; if (l > max) max = l;
+      }
+      return sum / n < 14 && max < 40;
+    }
+    var t = 0, b = H, l = 0, r = W;
+    while (t < H * .3 && dark(0, t, W, t + 1)) t++;
+    while (b > H * .7 && dark(0, b - 1, W, b)) b--;
+    while (l < W * .3 && dark(l, t, l + 1, b)) l++;
+    while (r > W * .7 && dark(r - 1, t, r, b)) r--;
+    if (t + (H - b) < H * .02 && l + (W - r) < W * .02) return;   // nothing worth trimming
+    var cw = (r - l) / W, ch = (b - t) / H, box = document.createElement('span');
+    box.className = 'crop';
+    box.style.aspectRatio = (cw * img.naturalWidth) + ' / ' + (ch * img.naturalHeight);
+    img.parentNode.insertBefore(box, img); box.appendChild(img);
+    img.style.width = (100 / cw) + '%';
+    img.style.left = (-l / W / cw * 100) + '%';
+    img.style.top = (-t / H / ch * 100) + '%';
+    // On the wall the frame's width follows the painting's shape; use the trimmed shape.
+    var fr = img.closest('.wall .frame');
+    if (fr) fr.style.setProperty('--ar', ((cw * img.naturalWidth) / (ch * img.naturalHeight)).toFixed(4));
+  }
+  function trimAll() { Array.prototype.forEach.call(document.querySelectorAll('.fas .frame__mat img'), trimBars); }
+  numberCards(); apply();
+
+  // Lightbox (works for pieces added after page load)
+  var dlg = document.getElementById('lightbox');
+  var img = document.getElementById('lb-img');
+  var title = document.getElementById('lb-title');
+  var idx = 0;
+  function pieces() { return cards().filter(function (w) { return !w.hidden; }); }
+  function show(i) {
+    var list = pieces(); if (!list.length) return;
+    idx = (i + list.length) % list.length;
+    var p = list[idx].querySelector('.frame'), thumb = p.querySelector('img');
+    img.src = p.getAttribute('data-full') || thumb.src;
+    img.alt = thumb.alt + ' by Scotty';
+    title.textContent = thumb.alt;
+  }
+  gallery.addEventListener('click', function (e) {
+    var q = e.target.closest('.link-quote');
+    if (q) { selectPiece(q.getAttribute('data-title')); return; }
+    if (!e.target.closest('.frame, .link-view')) return;
+    show(pieces().indexOf(e.target.closest('.work')));
+    if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
+  });
+  function close() { if (dlg.close) dlg.close(); else dlg.removeAttribute('open'); }
+  document.getElementById('lb-prev').addEventListener('click', function () { show(idx - 1); });
+  document.getElementById('lb-next').addEventListener('click', function () { show(idx + 1); });
+  document.getElementById('lb-close').addEventListener('click', close);
+  dlg.addEventListener('click', function (e) { if (e.target === dlg || e.target.tagName === 'FIGURE') close(); });
+  dlg.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowLeft') show(idx - 1);
+    if (e.key === 'ArrowRight') show(idx + 1);
+  });
+  document.getElementById('lb-quote').addEventListener('click', function () {
+    selectPiece(title.textContent);
+    close();
+  });
+
+  // Quote form. The piece list is a dropdown (newest first, then A-Z), with
+  // "Something else" opening a text box.
+  var form = document.getElementById('quote-form');
+  var artSel = document.getElementById('q-art');
+  var otherWrap = document.getElementById('q-other-wrap');
+  var otherIn = document.getElementById('q-other');
+  function syncOther() {
+    var on = artSel.value === '__other';
+    otherWrap.hidden = !on; otherIn.required = on;
+  }
+  function selectPiece(t) {
+    var k = key(t), hit = '';
+    Array.prototype.forEach.call(artSel.options, function (o) { if (!hit && o.value && key(o.value) === k) hit = o.value; });
+    if (hit) { artSel.value = hit; } else { artSel.value = '__other'; otherIn.value = t; }
+    syncOther();
+  }
+  if (artSel) artSel.addEventListener('change', function () { syncOther(); if (artSel.value === '__other') otherIn.focus(); });
+  function fillPieces(posts) {               // live site: rebuild the list from the artwork posts
+    var seen = {}, all = [];
+    (picks.pinned || []).concat(posts.map(function (p) { return niceTitle(p.title.rendered); }))
+      .forEach(function (n) { var k = key(n.title); if (k && !seen[k]) { seen[k] = 1; all.push(n); } });
+    var newest = all.filter(function (n) { return +n.num; }).sort(function (a, b) { return b.num - a.num; }).slice(0, 8);
+    var az = all.slice().sort(function (a, b) { return a.title.localeCompare(b.title); });
+    function opt(n) { return '<option value="' + esc(n.title) + '">' + esc(n.title) + (+n.num ? ' (No. ' + n.num + ')' : '') + '</option>'; }
+    var keep = artSel.value;
+    artSel.innerHTML = '<option value="">Choose a piece…</option>' +
+      '<optgroup label="Newest work">' + newest.map(opt).join('') + '</optgroup>' +
+      '<optgroup label="Full collection, A–Z">' + az.map(opt).join('') + '</optgroup>' +
+      '<option value="__other">Something else / not sure</option>';
+    artSel.value = keep; if (artSel.value !== keep) artSel.value = '';
+    syncOther();
+  }
+  var LIVE = /(^|\.)fineartbyscotty\.com$/.test(location.hostname);
+  if (LIVE && artSel && window.fetch) {
+    getJSON(LIST + 1).then(function (first) {
+      var more = [];
+      for (var pg = 2; pg <= first.pages; pg++) more.push(getJSON(LIST + pg));
+      return Promise.all(more).then(function (rest) { fillPieces(rest.reduce(function (a, r) { return a.concat(r.data); }, first.data)); });
+    }).catch(function () { /* keep the built-in list */ });
+  }
+  function done(html) { form.innerHTML = '<div class="form-done">' + html + '</div>'; }
+  if (form) form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+    var name = form.first_name.value.trim();
+    var piece = artSel.value === '__other' ? otherIn.value.trim() : artSel.value;
+    var notes = form.notes.value.trim();
+    if (!LIVE) {
+      done('<p class="label label--gold">Request received</p><h3>Thank you, ' + esc(name) + '.</h3>' +
+        '<p>This is a preview, so nothing was sent. On the live site this goes straight to the studio.</p>');
+      return;
+    }
+    var pid = form.getAttribute('data-post-id');
+    var fd = new FormData();
+    fd.append('action', 'elementor_pro_forms_send_form');
+    fd.append('post_id', pid);
+    fd.append('form_id', form.getAttribute('data-form-id'));
+    fd.append('queried_id', pid);
+    fd.append('referer_title', document.title);
+    fd.append('form_fields[name]', name);
+    fd.append('form_fields[field_c866b88]', form.last_name.value.trim());
+    fd.append('form_fields[field_995725c]', form.phone.value.replace(/[^0-9()#&+*\-=.]/g, ''));
+    fd.append('form_fields[email]', form.email.value.trim());
+    fd.append('form_fields[field_3e4d9c0]', piece + (notes ? ' | Notes: ' + notes : ''));
+    var btn = form.querySelector('button[type=submit]'), status = document.getElementById('q-status');
+    btn.disabled = true; status.textContent = 'Sending…';
+    fetch('/wp-admin/admin-ajax.php', { method: 'POST', body: fd, credentials: 'same-origin' })
+      .then(function (r) { return r.json(); })
+      .then(function (res) {
+        if (!res || !res.success) throw new Error('rejected');
+        done('<p class="label label--gold">Request received</p><h3>Thank you, ' + esc(name) + '.</h3>' +
+          '<p>We\'ll be in touch about ' + esc(piece) + ' with your personal quote.</p>');
+      })
+      .catch(function () {
+        btn.disabled = false;
+        status.textContent = 'That didn\'t go through. Please try again, or call (619) 890-3330 or email info@fineartbyscotty.com.';
+      });
+  });
+  syncOther();
+})();
+</script>

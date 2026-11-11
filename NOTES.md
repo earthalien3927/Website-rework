@@ -8,7 +8,9 @@ Read this first when picking the project up in a new session.
   - Source: `pages/home.html` + shared styles `assets/site.css`
   - WordPress-ready output: `dist/home.html` (built by `python3 tools/build.py home`)
   - Preview link (update this same link, don't make a new one): https://claude.ai/artifact/VPNkJvE2YWGCc2sHxuhYyn
-- **Next page:** the art page (`/fine-art/`). Build it as `pages/art.html` with its **own** preview link, so the homepage preview stays as approved.
+- **Art page (`/fine-art/`):** first version built, waiting on Scotty's feedback.
+  - Source: `pages/art.html` (same shared styles). Output: `dist/art.html` (`python3 tools/build.py art`)
+  - Preview link (its own; update this same link): https://claude.ai/artifact/JDNJoTznqp4y1reGv4WFHT
 - **Waiting on:** WordPress access through the site's developer (see below).
 
 ## Ground rules from Scotty
@@ -41,6 +43,16 @@ Read this first when picking the project up in a new session.
   - `data-count="4"`; Sculpture and Uncategorized categories are excluded.
 - **"Newest first"** = highest SZ number in the title, then publish date. The older 136 pieces have no SZ number yet. The price sheet is in Dropbox (`Price Data and Labels/Retail Price Sheet - Fine Art by Scotty SKU Order.pdf`).
 - **Quote form:** a dropdown of every piece (newest first, then A–Z) plus "Something else". On the live site it sends through the **existing Elementor form** (page 4676, form `dfb2b92`, field ids in the page). Page 4676 must stay published after the homepage switch. Send one real test after going live.
+
+## Art page specifics
+
+- **The live art page is the developer's custom build** (Elementor + Unlimited Elements post grid with a checkbox filter, a second hidden loop grid with JetPopup "quick view", and per-piece pages at `/fine-art/<name>/` that show the size and a "Get a Quote" button to `/contact/`). `/fine-art/` is also the address of every piece's page, so don't replace or rename anything there. Plan: install ours as a **new draft page** and only switch the menu link once she agrees.
+- **Layout:** "The *collection.*" heading → pinned filter bar (one button per subject with counts, Uncategorized has no button but its pieces show under All; Newest / A–Z sort) → every piece on the onyx pebble wall in the studio frame with a homepage-style name plate (No. · subject, title, View / Details / Request a quote) → the homepage's quote form → footer.
+- 3 columns (2 on tablet, 1 on phone); frames in a row sit on one line so the name plates line up. 24 pieces show, then "Show more".
+- Fills itself from the site's artwork list (build snapshot + live refresh). `gallery-picks` in the page: Community Property pinned first; `skip` is empty (the homepage skips Pre Flight, Trouble, Power Ball).
+- Sizes (e.g. 28×49) are only in each piece's own page, not the API, so they aren't shown yet.
+- The frame/name plate/pebble/viewer/quote CSS is copied from `pages/home.html`. If one changes, change both (or move them into `site.css`).
+- Preview uses smaller images (`<meta name="claude:preview-edge" content="560">`) to stay under the preview size limit.
 
 ## New artwork not yet on the site (from Dropbox `NEW ART 2026.docx`)
 
