@@ -198,12 +198,13 @@ def card_html(w, unframed=frozenset()) -> str:
     """One framed piece + name plate for the art page. Mirrors cardHTML() in the page."""
     e = lambda v: htmllib.escape(str(v), quote=True)
     wd, ht = int(w.get("width") or 1), int(w.get("height") or 1)
-    orient = "portrait" if ht > wd else "landscape"
+    orient = "landscape" if wd / ht > 1.15 else "portrait"     # squares hang like portraits
     meta = " · ".join(x for x in ("No. " + w["num"] if w.get("num") else "", w.get("meta") or "") if x) or "by Scotty"
+    tag = f'<span class="tag">{e(w["tag"])}</span>' if w.get("tag") else ""
     details = (f'<a href="{e(w["link"])}" class="link-details">Details</a>') if w.get("link") else ""
     return (
         f'<article class="work work--{orient}" data-cats="{e(" ".join(w.get("cats", [])))}">'
-        f'<div class="work__art"><button class="frame{" frame--bare" if key(w["title"]) in unframed else ""}" type="button" style="--ar:{wd / ht:.4f}" data-full="{e(w.get("full") or w["img"])}" aria-label="View {e(w["title"])} full size">'
+        f'<div class="work__art"><button class="frame{" frame--bare" if key(w["title"]) in unframed else ""}" type="button" style="--ar:{wd / ht:.4f}" data-full="{e(w.get("full") or w["img"])}" aria-label="View {e(w["title"])} full size">{tag}'
         f'<span class="frame__mat"><img src="{e(w["img"])}" alt="{e(w["title"])}" width="{wd}" height="{ht}" loading="lazy"></span></button>'
         f'{"<p class=" + chr(34) + "medium" + chr(34) + ">Venetian Plaster</p>" if "venetian-plaster" in w.get("cats", []) else ""}</div>'
         f'<div class="placard"><p class="label label--gold">{e(meta)}</p><h3>{e(w["title"])}</h3>'
