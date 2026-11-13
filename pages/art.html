@@ -69,6 +69,14 @@
     0 80px 110px -35px rgba(0,0,0,1), 0 40px 60px -15px rgba(0,0,0,.9), 0 0 0 1px rgba(0,0,0,.8); }
 .fas .frame--static { cursor: default; }
 /* "Scotty's Newest" tag at the top of the name plate */
+.fas .tag--series {
+  color: var(--ink) !important; background: linear-gradient(135deg, #f4f5f7 0%, #b9bdc2 45%, #e6e8eb 70%, #a3a7ad 100%) !important;
+}
+.fas .series-note { font-family: var(--f-display); font-style: italic; font-size: 1rem; line-height: 1.4; color: var(--smoke); margin-top: -.2rem; }
+.fas .tag--sold {
+  color: #fff !important; background: linear-gradient(135deg, #a3202f, #6e1420) !important;
+  box-shadow: 0 6px 14px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.25) !important;
+}
 .fas .tag {
   justify-self: start; margin-bottom: .2rem;
   padding: .6rem .95rem .55rem; font-family: var(--f-label); font-weight: 700; font-size: .625rem;
@@ -78,9 +86,10 @@
 }
 /* Unframed: for photos that already show the physical frame. Just the shadow. */
 .fas .frame--bare, .fas button.frame--bare:hover {
-  padding: 0; background: none;
-  box-shadow: 0 60px 90px -35px rgba(0,0,0,1), 0 30px 45px -15px rgba(0,0,0,.9);
+  padding: 0; background: none; box-shadow: none;
+  filter: drop-shadow(0 30px 30px rgba(0,0,0,.85)) drop-shadow(0 10px 12px rgba(0,0,0,.7));
 }
+.fas .frame--bare .frame__mat img, .fas .frame--bare .frame__mat .crop { box-shadow: none; }
 .fas .frame--bare::after { display: none; }
 .fas .frame--bare .frame__mat { padding: 0; background: none; box-shadow: none; }
 .fas .frame__mat {                       /* the bright brushed-metal liner */
@@ -352,12 +361,18 @@
     { "title": "Done Deal", "num": "", "meta": "New",
       "img": "../assets/art-new/done-deal.jpg", "width": 1600, "height": 773 }
   ],
-  "skip": ["Custom Cuff By Scotty", "Mermaid Tail Pendant"],
+  "skip": ["Custom Cuff By Scotty", "Mermaid Tail Pendant", "Sabrina"],
   "unavailable": ["Rustic Elegance"],
   "swap": [["Trouble", "Sunday Morning"], ["Wine Me Up", "Wine Roper"]],
-  "large": ["Moon Tale"],
+  "large": ["Moon Tale", "Double Dipping"],
+  "sold": ["If You See Kay"],
+  "moveTo": { "Pick Me": 9 },
+  "series": [
+    { "name": "A Full Day", "pieces": ["Good Morning", "Good Afternoon", "Good Evening"],
+      "note": "One series, hung in order: a full day, from morning light to evening." }
+  ],
   "skipCats": ["sculpture"],
-  "unframed": [],
+  "unframed": ["Reverence"],
   "crop": {
     "Power Ball": [0.155, 0.13, 0.87, 0.835],
     "Penrose Beach Party": [0.12, 0.105, 0.90, 0.89],
@@ -370,7 +385,6 @@
     "Sixth And Ariel": [0.22, 0.15, 0.78, 0.88],
     "She Blushed": [0.27, 0.11, 0.74, 0.89],
     "Sun Kissed": [0.155, 0.16, 0.865, 0.84],
-    "Reverence": [0.305, 0.31, 0.70, 0.835],
     "If You See Kay": [0.055, 0.065, 0.90, 0.945],
     "Moon Shine": [0.31, 0.05, 0.77, 0.95],
     "Sabrina": [0.205, 0.095, 0.795, 0.905],
@@ -522,6 +536,30 @@
   try { var pj = document.getElementById('gallery-picks'); if (pj) picks = JSON.parse(pj.textContent); } catch (e) {}
   function key(t) { return String(t).toLowerCase().replace(/[^a-z0-9]/g, ''); }
   // "swap": trade the places of two pieces in the order. Mirrors swap_pairs() in tools/build.py.
+  // "moveTo": put a piece at a set place in the order (1 = first). Mirrors the build.
+  // "series": hang a set of pieces together, in order, where the first of them
+  // falls, and mark each with the series name. Mirrors group_series() in the build.
+  function groupSeries(works) {
+    (picks.series || []).forEach(function (sr) {
+      var keys = sr.pieces.map(key), found = [], at = -1;
+      for (var n = works.length - 1; n >= 0; n--) {
+        var k = keys.indexOf(key(works[n].title));
+        if (k > -1) { found[k] = works.splice(n, 1)[0]; at = n; }
+      }
+      found = found.filter(Boolean);
+      found.forEach(function (w, i) { w.series = { name: sr.name, note: sr.note, i: i + 1, n: found.length }; });
+      if (at > -1) Array.prototype.splice.apply(works, [at, 0].concat(found));
+    });
+    return works;
+  }
+  function moveTo(works) {
+    var m = picks.moveTo || {};
+    Object.keys(m).forEach(function (t) {
+      var i = -1; works.forEach(function (w, n) { if (key(w.title) === key(t)) i = n; });
+      if (i > -1) { var w = works.splice(i, 1)[0]; works.splice(Math.max(0, m[t] - 1), 0, w); }
+    });
+    return works;
+  }
   function swapPairs(works) {
     (picks.swap || []).forEach(function (pr) {
       var i = -1, j = -1;
@@ -539,11 +577,13 @@
       '<div class="work__art"><button class="frame' + ((picks.unframed || []).map(key).indexOf(key(w.title)) > -1 ? ' frame--bare' : '') + '" type="button" style="--ar:' + (wd / ht).toFixed(4) + '" data-full="' + esc(w.full || w.img) + '" aria-label="View ' + esc(w.title) + ' full size">' +
       '<span class="frame__mat"><img src="' + esc(w.img) + '" alt="' + esc(w.title) + '" width="' + wd + '" height="' + ht + '" loading="lazy"></span></button>' +
       ((w.cats || []).indexOf('venetian-plaster') > -1 ? '<p class="medium">Venetian Plaster</p>' : '') + '</div>' +
-      '<div class="placard">' + (w.tag ? '<span class="tag">' + esc(w.tag) + '</span>' : '') + (w.tag && !w.num && !w.meta ? '' : '<p class="label label--gold">' + esc(meta) + '</p>') + '<h3>' + esc(w.title) + '</h3>' +
+      '<div class="placard">' + (isSold(w) ? '<span class="tag tag--sold">Sold Out</span>' : w.tag ? '<span class="tag">' + esc(w.tag) + '</span>' : '') +
+      (w.series ? '<span class="tag tag--series">' + esc(w.series.name) + ' · ' + w.series.i + ' of ' + w.series.n + '</span>' : '') + (w.tag && !w.num && !w.meta ? '' : '<p class="label label--gold">' + esc(meta) + '</p>') + '<h3>' + esc(w.title) + '</h3>' + (w.series && w.series.note ? '<p class="series-note">' + esc(w.series.note) + '</p>' : '') +
       '<div class="placard__links"><button type="button" class="link-view">View</button>' +
       (w.link ? '<a href="' + esc(w.link) + '" class="link-details">Details</a>' : '') +
-      '<a href="#quote" class="link-quote" data-title="' + esc(w.title) + '">Request a quote →</a></div></div></article>';
+      (isSold(w) ? '' : '<a href="#quote" class="link-quote" data-title="' + esc(w.title) + '">Request a quote →</a>') + '</div></div></article>';
   }
+  function isSold(w) { return (picks.sold || []).map(key).indexOf(key(w.title)) > -1; }
 
   var STEP = 12, shown = STEP, cat = '', sort = 'newest';
   var chips = document.getElementById('chips');
@@ -620,7 +660,7 @@
           if (!works.length) return;
           var keys = {}; works.forEach(function (w) { keys[key(w.title)] = 1; });
           works = (picks.pinned || []).filter(function (w) { return !keys[key(w.title)]; }).concat(works);
-          swapPairs(works);
+          swapPairs(works); groupSeries(works); moveTo(works);
           gallery.innerHTML = works.map(cardHTML).join('');
           var list = Object.keys(cats).map(function (id) { return cats[id]; })
             .filter(function (c) { return counts[c.slug] && c.slug !== 'uncategorized'; })
@@ -639,6 +679,7 @@
   // Trim black bars that are baked into some image files, so each painting
   // sits evenly in its mat. Reads the pixels once the image loads.
   function trimBars(img) {
+    if (img.closest('.frame--bare')) return;    // standalone pieces keep their own shape
     if (img.closest('.crop')) return;
     if (!img.complete || !img.naturalWidth) { img.addEventListener('load', function () { trimBars(img); }, { once: true }); return; }
     var W = 240, H = Math.round(W * img.naturalHeight / img.naturalWidth), c = document.createElement('canvas');
@@ -736,7 +777,7 @@
   }
   if (artSel) artSel.addEventListener('change', function () { syncOther(); if (artSel.value === '__other') otherIn.focus(); });
   function fillPieces(posts) {               // live site: rebuild the list from the artwork posts
-    var seen = {}, all = [], gone = (picks.unavailable || []).map(key);   // sold out / no longer offered
+    var seen = {}, all = [], gone = (picks.unavailable || []).concat(picks.sold || []).map(key);   // sold out / no longer offered
     (picks.pinned || []).concat(posts.map(function (p) { return niceTitle(p.title.rendered); }))
       .forEach(function (n) { var k = key(n.title); if (k && !seen[k] && gone.indexOf(k) < 0) { seen[k] = 1; all.push(n); } });
     var newest = all.filter(function (n) { return +n.num; }).sort(function (a, b) { return b.num - a.num; }).slice(0, 8);

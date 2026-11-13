@@ -79,9 +79,9 @@ def work_html(w) -> str:
         f'          <article class="work work--{orient}{" work--large" if w.get("large") else ""}{" work--fill" if w.get("fill") else ""}">'
         f'<button class="frame" type="button" data-full="{e(w.get("full") or w["img"])}" aria-label="View {e(w["title"])} full size">'
         f'<span class="frame__mat"><img src="{e(w["img"])}" alt="{e(w["title"])}" width="{e(w.get("width", ""))}" height="{e(w.get("height", ""))}" loading="lazy"></span></button>'
-        f'<div class="placard"><p class="label label--gold">{e(meta)}</p><h3>{e(w["title"])}</h3>'
+        f'<div class="placard"><p class="label label--gold">{e(meta)}</p><h3>{e(w["title"])}</h3>{series_note}'
         f'<div class="placard__links"><button type="button" class="link-view">View full size</button>'
-        f'<a href="#quote" class="link-quote" data-title="{e(w["title"])}">Request a quote →</a></div></div></article>\n'
+        f'{"" if is_sold else f"<a href={chr(34)}#quote{chr(34)} class={chr(34)}link-quote{chr(34)} data-title={chr(34)}{e(w[chr(116)+chr(105)+chr(116)+chr(108)+chr(101)])}{chr(34)}>Request a quote →</a>"}</div></div></article>\n'
     )
 
 
@@ -137,7 +137,7 @@ def fill_pieces(html: str, picks: dict) -> str:
     """The quote form's dropdown: newest 8 by number, then everything A-Z.
     Mirrors fillPieces() in the page."""
     seen, pieces = set(), []
-    gone = {key(t) for t in picks.get("unavailable", [])}         # no longer offered
+    gone = {key(t) for t in picks.get("unavailable", []) + picks.get("sold", [])}   # no longer offered
     for n in [(w["title"], w.get("num", "")) for w in picks.get("pinned", [])] + \
              [nice_title(p["title"]["rendered"]) for p in all_posts()]:
         if key(n[0]) and key(n[0]) not in seen and key(n[0]) not in gone:
@@ -194,22 +194,26 @@ TOTAL_RE = re.compile(r'(<span data-total>)[^<]*(</span>)')
 HIDDEN_CATS = {"uncategorized"}        # no filter button; those pieces still show under All
 
 
-def card_html(w, unframed=frozenset(), large=frozenset()) -> str:
+def card_html(w, unframed=frozenset(), large=frozenset(), sold=frozenset()) -> str:
     """One framed piece + name plate for the art page. Mirrors cardHTML() in the page."""
     e = lambda v: htmllib.escape(str(v), quote=True)
     wd, ht = int(w.get("width") or 1), int(w.get("height") or 1)
     orient = "landscape" if wd / ht > 1.15 else "portrait"     # squares hang like portraits
     meta = " · ".join(x for x in ("No. " + w["num"] if w.get("num") else "", w.get("meta") or "") if x) or "by Scotty"
-    tag = f'<span class="tag">{e(w["tag"])}</span>' if w.get("tag") else ""
+    is_sold = key(w["title"]) in sold
+    sr = w.get("series")
+    series_tag = f'<span class="tag tag--series">{e(sr["name"])} · {sr["i"]} of {sr["n"]}</span>' if sr else ""
+    series_note = f'<p class="series-note">{e(sr["note"])}</p>' if sr and sr.get("note") else ""
+    tag = '<span class="tag tag--sold">Sold Out</span>' if is_sold else f'<span class="tag">{e(w["tag"])}</span>' if w.get("tag") else ""
     details = (f'<a href="{e(w["link"])}" class="link-details">Details</a>') if w.get("link") else ""
     return (
         f'<article class="work work--{orient}{" work--large" if key(w["title"]) in large else ""}" data-cats="{e(" ".join(w.get("cats", [])))}">'
         f'<div class="work__art"><button class="frame{" frame--bare" if key(w["title"]) in unframed else ""}" type="button" style="--ar:{wd / ht:.4f}" data-full="{e(w.get("full") or w["img"])}" aria-label="View {e(w["title"])} full size">'
         f'<span class="frame__mat"><img src="{e(w["img"])}" alt="{e(w["title"])}" width="{wd}" height="{ht}" loading="lazy"></span></button>'
         f'{"<p class=" + chr(34) + "medium" + chr(34) + ">Venetian Plaster</p>" if "venetian-plaster" in w.get("cats", []) else ""}</div>'
-        f'<div class="placard">{tag}{"" if w.get("tag") and not w.get("num") and not w.get("meta") else f"<p class={chr(34)}label label--gold{chr(34)}>{e(meta)}</p>"}<h3>{e(w["title"])}</h3>'
+        f'<div class="placard">{tag}{series_tag}{"" if w.get("tag") and not w.get("num") and not w.get("meta") else f"<p class={chr(34)}label label--gold{chr(34)}>{e(meta)}</p>"}<h3>{e(w["title"])}</h3>{series_note}'
         f'<div class="placard__links"><button type="button" class="link-view">View</button>{details}'
-        f'<a href="#quote" class="link-quote" data-title="{e(w["title"])}">Request a quote →</a></div></div></article>\n'
+        f'{"" if is_sold else f"<a href={chr(34)}#quote{chr(34)} class={chr(34)}link-quote{chr(34)} data-title={chr(34)}{e(w[chr(116)+chr(105)+chr(116)+chr(108)+chr(101)])}{chr(34)}>Request a quote →</a>"}</div></div></article>\n'
     )
 
 
@@ -253,6 +257,20 @@ def fill_all(html: str) -> str:
         if key(a) in idx and key(b) in idx:
             i, j = idx[key(a)], idx[key(b)]
             works[i], works[j] = works[j], works[i]
+    for sr in picks.get("series", []):           # hang a series together; mirrors groupSeries() in the page
+        keys = [key(t) for t in sr["pieces"]]
+        found = {keys.index(key(w["title"])): w for w in works if key(w["title"]) in keys}
+        if found:
+            at = min(n for n, w in enumerate(works) if key(w["title"]) in keys)
+            works[:] = [w for w in works if key(w["title"]) not in keys]
+            group = [found[k] for k in sorted(found)]
+            for i, w in enumerate(group):
+                w["series"] = {"name": sr["name"], "note": sr.get("note", ""), "i": i + 1, "n": len(group)}
+            works[at:at] = group
+    for t, pos in picks.get("moveTo", {}).items():   # put a piece at a set place; mirrors moveTo() in the page
+        idx = [n for n, w in enumerate(works) if key(w["title"]) == key(t)]
+        if idx:
+            works.insert(max(0, int(pos) - 1), works.pop(idx[0]))
     e = lambda v: htmllib.escape(str(v), quote=True)
     chips = "".join(
         f'<button type="button" class="chip" data-cat="{e(c["slug"])}" aria-pressed="false">{e(htmllib.unescape(c["name"]))} <span>{counts[c["slug"]]}</span></button>\n'
@@ -262,7 +280,8 @@ def fill_all(html: str) -> str:
     print(f"wall:    {len(works)} pieces ({len(pinned)} pinned), {chips.count('<button')} filters")
     unframed = frozenset(key(t) for t in picks.get("unframed", []))
     large = frozenset(key(t) for t in picks.get("large", []))
-    return ALL_RE.sub(lambda m: m.group(1) + "\n" + "".join(card_html(w, unframed, large) for w in works) + m.group(2), html)
+    sold = frozenset(key(t) for t in picks.get("sold", []))
+    return ALL_RE.sub(lambda m: m.group(1) + "\n" + "".join(card_html(w, unframed, large, sold) for w in works) + m.group(2), html)
 
 
 def inline_assets(html: str) -> str:
@@ -314,6 +333,8 @@ def source_bytes(url: str) -> bytes:
     name = url.rsplit("/", 1)[1]
     base = SIZE_RE.sub(r"\1", name)
     edit = EDITS / base
+    if not edit.exists():                       # a PNG edit (e.g. with a transparent background)
+        edit = EDITS / (base.rsplit(".", 1)[0] + ".png")
     if not edit.exists():
         return fetch(url)
     from PIL import Image
