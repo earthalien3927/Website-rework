@@ -193,7 +193,7 @@ TOTAL_RE = re.compile(r'(<span data-total>)[^<]*(</span>)')
 HIDDEN_CATS = {"uncategorized"}        # no filter button; those pieces still show under All
 
 
-def card_html(w) -> str:
+def card_html(w, unframed=frozenset()) -> str:
     """One framed piece + name plate for the art page. Mirrors cardHTML() in the page."""
     e = lambda v: htmllib.escape(str(v), quote=True)
     wd, ht = int(w.get("width") or 1), int(w.get("height") or 1)
@@ -202,7 +202,7 @@ def card_html(w) -> str:
     details = (f'<a href="{e(w["link"])}" class="link-details">Details</a>') if w.get("link") else ""
     return (
         f'<article class="work work--{orient}" data-cats="{e(" ".join(w.get("cats", [])))}">'
-        f'<div class="work__art"><button class="frame" type="button" style="--ar:{wd / ht:.4f}" data-full="{e(w.get("full") or w["img"])}" aria-label="View {e(w["title"])} full size">'
+        f'<div class="work__art"><button class="frame{" frame--bare" if key(w["title"]) in unframed else ""}" type="button" style="--ar:{wd / ht:.4f}" data-full="{e(w.get("full") or w["img"])}" aria-label="View {e(w["title"])} full size">'
         f'<span class="frame__mat"><img src="{e(w["img"])}" alt="{e(w["title"])}" width="{wd}" height="{ht}" loading="lazy"></span></button></div>'
         f'<div class="placard"><p class="label label--gold">{e(meta)}</p><h3>{e(w["title"])}</h3>'
         f'<div class="placard__links"><button type="button" class="link-view">View</button>{details}'
@@ -250,7 +250,8 @@ def fill_all(html: str) -> str:
     html = CATS_RE.sub(lambda m: "<!-- cats:start -->\n" + chips + "<!-- cats:end -->", html)
     html = TOTAL_RE.sub(lambda m: m.group(1) + str(len(works)) + m.group(2), html)
     print(f"wall:    {len(works)} pieces ({len(pinned)} pinned), {chips.count('<button')} filters")
-    return ALL_RE.sub(lambda m: m.group(1) + "\n" + "".join(card_html(w) for w in works) + m.group(2), html)
+    unframed = frozenset(key(t) for t in picks.get("unframed", []))
+    return ALL_RE.sub(lambda m: m.group(1) + "\n" + "".join(card_html(w, unframed) for w in works) + m.group(2), html)
 
 
 def inline_assets(html: str) -> str:

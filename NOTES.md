@@ -66,3 +66,10 @@ Planned approach: an Application Password (requested through the secure credenti
 ## Session setup
 
 Use the **website-rework** environment (it allows fineartbyscotty.com) and connect the Dropbox connector.
+
+## Art page decisions (Nov 2026)
+
+- Sculptures and jewellery stay framed like the paintings.
+- Pre Flight, Trouble and Power Ball DO show on the art page (only the homepage skips them).
+- `unframed` pick: Power Ball hangs without our frame (its photo already shows a physical frame).
+- Full-size viewer (both pages): × sits in the top corner; the enlarged picture uses the same black-bar trim as the wall.

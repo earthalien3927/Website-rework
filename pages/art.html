@@ -68,6 +68,13 @@
     inset 0 0 0 1px rgba(255,255,255,.26), inset 1px 1px 0 1px rgba(255,255,255,.14), inset -1px -1px 0 1px rgba(0,0,0,.35),
     0 80px 110px -35px rgba(0,0,0,1), 0 40px 60px -15px rgba(0,0,0,.9), 0 0 0 1px rgba(0,0,0,.8); }
 .fas .frame--static { cursor: default; }
+/* Unframed: for photos that already show the physical frame. Just the shadow. */
+.fas .frame--bare, .fas button.frame--bare:hover {
+  padding: 0; background: none;
+  box-shadow: 0 60px 90px -35px rgba(0,0,0,1), 0 30px 45px -15px rgba(0,0,0,.9);
+}
+.fas .frame--bare::after { display: none; }
+.fas .frame--bare .frame__mat { padding: 0; background: none; box-shadow: none; }
 .fas .frame__mat {                       /* the bright brushed-metal liner */
   display: block; padding: var(--liner);
   background:
@@ -140,6 +147,20 @@
   font-family: var(--f-body);
 }
 .fas-lightbox figure { margin: 0; min-height: 0; display: grid; place-items: center; }
+/* The enlarged picture, trimmed like the wall picture and sized to fit the screen */
+.fas-lightbox .lb-crop {
+  --vh: calc(100vh - 12rem); position: relative; overflow: hidden; display: block;
+  aspect-ratio: var(--ar, 1); width: min(100%, calc(var(--vh) * var(--ar, 1)));
+  box-shadow: 0 30px 90px rgba(0,0,0,.8);
+}
+@supports (height: 100dvh) { .fas-lightbox .lb-crop { --vh: calc(100dvh - 12rem); } }
+.fas-lightbox .lb-crop img { position: absolute; display: block; max-width: none; max-height: none; height: auto; box-shadow: none; }
+/* Close button sits in the top corner (it used to wrap onto its own line on phones) */
+.fas-lightbox .lb { position: relative; padding-top: calc(4.25rem + env(safe-area-inset-top, 0px)) !important; }
+.fas-lightbox #lb-close {
+  position: absolute; z-index: 2; top: calc(1rem + env(safe-area-inset-top, 0px));
+  right: max(16px, env(safe-area-inset-right, 0px)); background: rgba(13,10,11,.75);
+}
 .fas-lightbox img { max-width: 100%; max-height: 100%; object-fit: contain; box-shadow: 0 30px 90px rgba(0,0,0,.8); }
 .fas-lightbox .lb__bar {
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem;
@@ -277,14 +298,16 @@
         </div>
 
         <!-- Pieces that aren't on the site yet show first ("pinned"); "skip" leaves
-             pieces out. Same format as the homepage's gallery-picks. -->
+             pieces out; "unframed" hangs a piece without our frame (for photos
+             that already show a physical frame). Same format as the homepage's. -->
         <script type="application/json" id="gallery-picks">
 {
   "pinned": [
     { "title": "Community Property", "num": "144", "meta": "New for 2026",
       "img": "../assets/art-new/community-property-sz144.jpg", "width": 1208, "height": 1600 }
   ],
-  "skip": []
+  "skip": [],
+  "unframed": ["Power Ball"]
 }
         </script>
         <!-- Every piece. The build fills this with a snapshot of the site's artwork
@@ -365,7 +388,7 @@
 
   <dialog class="fas-lightbox" id="lightbox" aria-label="Artwork viewer">
     <div class="lb">
-      <figure><img id="lb-img" src="" alt=""></figure>
+      <figure><span class="lb-crop" id="lb-crop"><img id="lb-img" src="" alt=""></span></figure>
       <div class="lb__bar">
         <h3 id="lb-title"></h3>
         <div class="lb__ctrl">
@@ -435,7 +458,7 @@
     var wd = +w.width || 1, ht = +w.height || 1, orient = ht > wd ? 'portrait' : 'landscape';
     var meta = [w.num ? 'No. ' + w.num : '', w.meta || ''].filter(Boolean).join(' · ') || 'by Scotty';
     return '<article class="work work--' + orient + '" data-cats="' + esc((w.cats || []).join(' ')) + '">' +
-      '<div class="work__art"><button class="frame" type="button" style="--ar:' + (wd / ht).toFixed(4) + '" data-full="' + esc(w.full || w.img) + '" aria-label="View ' + esc(w.title) + ' full size">' +
+      '<div class="work__art"><button class="frame' + ((picks.unframed || []).map(key).indexOf(key(w.title)) > -1 ? ' frame--bare' : '') + '" type="button" style="--ar:' + (wd / ht).toFixed(4) + '" data-full="' + esc(w.full || w.img) + '" aria-label="View ' + esc(w.title) + ' full size">' +
       '<span class="frame__mat"><img src="' + esc(w.img) + '" alt="' + esc(w.title) + '" width="' + wd + '" height="' + ht + '" loading="lazy"></span></button></div>' +
       '<div class="placard"><p class="label label--gold">' + esc(meta) + '</p><h3>' + esc(w.title) + '</h3>' +
       '<div class="placard__links"><button type="button" class="link-view">View</button>' +
@@ -558,6 +581,7 @@
     if (t + (H - b) < H * .02 && l + (W - r) < W * .02) return;   // nothing worth trimming
     var cw = (r - l) / W, ch = (b - t) / H, box = document.createElement('span');
     box.className = 'crop';
+    box.setAttribute('data-trim', [l / W, t / H, cw, ch].join(','));   // reused by the full-size viewer
     box.style.aspectRatio = (cw * img.naturalWidth) + ' / ' + (ch * img.naturalHeight);
     img.parentNode.insertBefore(box, img); box.appendChild(img);
     img.style.width = (100 / cw) + '%';
@@ -581,6 +605,13 @@
     idx = (i + list.length) % list.length;
     var p = list[idx].querySelector('.frame'), thumb = p.querySelector('img');
     img.src = p.getAttribute('data-full') || thumb.src;
+    // Same black-bar trim as on the wall (none: show the whole image)
+    var cr = thumb.closest('.crop'), tr = cr && cr.getAttribute('data-trim') ? cr.getAttribute('data-trim').split(',').map(Number) : [0, 0, 1, 1];
+    var nw = thumb.naturalWidth || +thumb.getAttribute('width') || 1, nh = thumb.naturalHeight || +thumb.getAttribute('height') || 1;
+    document.getElementById('lb-crop').style.setProperty('--ar', ((tr[2] * nw) / (tr[3] * nh)).toFixed(4));
+    img.style.width = (100 / tr[2]) + '%';
+    img.style.left = (-tr[0] / tr[2] * 100) + '%';
+    img.style.top = (-tr[1] / tr[3] * 100) + '%';
     img.alt = thumb.alt + ' by Scotty';
     title.textContent = thumb.alt;
   }
