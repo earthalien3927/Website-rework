@@ -298,7 +298,8 @@
         </div>
 
         <!-- Pieces that aren't on the site yet show first ("pinned"); "skip" leaves
-             pieces out; "unframed" hangs a piece without our frame (for photos
+             pieces out ("skipCats" leaves whole categories out: this page is
+             paintings only, so sculpture and jewellery are left off); "unframed" hangs a piece without our frame (for photos
              that already show a physical frame). Same format as the homepage's. -->
         <script type="application/json" id="gallery-picks">
 {
@@ -306,7 +307,8 @@
     { "title": "Community Property", "num": "144", "meta": "New for 2026",
       "img": "../assets/art-new/community-property-sz144.jpg", "width": 1208, "height": 1600 }
   ],
-  "skip": [],
+  "skip": ["Custom Cuff By Scotty", "Mermaid Tail Pendant"],
+  "skipCats": ["sculpture"],
   "unframed": ["Power Ball"]
 }
         </script>
@@ -515,13 +517,13 @@
     var skipTitles = {};
     (picks.skip || []).forEach(function (t) { skipTitles[key(t)] = 1; });
     Promise.all([getJSON(CATS), getJSON(LIST + 1)]).then(function (res) {
-      var cats = {};
-      res[0].data.forEach(function (c) { cats[c.id] = { name: decode(c.name), slug: c.slug }; });
+      var cats = {}, skipCats = {};
+      res[0].data.forEach(function (c) { cats[c.id] = { name: decode(c.name), slug: c.slug }; if ((picks.skipCats || []).indexOf(c.slug) > -1) skipCats[c.id] = 1; });
       var first = res[1], rest = [];
       for (var pg = 2; pg <= first.pages; pg++) rest.push(getJSON(LIST + pg));
       return Promise.all(rest).then(function (r) {
         var posts = r.reduce(function (all, x) { return all.concat(x.data); }, first.data)
-          .filter(function (p) { return p.featured_media && !skipTitles[key(niceTitle(p.title.rendered).title)]; })
+          .filter(function (p) { return p.featured_media && !skipTitles[key(niceTitle(p.title.rendered).title)] && !(p['fine-art-category'] || []).some(function (id) { return skipCats[id]; }); })
           .sort(newestFirst);
         var ids = posts.map(function (p) { return p.featured_media; }), batches = [];
         for (var i = 0; i < ids.length; i += 100) batches.push(getJSON(MEDIA + ids.slice(i, i + 100).join(',')));

@@ -218,8 +218,10 @@ def fill_all(html: str) -> str:
     skip = {key(t) for t in picks.get("skip", [])}
     cats, _ = get_json("fine-art-category?per_page=100&_fields=id,name,slug,count")
     by_id = {c["id"]: c for c in cats}
+    skip_cat_ids = {c["id"] for c in cats if c["slug"] in set(picks.get("skipCats", []))}
     posts = sorted((p for p in all_posts() if p.get("featured_media")
-                    and key(nice_title(p["title"]["rendered"])[0]) not in skip), key=newest_key, reverse=True)
+                    and key(nice_title(p["title"]["rendered"])[0]) not in skip
+                    and not skip_cat_ids & set(p.get("fine-art-category", []))), key=newest_key, reverse=True)
     media = {}
     ids = [p["featured_media"] for p in posts]
     for i in range(0, len(ids), 100):
