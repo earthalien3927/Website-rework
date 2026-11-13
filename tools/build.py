@@ -204,10 +204,10 @@ def card_html(w, unframed=frozenset()) -> str:
     details = (f'<a href="{e(w["link"])}" class="link-details">Details</a>') if w.get("link") else ""
     return (
         f'<article class="work work--{orient}" data-cats="{e(" ".join(w.get("cats", [])))}">'
-        f'<div class="work__art"><button class="frame{" frame--bare" if key(w["title"]) in unframed else ""}" type="button" style="--ar:{wd / ht:.4f}" data-full="{e(w.get("full") or w["img"])}" aria-label="View {e(w["title"])} full size">{tag}'
+        f'<div class="work__art"><button class="frame{" frame--bare" if key(w["title"]) in unframed else ""}" type="button" style="--ar:{wd / ht:.4f}" data-full="{e(w.get("full") or w["img"])}" aria-label="View {e(w["title"])} full size">'
         f'<span class="frame__mat"><img src="{e(w["img"])}" alt="{e(w["title"])}" width="{wd}" height="{ht}" loading="lazy"></span></button>'
         f'{"<p class=" + chr(34) + "medium" + chr(34) + ">Venetian Plaster</p>" if "venetian-plaster" in w.get("cats", []) else ""}</div>'
-        f'<div class="placard"><p class="label label--gold">{e(meta)}</p><h3>{e(w["title"])}</h3>'
+        f'<div class="placard">{tag}{"" if w.get("tag") and not w.get("num") and not w.get("meta") else f"<p class={chr(34)}label label--gold{chr(34)}>{e(meta)}</p>"}<h3>{e(w["title"])}</h3>'
         f'<div class="placard__links"><button type="button" class="link-view">View</button>{details}'
         f'<a href="#quote" class="link-quote" data-title="{e(w["title"])}">Request a quote →</a></div></div></article>\n'
     )

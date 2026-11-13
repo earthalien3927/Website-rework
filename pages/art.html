@@ -68,9 +68,9 @@
     inset 0 0 0 1px rgba(255,255,255,.26), inset 1px 1px 0 1px rgba(255,255,255,.14), inset -1px -1px 0 1px rgba(0,0,0,.35),
     0 80px 110px -35px rgba(0,0,0,1), 0 40px 60px -15px rgba(0,0,0,.9), 0 0 0 1px rgba(0,0,0,.8); }
 .fas .frame--static { cursor: default; }
-/* "Scotty's Newest" tag pinned to the top corner of the frame */
+/* "Scotty's Newest" tag at the top of the name plate */
 .fas .tag {
-  position: absolute; z-index: 2; top: -.85rem; left: 1.5rem;
+  justify-self: start; margin-bottom: .2rem;
   padding: .6rem .95rem .55rem; font-family: var(--f-label); font-weight: 700; font-size: .625rem;
   line-height: 1; letter-spacing: .22em; text-transform: uppercase; white-space: nowrap; color: var(--ink);
   background: linear-gradient(135deg, #f0dcae 0%, #c9a86a 45%, #e8cf98 70%, #b8955a 100%);
@@ -333,9 +333,9 @@
         <script type="application/json" id="gallery-picks">
 {
   "pinned": [
-    { "title": "High Tide", "num": "", "meta": "New", "tag": "Scotty's Newest",
+    { "title": "High Tide", "num": "", "meta": "", "tag": "Scotty's Newest",
       "img": "../assets/art-new/high-tide.jpg", "width": 1600, "height": 1600 },
-    { "title": "Wine Time", "num": "", "meta": "New", "tag": "Scotty's Newest",
+    { "title": "Wine Time", "num": "", "meta": "", "tag": "Scotty's Newest",
       "img": "../assets/art-new/wine-time.jpg", "width": 1600, "height": 941 },
     { "title": "Community Property", "num": "144", "meta": "New for 2026",
       "img": "../assets/art-new/community-property-sz144.jpg", "width": 1208, "height": 1600 },
@@ -533,10 +533,9 @@
     var meta = [w.num ? 'No. ' + w.num : '', w.meta || ''].filter(Boolean).join(' · ') || 'by Scotty';
     return '<article class="work work--' + orient + '" data-cats="' + esc((w.cats || []).join(' ')) + '">' +
       '<div class="work__art"><button class="frame' + ((picks.unframed || []).map(key).indexOf(key(w.title)) > -1 ? ' frame--bare' : '') + '" type="button" style="--ar:' + (wd / ht).toFixed(4) + '" data-full="' + esc(w.full || w.img) + '" aria-label="View ' + esc(w.title) + ' full size">' +
-      (w.tag ? '<span class="tag">' + esc(w.tag) + '</span>' : '') +
       '<span class="frame__mat"><img src="' + esc(w.img) + '" alt="' + esc(w.title) + '" width="' + wd + '" height="' + ht + '" loading="lazy"></span></button>' +
       ((w.cats || []).indexOf('venetian-plaster') > -1 ? '<p class="medium">Venetian Plaster</p>' : '') + '</div>' +
-      '<div class="placard"><p class="label label--gold">' + esc(meta) + '</p><h3>' + esc(w.title) + '</h3>' +
+      '<div class="placard">' + (w.tag ? '<span class="tag">' + esc(w.tag) + '</span>' : '') + (w.tag && !w.num && !w.meta ? '' : '<p class="label label--gold">' + esc(meta) + '</p>') + '<h3>' + esc(w.title) + '</h3>' +
       '<div class="placard__links"><button type="button" class="link-view">View</button>' +
       (w.link ? '<a href="' + esc(w.link) + '" class="link-details">Details</a>' : '') +
       '<a href="#quote" class="link-quote" data-title="' + esc(w.title) + '">Request a quote →</a></div></div></article>';
