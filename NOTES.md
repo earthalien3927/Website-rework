@@ -79,3 +79,4 @@ Use the **website-rework** environment (it allows fineartbyscotty.com) and conne
 - Venetian Plaster pieces show a small "VENETIAN PLASTER" plate under the frame (from the venetian-plaster category; automatic for new ones).
 - `swap` pick (art page): trades two pieces' places. Currently Trouble <-> Sunday Morning, and Wine Me Up <-> Wine Roper.
 - High Tide and Wine Time (from Dropbox, no numbers yet) lead the art page with a gold "Scotty's Newest" tag (`tag` field on a pinned piece). Pieces wider than 1.15:1 go full width; squares hang like portraits.
+- `large` pick (art page): hangs a piece about 40% bigger. Currently Moon Tale.

@@ -238,6 +238,8 @@
 .fas .wall .frame { --art-h: clamp(24rem, 100vh - 14rem, 46rem);
   width: min(100%, calc(var(--art-h) * var(--ar, .75) + 2 * (var(--tube) + var(--liner)))); }
 .fas .wall .placard { margin-bottom: clamp(0rem, 2vw, 2rem); }
+/* "large": a featured piece hangs about 40% bigger */
+.fas .wall .work--large .frame { --art-h: clamp(32rem, 140vh - 20rem, 64rem); }
 /* Landscape pieces go bold: the frame spans the full width of the page and the
    name plate sits underneath, alternating left and right. */
 .fas .work.work--landscape, .fas .work.work--landscape.is-alt { grid-template-columns: minmax(0, 1fr); gap: 1.75rem; }
@@ -353,6 +355,7 @@
   "skip": ["Custom Cuff By Scotty", "Mermaid Tail Pendant"],
   "unavailable": ["Rustic Elegance"],
   "swap": [["Trouble", "Sunday Morning"], ["Wine Me Up", "Wine Roper"]],
+  "large": ["Moon Tale"],
   "skipCats": ["sculpture"],
   "unframed": [],
   "crop": {
@@ -531,7 +534,8 @@
   function cardHTML(w) {
     var wd = +w.width || 1, ht = +w.height || 1, orient = wd / ht > 1.15 ? 'landscape' : 'portrait';   // squares hang like portraits
     var meta = [w.num ? 'No. ' + w.num : '', w.meta || ''].filter(Boolean).join(' · ') || 'by Scotty';
-    return '<article class="work work--' + orient + '" data-cats="' + esc((w.cats || []).join(' ')) + '">' +
+    var big = (picks.large || []).map(key).indexOf(key(w.title)) > -1 ? ' work--large' : '';
+    return '<article class="work work--' + orient + big + '" data-cats="' + esc((w.cats || []).join(' ')) + '">' +
       '<div class="work__art"><button class="frame' + ((picks.unframed || []).map(key).indexOf(key(w.title)) > -1 ? ' frame--bare' : '') + '" type="button" style="--ar:' + (wd / ht).toFixed(4) + '" data-full="' + esc(w.full || w.img) + '" aria-label="View ' + esc(w.title) + ' full size">' +
       '<span class="frame__mat"><img src="' + esc(w.img) + '" alt="' + esc(w.title) + '" width="' + wd + '" height="' + ht + '" loading="lazy"></span></button>' +
       ((w.cats || []).indexOf('venetian-plaster') > -1 ? '<p class="medium">Venetian Plaster</p>' : '') + '</div>' +
