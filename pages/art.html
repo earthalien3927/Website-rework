@@ -367,6 +367,7 @@
   "large": ["Moon Tale", "Double Dipping"],
   "sold": ["If You See Kay"],
   "moveTo": { "Pick Me": 9 },
+  "medium": { "Sixth And Ariel": "Carved Wood" },
   "series": [
     { "name": "A Full Day", "pieces": ["Good Morning", "Good Afternoon", "Good Evening"],
       "note": "One series, hung in order: a full day, from morning light to evening." }
@@ -552,6 +553,8 @@
     });
     return works;
   }
+  // "medium": the material plate under a piece, where the site's category is wrong
+  function mediumFor(t) { var m = picks.medium || {}, k = Object.keys(m).filter(function (x) { return key(x) === key(t); })[0]; return k ? m[k] : ''; }
   function moveTo(works) {
     var m = picks.moveTo || {};
     Object.keys(m).forEach(function (t) {
@@ -576,7 +579,7 @@
     return '<article class="work work--' + orient + big + '" data-cats="' + esc((w.cats || []).join(' ')) + '">' +
       '<div class="work__art"><button class="frame' + ((picks.unframed || []).map(key).indexOf(key(w.title)) > -1 ? ' frame--bare' : '') + '" type="button" style="--ar:' + (wd / ht).toFixed(4) + '" data-full="' + esc(w.full || w.img) + '" aria-label="View ' + esc(w.title) + ' full size">' +
       '<span class="frame__mat"><img src="' + esc(w.img) + '" alt="' + esc(w.title) + '" width="' + wd + '" height="' + ht + '" loading="lazy"></span></button>' +
-      ((w.cats || []).indexOf('venetian-plaster') > -1 ? '<p class="medium">Venetian Plaster</p>' : '') + '</div>' +
+      (w.medium ? '<p class="medium">' + esc(w.medium) + '</p>' : (w.cats || []).indexOf('venetian-plaster') > -1 ? '<p class="medium">Venetian Plaster</p>' : '') + '</div>' +
       '<div class="placard">' + (isSold(w) ? '<span class="tag tag--sold">Sold Out</span>' : w.tag ? '<span class="tag">' + esc(w.tag) + '</span>' : '') +
       (w.series ? '<span class="tag tag--series">' + esc(w.series.name) + ' · ' + w.series.i + ' of ' + w.series.n + '</span>' : '') + (w.tag && !w.num && !w.meta ? '' : '<p class="label label--gold">' + esc(meta) + '</p>') + '<h3>' + esc(w.title) + '</h3>' + (w.series && w.series.note ? '<p class="series-note">' + esc(w.series.note) + '</p>' : '') +
       '<div class="placard__links"><button type="button" class="link-view">View</button>' +
@@ -652,10 +655,11 @@
             var pc = (p['fine-art-category'] || []).map(function (id) { return cats[id]; }).filter(Boolean);
             var d = media.media_details || {}, sizes = d.sizes || {};
             var img = sizes.medium_large || sizes.large || { source_url: media.source_url, width: d.width, height: d.height };
-            var n = niceTitle(p.title.rendered);
+            var n = niceTitle(p.title.rendered), med = mediumFor(n.title);
+            if (med) pc = pc.filter(function (c) { return c.slug !== 'venetian-plaster'; });   // corrected medium
             pc.forEach(function (c) { counts[c.slug] = (counts[c.slug] || 0) + 1; });
             works.push({ title: n.title, num: n.num, meta: pc.length ? pc[0].name : '', img: img.source_url, width: img.width, height: img.height,
-              full: media.source_url, link: p.link, cats: pc.map(function (c) { return c.slug; }) });
+              full: media.source_url, link: p.link, cats: pc.map(function (c) { return c.slug; }), medium: med });
           });
           if (!works.length) return;
           var keys = {}; works.forEach(function (w) { keys[key(w.title)] = 1; });

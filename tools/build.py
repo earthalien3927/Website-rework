@@ -210,7 +210,7 @@ def card_html(w, unframed=frozenset(), large=frozenset(), sold=frozenset()) -> s
         f'<article class="work work--{orient}{" work--large" if key(w["title"]) in large else ""}" data-cats="{e(" ".join(w.get("cats", [])))}">'
         f'<div class="work__art"><button class="frame{" frame--bare" if key(w["title"]) in unframed else ""}" type="button" style="--ar:{wd / ht:.4f}" data-full="{e(w.get("full") or w["img"])}" aria-label="View {e(w["title"])} full size">'
         f'<span class="frame__mat"><img src="{e(w["img"])}" alt="{e(w["title"])}" width="{wd}" height="{ht}" loading="lazy"></span></button>'
-        f'{"<p class=" + chr(34) + "medium" + chr(34) + ">Venetian Plaster</p>" if "venetian-plaster" in w.get("cats", []) else ""}</div>'
+        f'{f"<p class={chr(34)}medium{chr(34)}>{e(w[chr(109)+chr(101)+chr(100)+chr(105)+chr(117)+chr(109)])}</p>" if w.get("medium") else "<p class=" + chr(34) + "medium" + chr(34) + ">Venetian Plaster</p>" if "venetian-plaster" in w.get("cats", []) else ""}</div>'
         f'<div class="placard">{tag}{series_tag}{"" if w.get("tag") and not w.get("num") and not w.get("meta") else f"<p class={chr(34)}label label--gold{chr(34)}>{e(meta)}</p>"}<h3>{e(w["title"])}</h3>{series_note}'
         f'<div class="placard__links"><button type="button" class="link-view">View</button>{details}'
         f'{"" if is_sold else f"<a href={chr(34)}#quote{chr(34)} class={chr(34)}link-quote{chr(34)} data-title={chr(34)}{e(w[chr(116)+chr(105)+chr(116)+chr(108)+chr(101)])}{chr(34)}>Request a quote →</a>"}</div></div></article>\n'
@@ -236,7 +236,10 @@ def fill_all(html: str) -> str:
         media.update({m["id"]: m for m in got})
     works, counts = [], {}
     for p in posts:
+        med = {key(k): v for k, v in picks.get("medium", {}).items()}.get(key(nice_title(p["title"]["rendered"])[0]), "")
         pc = [by_id[c] for c in p.get("fine-art-category", []) if c in by_id]
+        if med:                                   # corrected medium: not Venetian plaster
+            pc = [c for c in pc if c["slug"] != "venetian-plaster"]
         w = from_site(p, media.get(p["featured_media"]), htmllib.unescape(pc[0]["name"]) if pc else "")
         if not w:
             continue
@@ -246,6 +249,7 @@ def fill_all(html: str) -> str:
             w.update(img=img["source_url"], width=img["width"], height=img["height"])
         w["cats"] = [c["slug"] for c in pc]
         w["link"] = p.get("link", "")
+        w["medium"] = med
         for c in pc:
             counts[c["slug"]] = counts.get(c["slug"], 0) + 1
         works.append(w)
