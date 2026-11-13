@@ -247,6 +247,11 @@ def fill_all(html: str) -> str:
     live_keys = {key(w["title"]) for w in works}
     pinned = [dict(w, cats=w.get("cats", [])) for w in picks.get("pinned", []) if key(w["title"]) not in live_keys]
     works = pinned + works
+    for a, b in picks.get("swap", []):          # trade two pieces' places; mirrors swapPairs() in the page
+        idx = {key(w["title"]): n for n, w in enumerate(works)}
+        if key(a) in idx and key(b) in idx:
+            i, j = idx[key(a)], idx[key(b)]
+            works[i], works[j] = works[j], works[i]
     e = lambda v: htmllib.escape(str(v), quote=True)
     chips = "".join(
         f'<button type="button" class="chip" data-cat="{e(c["slug"])}" aria-pressed="false">{e(htmllib.unescape(c["name"]))} <span>{counts[c["slug"]]}</span></button>\n'

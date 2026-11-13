@@ -77,3 +77,4 @@ Use the **website-rework** environment (it allows fineartbyscotty.com) and conne
 
 - `unavailable` pick (both pages): pieces no longer offered are left off the wall and out of the quote list. Currently: Rustic Elegance.
 - Venetian Plaster pieces show a small "VENETIAN PLASTER" plate under the frame (from the venetian-plaster category; automatic for new ones).
+- `swap` pick (art page): trades two pieces' places. Currently Trouble <-> Sunday Morning (Sunday Morning 11th, Trouble 41st).

@@ -317,7 +317,7 @@
 
         <!-- Pieces that aren't on the site yet show first ("pinned"); "skip" leaves
              pieces out ("skipCats" leaves whole categories out: this page is
-             paintings only, so sculpture and jewellery are left off); "unframed" hangs a piece without our frame; "crop" cuts a
+             paintings only, so sculpture and jewellery are left off); "unframed" hangs a piece without our frame; "swap" trades two pieces' places in the order; "crop" cuts a
              photographed frame off (left, top, right, bottom as fractions of
              the image) so the painting gets our studio frame instead. Same format as the homepage's. -->
         <script type="application/json" id="gallery-picks">
@@ -338,6 +338,7 @@
   ],
   "skip": ["Custom Cuff By Scotty", "Mermaid Tail Pendant"],
   "unavailable": ["Rustic Elegance"],
+  "swap": [["Trouble", "Sunday Morning"]],
   "skipCats": ["sculpture"],
   "unframed": [],
   "crop": {
@@ -503,6 +504,15 @@
   var picks = { pinned: [], skip: [] };
   try { var pj = document.getElementById('gallery-picks'); if (pj) picks = JSON.parse(pj.textContent); } catch (e) {}
   function key(t) { return String(t).toLowerCase().replace(/[^a-z0-9]/g, ''); }
+  // "swap": trade the places of two pieces in the order. Mirrors swap_pairs() in tools/build.py.
+  function swapPairs(works) {
+    (picks.swap || []).forEach(function (pr) {
+      var i = -1, j = -1;
+      works.forEach(function (w, n) { if (key(w.title) === key(pr[0])) i = n; if (key(w.title) === key(pr[1])) j = n; });
+      if (i > -1 && j > -1) { var t = works[i]; works[i] = works[j]; works[j] = t; }
+    });
+    return works;
+  }
   // One framed piece + name plate. Mirrors card_html() in tools/build.py.
   function cardHTML(w) {
     var wd = +w.width || 1, ht = +w.height || 1, orient = ht > wd ? 'portrait' : 'landscape';
@@ -592,6 +602,7 @@
           if (!works.length) return;
           var keys = {}; works.forEach(function (w) { keys[key(w.title)] = 1; });
           works = (picks.pinned || []).filter(function (w) { return !keys[key(w.title)]; }).concat(works);
+          swapPairs(works);
           gallery.innerHTML = works.map(cardHTML).join('');
           var list = Object.keys(cats).map(function (id) { return cats[id]; })
             .filter(function (c) { return counts[c.slug] && c.slug !== 'uncategorized'; })
