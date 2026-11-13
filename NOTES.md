@@ -76,3 +76,4 @@ Use the **website-rework** environment (it allows fineartbyscotty.com) and conne
 - Full-size viewer (both pages): × sits in the top corner; the enlarged picture uses the same black-bar trim as the wall.
 
 - `unavailable` pick (both pages): pieces no longer offered are left off the wall and out of the quote list. Currently: Rustic Elegance.
+- Venetian Plaster pieces show a small "VENETIAN PLASTER" plate under the frame (from the venetian-plaster category; automatic for new ones).

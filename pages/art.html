@@ -216,7 +216,13 @@
 .fas .work.is-alt .work__art { order: 2; }
 .fas .work.is-alt .placard { order: 1; }
 .fas .work[hidden] { display: none; }
-.fas .work__art { display: flex; justify-content: center; min-width: 0; }
+.fas .work__art { display: flex; flex-direction: column; align-items: center; gap: .9rem; min-width: 0; }
+/* Medium line under the frame, e.g. VENETIAN PLASTER */
+.fas .medium {
+  margin: .35rem 0 0; padding: .55rem 1rem .5rem; font-family: var(--f-body); font-weight: 700;
+  font-size: .75rem; line-height: 1; letter-spacing: .24em; text-transform: uppercase;
+  color: #e6e8eb; background: rgba(13,10,11,.85); border: 1px solid rgba(255,255,255,.12);
+}
 /* Size follows the painting's shape: tall pieces hang tall, wide pieces wide,
    and the whole frame always fits on screen. */
 .fas .wall .frame { --art-h: clamp(24rem, 100vh - 14rem, 46rem);
@@ -503,7 +509,8 @@
     var meta = [w.num ? 'No. ' + w.num : '', w.meta || ''].filter(Boolean).join(' · ') || 'by Scotty';
     return '<article class="work work--' + orient + '" data-cats="' + esc((w.cats || []).join(' ')) + '">' +
       '<div class="work__art"><button class="frame' + ((picks.unframed || []).map(key).indexOf(key(w.title)) > -1 ? ' frame--bare' : '') + '" type="button" style="--ar:' + (wd / ht).toFixed(4) + '" data-full="' + esc(w.full || w.img) + '" aria-label="View ' + esc(w.title) + ' full size">' +
-      '<span class="frame__mat"><img src="' + esc(w.img) + '" alt="' + esc(w.title) + '" width="' + wd + '" height="' + ht + '" loading="lazy"></span></button></div>' +
+      '<span class="frame__mat"><img src="' + esc(w.img) + '" alt="' + esc(w.title) + '" width="' + wd + '" height="' + ht + '" loading="lazy"></span></button>' +
+      ((w.cats || []).indexOf('venetian-plaster') > -1 ? '<p class="medium">Venetian Plaster</p>' : '') + '</div>' +
       '<div class="placard"><p class="label label--gold">' + esc(meta) + '</p><h3>' + esc(w.title) + '</h3>' +
       '<div class="placard__links"><button type="button" class="link-view">View</button>' +
       (w.link ? '<a href="' + esc(w.link) + '" class="link-details">Details</a>' : '') +
