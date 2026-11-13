@@ -335,7 +335,17 @@ def to_webp(data: bytes, dest: pathlib.Path, edge: int = MAX_EDGE, quality: int 
     im.save(dest, "WEBP", quality=quality, method=6)
 
 
+# In the previews, menu links between our pages open the other preview instead
+# of the current live site. (The WordPress version keeps the real addresses.)
+PREVIEW_LINKS = {
+    'href="https://www.fineartbyscotty.com/"': 'href="https://claude.ai/artifact/VPNkJvE2YWGCc2sHxuhYyn"',
+    'href="https://www.fineartbyscotty.com/fine-art/"': 'href="https://claude.ai/artifact/JDNJoTznqp4y1reGv4WFHT"',
+}
+
+
 def preview_version(name: str, html: str) -> None:
+    for a, b in PREVIEW_LINKS.items():
+        html = html.replace(a, b)
     out = PREVIEW / name
     (out / "img").mkdir(parents=True, exist_ok=True)
     urls = sorted(set(UPLOAD_RE.findall(html)))
