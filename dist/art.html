@@ -431,9 +431,11 @@ body::before {
 .fas .work__art { display: flex; flex-direction: column; align-items: center; gap: .9rem; min-width: 0; }
 /* Medium line under the frame, e.g. VENETIAN PLASTER */
 .fas .medium {
-  margin: .35rem 0 0; padding: .55rem 1rem .5rem; font-family: var(--f-body); font-weight: 700;
-  font-size: .75rem; line-height: 1; letter-spacing: .24em; text-transform: uppercase;
-  color: #e6e8eb; background: rgba(13,10,11,.85); border: 1px solid rgba(255,255,255,.12);
+  margin: .4rem 0 0; padding: .7rem 1.3rem .65rem; font-family: var(--f-body); font-weight: 700;
+  font-size: clamp(1.1rem, .85rem + 1vw, 1.5rem); line-height: 1; letter-spacing: .2em; text-transform: uppercase;
+  color: #fff; background: rgba(13,10,11,.88); border: 1px solid rgba(255,255,255,.18);
+  text-shadow: 0 1px 2px rgba(0,0,0,.6); white-space: nowrap; max-width: 100%;
+  position: relative; z-index: 1;          /* sit above the frame's drop shadow, which otherwise greys it */
 }
 /* Size follows the painting's shape: tall pieces hang tall, wide pieces wide,
    and the whole frame always fits on screen. */
