@@ -408,6 +408,7 @@
       "img": "../assets/art-new/community-property-sz144.jpg", "width": 1208, "height": 1600 }
   ],
   "skip": ["Pre Flight", "Trouble", "Power Ball"],
+  "unavailable": ["Rustic Elegance"],
   "order": ["Community Property", "Spoiled Kitten"],
   "last": ["Soul Keeper"],
   "large": ["Spoiled Kitten"],
@@ -599,7 +600,7 @@
     var count = +gallery.getAttribute('data-count') || 6;
     var skip = (gallery.getAttribute('data-exclude') || '').split(',');
     var skipTitles = {};
-    (picks.skip || []).forEach(function (t) { skipTitles[key(t)] = 1; });
+    (picks.skip || []).concat(picks.unavailable || []).forEach(function (t) { skipTitles[key(t)] = 1; });
     Promise.all([getJSON(CATS), getJSON(LIST + 1)]).then(function (res) {
       var cats = {}, skipIds = {};
       res[0].data.forEach(function (c) { cats[c.id] = decode(c.name); if (skip.indexOf(c.slug) > -1) skipIds[c.id] = 1; });
@@ -720,9 +721,9 @@
   }
   if (artSel) artSel.addEventListener('change', function () { syncOther(); if (artSel.value === '__other') otherIn.focus(); });
   function fillPieces(posts) {               // live site: rebuild the list from the artwork posts
-    var seen = {}, all = [];
+    var seen = {}, all = [], gone = (picks.unavailable || []).map(key);   // sold out / no longer offered
     (picks.pinned || []).concat(posts.map(function (p) { return niceTitle(p.title.rendered); }))
-      .forEach(function (n) { var k = key(n.title); if (k && !seen[k]) { seen[k] = 1; all.push(n); } });
+      .forEach(function (n) { var k = key(n.title); if (k && !seen[k] && gone.indexOf(k) < 0) { seen[k] = 1; all.push(n); } });
     var newest = all.filter(function (n) { return +n.num; }).sort(function (a, b) { return b.num - a.num; }).slice(0, 8);
     var az = all.slice().sort(function (a, b) { return a.title.localeCompare(b.title); });
     function opt(n) { return '<option value="' + esc(n.title) + '">' + esc(n.title) + (+n.num ? ' (No. ' + n.num + ')' : '') + '</option>'; }

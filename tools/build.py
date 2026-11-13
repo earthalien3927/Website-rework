@@ -137,9 +137,10 @@ def fill_pieces(html: str, picks: dict) -> str:
     """The quote form's dropdown: newest 8 by number, then everything A-Z.
     Mirrors fillPieces() in the page."""
     seen, pieces = set(), []
+    gone = {key(t) for t in picks.get("unavailable", [])}         # no longer offered
     for n in [(w["title"], w.get("num", "")) for w in picks.get("pinned", [])] + \
              [nice_title(p["title"]["rendered"]) for p in all_posts()]:
-        if key(n[0]) and key(n[0]) not in seen:
+        if key(n[0]) and key(n[0]) not in seen and key(n[0]) not in gone:
             seen.add(key(n[0])); pieces.append(n)
     e = lambda v: htmllib.escape(str(v), quote=True)
     opt = lambda n: f'                <option value="{e(n[0])}">{e(n[0])}{f" (No. {n[1]})" if n[1] else ""}</option>\n'
@@ -215,7 +216,7 @@ def fill_all(html: str) -> str:
         return html
     pm = PICKS_RE.search(html)
     picks = json.loads(pm.group(1)) if pm else {}
-    skip = {key(t) for t in picks.get("skip", [])}
+    skip = {key(t) for t in picks.get("skip", []) + picks.get("unavailable", [])}
     cats, _ = get_json("fine-art-category?per_page=100&_fields=id,name,slug,count")
     by_id = {c["id"]: c for c in cats}
     skip_cat_ids = {c["id"] for c in cats if c["slug"] in set(picks.get("skipCats", []))}
