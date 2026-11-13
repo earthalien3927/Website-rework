@@ -71,5 +71,6 @@ Use the **website-rework** environment (it allows fineartbyscotty.com) and conne
 
 - The art page is **paintings only**: the Sculpture category and the jewellery (Custom Cuff by Scotty, Mermaid Tail Pendant, filed under Uncategorized) are left off via `skipCats` / `skip`. They'll get their own page or section later; on WordPress a Jewellery category would make this automatic.
 - Pre Flight, Trouble and Power Ball DO show on the art page (only the homepage skips them).
-- `unframed` pick: Power Ball hangs without our frame (its photo already shows a physical frame).
+- Layout: one piece per row, large, staggered left/right with the name plate beside it; landscape pieces span the full width with the plate underneath. 12 at a time, then "Show more".
+- Photographed frames are cut off and replaced with our studio frame via the `crop` pick (left, top, right, bottom fractions). Done for 11 pieces. NOT cropped (frame may be part of the art; ask Scotty): Reverence, If You See Kay, Sabrina, Rustic Elegance, Moon Shine.
 - Full-size viewer (both pages): × sits in the top corner; the enlarged picture uses the same black-bar trim as the wall.
