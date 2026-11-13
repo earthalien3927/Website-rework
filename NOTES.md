@@ -57,7 +57,7 @@ Read this first when picking the project up in a new session.
 ## New artwork not yet on the site (from Dropbox `NEW ART 2026.docx`)
 
 SZ142 The Visionary · SZ143 Low Key · SZ144 Community Property · SZ145 Heartstrings · SZ146 Fully Charged · SZ147 The Healer.
-Images are in the Dropbox Team Folder. Downloading from Dropbox needs `*.dropboxusercontent.com` allowed in the environment's network settings, or Scotty can drop the images into the chat.
+Images are in the Dropbox Team Folder (`Paintings/Signed & Signeted High Res Paintings`). Fully Charged, Heartstrings, Low Key, The Visionary and Done Deal (no number yet) are now pinned at the top of the art page; web copies are in `assets/art-new/`. The Healer still has no image. Downloading from Dropbox needs `*.dropboxusercontent.com` allowed in the environment's network settings, or Scotty can drop the images into the chat.
 
 ## Installing on WordPress (once access is agreed)
 
