@@ -105,3 +105,4 @@ Use the **website-rework** environment (it allows fineartbyscotty.com) and conne
 - Pink cabin: 8484 (same angle, Mandalorian helmet on the bed) replaces 8472.
 - 8484 pink cabin: warm rose tone with highlights pulled down (`tools/warm_tone.py <in> <out> 0.7`). The earlier pink glow (`tools/pink_glow.py`) blew out the windows and wall; Scotty wants warm, not overexposed.
 - 8478 lounge (mural): same warm tone, `tools/warm_tone.py <in> <out> 1.0` (ceiling lights were too bright).
+- 8467 helm: day-for-night edit (`tools/day_for_night.py`): dark blue night outside with sparse marina lights, darker cabin, red dash glow, pink under-glow below the sofa, warm pool on the carpet. Caption "The helm after dark." (edited from a daytime photo).

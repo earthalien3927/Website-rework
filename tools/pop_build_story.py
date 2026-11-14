@@ -18,7 +18,7 @@ CHAPTERS = [
  ("Lights on", "After dark, Pop comes alive.", ("3130", "The back of Pop Flamingo, open and lit up at night, with the tower on top."), [
    ("9644", "Lit from bow to tower."), ("1205", "The stairs and tower, glowing."), ("4071", "Doors closed, lights on."), ("9638", "The turbine tower, lit up.")]),
  ("Inside", "Finished, carpeted and lit.", None, [
-   ("8467", "The finished helm."), ("0564", "The bar, lit up under the truss."), ("7451", "The brick bar, glowing blue."), ("8469", "Brick bar and leopard stairs."),
+   ("8467", "The helm after dark."), ("0564", "The bar, lit up under the truss."), ("7451", "The brick bar, glowing blue."), ("8469", "Brick bar and leopard stairs."),
    ("8478", "The lounge, with Scotty's mural."), ("8484", "The pink cabin."), ("8471", "A Scotty mural on the door."), ("8476", "Art in the hallway.")]),
 ]
 REVEAL = [("8449", "All pink, with the Tribangle on deck and the turbine tower up top."), ("6426", "Pink at the dock, at dusk.")]
