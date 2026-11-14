@@ -427,8 +427,8 @@ body::before {
 .fas .popf h2 { font-size: var(--step-3); line-height: 1.02; text-shadow: 0 2px 24px rgba(0,0,0,.5); }
 .fas .popf__label { color: #f2a7c3; }
 .fas .popf__copy .btns { margin-top: .4rem; }
-.fas .popf__before { position: absolute; z-index: 1; right: clamp(1.25rem, 3vw, 3rem); bottom: clamp(1.25rem, 3vw, 3rem); margin: 0;
-  width: clamp(9rem, 22%, 17rem); padding: 6px 6px 0; background: #f4efe8; box-shadow: 0 18px 40px rgba(0,0,0,.55); transform: rotate(2deg); }
+.fas .popf__before { position: absolute; z-index: 1; left: 42%; bottom: clamp(1rem, 2.2vw, 2rem); margin: 0;
+  width: clamp(8rem, 17%, 13rem); padding: 5px 5px 0; background: #f4efe8; box-shadow: 0 18px 40px rgba(0,0,0,.55); transform: rotate(-2deg); }
 .fas .popf__before img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
 .fas .popf__before figcaption { padding: .45rem 0 .5rem; text-align: center; font-family: var(--f-label); font-weight: 700;
   font-size: .5625rem; letter-spacing: .24em; text-transform: uppercase; color: #1a1416; }
@@ -523,8 +523,8 @@ body::before {
   .fas .popf__stage { aspect-ratio: auto; overflow: visible; background: none; display: grid; }
   .fas .popf__stage::after { display: none; }
   .fas .popf__main { position: relative; grid-area: 1 / 1; display: block; aspect-ratio: 4 / 3.4; height: auto; }
-  .fas .popf__before { position: relative; grid-area: 1 / 1; align-self: end; justify-self: end; right: auto; bottom: auto;
-    margin: 0 .75rem .75rem 0; width: 34%; padding: 4px 4px 0; }
+  .fas .popf__before { position: relative; grid-area: 1 / 1; align-self: end; justify-self: start; left: auto; bottom: auto;
+    margin: 0 0 .75rem .75rem; width: 34%; padding: 4px 4px 0; }
   .fas .popf__before figcaption { padding: .3rem 0 .35rem; font-size: .5rem; }
   .fas .popf__copy { position: static; grid-area: 2 / 1; margin-top: 1.5rem; max-width: none; }
 }
