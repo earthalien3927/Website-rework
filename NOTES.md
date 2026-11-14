@@ -36,9 +36,9 @@ Read this first when picking the project up in a new session.
 - **Statement:** Sunday Morning in the studio frame, with a dark emerald glow from the bottom right that fades toward the left.
 - **Collection:** framed paintings staggered on a generated onyx pebble background (`tools/make_pebbles.py`; stones 25% darker, highlights 10% dimmer than the first version). It fills itself from the site's artwork list; the hand-picked list is the `gallery-picks` JSON in the page:
   - `pinned`: Community Property (SZ144). Its image is in `assets/art-new/` because it isn't on the site yet.
-  - `skip`: Pre Flight, Trouble, Power Ball
+  - `skip`: Pre Flight, Trouble, Power Ball, Soul Keeper (Nov 14: swapped out for Heartstrings)
   - `order`: Community Property, then Spoiled Kitten
-  - `last`: Soul Keeper
+  - `last`: Heartstrings (pinned on the homepage too, image in assets/art-new)
   - `large`: Spoiled Kitten. `fill`: Community Property (as big as fits on screen, centred between the page edge and its label).
   - `data-count="4"`; Sculpture and Uncategorized categories are excluded.
 - **"Newest first"** = highest SZ number in the title, then publish date. The older 136 pieces have no SZ number yet. The price sheet is in Dropbox (`Price Data and Labels/Retail Price Sheet - Fine Art by Scotty SKU Order.pdf`).
