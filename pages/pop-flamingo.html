@@ -20,7 +20,44 @@
 .fas .pf-hero .wrap { display: grid; gap: clamp(1.5rem, 1rem + 2vw, 2.75rem); }
 .fas .pf-hero__top { display: grid; justify-items: center; gap: 1rem; text-align: center; }
 .fas .pf-hero .pf-sign img { width: min(75%, 30rem); margin-inline: auto; filter: drop-shadow(0 10px 40px rgba(120,60,255,.5)); }
-.fas .pf-hero__photo img { aspect-ratio: 16 / 9; object-fit: cover; object-position: 50% 55%; }
+/* Frame, built the way the studio builds them: a charcoal brushed-metal outer
+   tube, a brighter brushed-metal liner set right inside it against the
+   painting (no mat), and a long shadow so it floats off the wall. */
+.fas .frame, .fas .frame__mat { --tube: calc(clamp(12px, .6rem + .9vw, 22px) * 1.3); --liner: clamp(6px, .3rem + .4vw, 12px); }
+.fas .frame {
+  display: block; position: relative; padding: var(--tube); border: 0; cursor: zoom-in;
+  background:
+    repeating-linear-gradient(0deg, rgba(255,255,255,.035) 0 1px, transparent 1px 2px, rgba(0,0,0,.06) 2px 3px, transparent 3px 5px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.025) 0 1px, transparent 1px 3px),
+    linear-gradient(135deg, #8a8d91 0%, #4a4c50 14%, #2b2d30 32%, #5e6165 50%, #313337 68%, #24262a 84%, #74777b 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.22),
+    inset 1px 1px 0 1px rgba(255,255,255,.12),
+    inset -1px -1px 0 1px rgba(0,0,0,.35),
+    0 60px 90px -35px rgba(0,0,0,1),
+    0 30px 45px -15px rgba(0,0,0,.9),
+    0 0 0 1px rgba(0,0,0,.8);
+  transition: transform .5s cubic-bezier(.2,.7,.2,1), box-shadow .5s;
+}
+.fas .frame::after {                     /* fine seam where the two metals meet */
+  content: ""; position: absolute; pointer-events: none; inset: calc(var(--tube) - 1px);
+  border: 1px solid; border-color: rgba(0,0,0,.6) rgba(0,0,0,.35) rgba(255,255,255,.18) rgba(0,0,0,.45);
+}
+.fas button.frame:hover { transform: translateY(-6px); box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.26), inset 1px 1px 0 1px rgba(255,255,255,.14), inset -1px -1px 0 1px rgba(0,0,0,.35),
+    0 80px 110px -35px rgba(0,0,0,1), 0 40px 60px -15px rgba(0,0,0,.9), 0 0 0 1px rgba(0,0,0,.8); }
+.fas .frame--static { cursor: default; }
+.fas .frame__mat {                       /* the bright brushed-metal liner */
+  display: block; padding: var(--liner);
+  background:
+    repeating-linear-gradient(0deg, rgba(255,255,255,.05) 0 1px, transparent 1px 2px, rgba(0,0,0,.07) 2px 3px, transparent 3px 5px),
+    linear-gradient(135deg, #c9ccd0 0%, #7b7e83 16%, #a4a7ac 34%, #66696d 52%, #b3b6bb 70%, #74777b 86%, #d2d5d9 100%);
+  box-shadow: inset 1px 1px 0 rgba(255,255,255,.55), inset -1px -1px 0 rgba(0,0,0,.45), 0 0 0 1px rgba(0,0,0,.5);
+}
+.fas .frame__mat img { display: block; width: 100%; }
+.fas .frame__mat img, .fas .frame__mat .crop { box-shadow: 0 0 0 1px rgba(0,0,0,.55); }
+.fas .pf-hero__photo { margin: 0; }
+.fas .pf-hero__photo img { aspect-ratio: 1590 / 994; object-fit: cover; }
 .fas .pf-hero__foot { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 1.5rem clamp(2rem, 5vw, 5rem); }
 .fas .pf-hero__foot .lede { max-width: none; margin: 0; }
 .fas .pf-hero__text { display: grid; gap: 1.4rem; min-width: 0; }
@@ -83,7 +120,7 @@
 
 @media (max-width: 860px) {
   .fas .pf-hero .wrap, .fas .pf-step, .fas .pf-hero__foot { grid-template-columns: minmax(0, 1fr); }
-  .fas .pf-hero__photo img { aspect-ratio: 4 / 3; }
+
   .fas .pf-step:nth-child(even) .pf-photo { order: 0; }
   .fas .pf-pair { gap: 4px; }
 }
@@ -130,9 +167,9 @@
           <p class="label label--pink">Scotty's crazy build</p>
           <h1 id="pf-title" class="pf-sign"><img src="../assets/art-new/pop-flamingo-sign.png" alt="Pop Flamingo" width="1600" height="401"></h1>
         </div>
-        <figure class="pf-photo pf-hero__photo">
-          <img src="../assets/art-new/pop-after-marina-wide.jpg" alt="Pop Flamingo, finished in pink, in the marina with the city behind her" width="1688" height="1056">
-        </figure>
+        <figure class="pf-hero__photo"><span class="frame frame--static"><span class="frame__mat">
+          <img src="../assets/art-new/pop-hero-framed.jpg" alt="Pop Flamingo, finished in pink, in the marina with the city behind her" width="1590" height="994">
+        </span></span></figure>
         <div class="pf-hero__foot">
           <p class="lede">A tired white cruiser, taken down to the bones and rebuilt as a floating work of art. Same hands as the paintings, much bigger canvas.</p>
           <div class="btns"><a class="btn btn--pink" href="#build">Follow the build <span class="arrow" aria-hidden="true">↓</span></a></div>
