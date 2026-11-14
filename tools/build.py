@@ -42,7 +42,7 @@ MAX_EDGE = 1600
 SITE = "https://www.fineartbyscotty.com/wp-json/wp/v2/"
 NEWEST_RE = re.compile(r'(data-count="(\d+)"(?: data-exclude="([^"]*)")?>\s*<!-- newest:start -->).*?(<!-- newest:end -->)', re.S)
 ASSET_URL_RE = re.compile(r'url\("\.\./assets/([^"]+)"\)')
-ART_URL_RE = re.compile(r'\.\./assets/(art-new/[A-Za-z0-9._-]+)')   # new artwork not on the site yet
+ART_URL_RE = re.compile(r'\.\./assets/(art-new/[A-Za-z0-9._/-]+)')   # new artwork not on the site yet
 
 
 def get_json(path: str):

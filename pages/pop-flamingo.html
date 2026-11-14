@@ -32,7 +32,7 @@
 .fas .pf-pair figure { position: relative; margin: 0; overflow: hidden; aspect-ratio: 4 / 3; max-width: 100%; }
 .fas .pf-pair img { width: 100%; height: 100%; object-fit: cover; }
 .fas .pf-pair figure:first-child img { object-position: 15% 62%; }
-.fas .pf-pair figure:last-child img { object-position: 70% 60%; }
+.fas .pf-pair figure:last-child img { object-position: 55% 60%; }
 .fas .pf-tag { position: absolute; top: 1rem; left: 1rem; padding: .5rem .85rem .45rem; font-family: var(--f-label); font-weight: 700;
   font-size: .625rem; letter-spacing: .22em; text-transform: uppercase; color: var(--bone); background: rgba(13,10,11,.8); }
 .fas .pf-pair figure:last-child .pf-tag { left: auto; right: 1rem; background: var(--pink); color: var(--ink); }
@@ -49,6 +49,26 @@
 .fas .pf-step__text .label::before { content: "Step " counter(step) " · "; }
 .fas .pf-step h3 { font-size: var(--step-2); }
 
+.fas .pf-ch { display: grid; gap: clamp(1.25rem, 1rem + 1vw, 2rem); margin-top: clamp(3rem, 2rem + 3vw, 5rem); }
+.fas .pf-ch__head { display: grid; gap: .5rem; max-width: 40rem; }
+.fas .pf-ch__head h3 { font-size: var(--step-2); }
+.fas .pf-ch__head p:last-child { color: var(--smoke); }
+.fas .pf-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(var(--cols, 4), minmax(0, 1fr)); gap: clamp(.75rem, .5rem + .8vw, 1.25rem); }
+@media (max-width: 900px) { .fas .pf-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .fas .pf-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.fas .pf-grid li { margin: 0; display: grid; gap: .55rem; align-content: start; }
+.fas .pf-grid p { font-size: var(--step--1); color: var(--smoke); margin: 0; }
+.fas .pf-shot { display: block; padding: 0; border: 0; background: #000; cursor: zoom-in; aspect-ratio: 4 / 5; overflow: hidden; width: 100%; }
+.fas .pf-shot img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s ease, filter .5s ease; filter: saturate(.92); }
+.fas .pf-shot:hover img, .fas .pf-shot:focus-visible img { transform: scale(1.04); filter: saturate(1.05); }
+.fas .pf-ch--end .pf-photo { max-width: 100%; }
+.fas .pf-viewer { position: fixed; inset: 0; z-index: 200; background: rgba(8,6,8,.94); display: grid; place-items: center; padding: 3.5rem 1rem 2rem; }
+.fas .pf-viewer[hidden] { display: none; }
+.fas .pf-viewer img { max-width: min(100%, 1400px); max-height: calc(100dvh - 8rem); object-fit: contain; box-shadow: 0 30px 80px rgba(0,0,0,.8); }
+.fas .pf-viewer p { color: var(--bone); margin: .9rem 0 0; text-align: center; }
+.fas .pf-viewer__x { position: absolute; top: .75rem; right: 1rem; width: 2.75rem; height: 2.75rem; border: 1px solid var(--line); background: transparent; color: var(--bone); font-size: 1.6rem; line-height: 1; cursor: pointer; }
+.fas .pf-viewer > *:not(.pf-viewer__x) { grid-column: 1; }
+.fas .pf-viewer { grid-template-rows: auto auto; align-content: center; }
 .fas .pf-more { padding-block: clamp(3rem, 2rem + 3vw, 5rem); border-top: 1px solid var(--line); text-align: center; }
 .fas .pf-more .wrap { display: grid; justify-items: center; gap: 1.25rem; }
 
@@ -116,7 +136,7 @@
         </div>
         <div class="pf-pair">
           <figure><img src="../assets/art-new/pop-before-dock.jpg" alt="The boat before the build, white at the dock" width="1440" height="1080" loading="lazy"><figcaption class="pf-tag">Before</figcaption></figure>
-          <figure><img src="../assets/art-new/pop-after-marina.jpg" alt="Pop Flamingo after the build" width="480" height="360" loading="lazy"><figcaption class="pf-tag">After</figcaption></figure>
+          <figure><img src="../assets/art-new/pop-after-marina-wide.jpg" alt="Pop Flamingo after the build" width="1688" height="1056" loading="lazy"><figcaption class="pf-tag">After</figcaption></figure>
         </div>
       </div>
     </section>
@@ -126,31 +146,66 @@
         <div class="pf-build__head">
           <p class="label label--pink">The build</p>
           <h2 id="pf-build-title">From the dock <em>to the spotlight.</em></h2>
+          <p class="lede">How a tired white cruiser became Pop Flamingo. Tap any photo to see it bigger.</p>
         </div>
-        <ol class="pf-steps">
-          <li class="pf-step">
-            <figure class="pf-photo"><img src="../assets/art-new/pop-before-dock-2.jpg" alt="The white cruiser at the dock before the build" width="1600" height="1200" loading="lazy"></figure>
-            <div class="pf-step__text"><p class="label label--pink">Where she started</p><h3>A plain white cruiser.</h3><p>Solid bones, no personality. Exactly the kind of blank canvas Scotty likes.</p></div>
-          </li>
-          <li class="pf-step pf-step--tall">
-            <figure class="pf-photo"><img src="../assets/art-new/pop-haulout.jpg" alt="The boat lifted out of the water on the travel lift" width="1200" height="1600" loading="lazy"></figure>
-            <div class="pf-step__text"><p class="label label--pink">Out of the water</p><h3>Hauled out.</h3><p>Up on the travel lift and onto dry land, where the real work begins.</p></div>
-          </li>
-          <li class="pf-step pf-step--tall">
-            <figure class="pf-photo"><img src="../assets/art-new/pop-helm.jpg" alt="Inside the helm with the ceiling opened up and the wiring exposed" width="1200" height="1600" loading="lazy"></figure>
-            <div class="pf-step__text"><p class="label label--pink">Down to the bones</p><h3>Opened up.</h3><p>Ceilings down, wiring out. Everything gets looked at before anything gets painted.</p></div>
-          </li>
-          <li class="pf-step">
-            <figure class="pf-photo"><img src="../assets/art-new/pop-after-side.jpg" alt="Pop Flamingo finished in pink, side view at the dock" width="480" height="360" loading="lazy"></figure>
-            <div class="pf-step__text"><p class="label label--pink">The reveal</p><h3>Pop Flamingo.</h3><p>Pink from bow to stern, and impossible to miss in any marina.</p></div>
-          </li>
-        </ol>
+        <div class="pf-ch">
+          <div class="pf-ch__head"><p class="label label--pink">Chapter 1</p><h3>Where she started</h3><p>A plain white cruiser, still wearing her old name.</p></div>
+          <ul class="pf-grid" style="--cols:3">
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-1481.jpg" alt="White, at the dock. The blank canvas." width="1400" height="1050" loading="lazy"></button><p>White, at the dock. The blank canvas.</p></li>
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-4335.jpg" alt="Still called ODESSA." width="1050" height="1400" loading="lazy"></button><p>Still called ODESSA.</p></li>
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-1444.jpg" alt="Hauled out on the travel lift." width="1050" height="1400" loading="lazy"></button><p>Hauled out on the travel lift.</p></li>
+          </ul>
+        </div>
+        <div class="pf-ch">
+          <div class="pf-ch__head"><p class="label label--pink">Chapter 2</p><h3>Down to the bones</h3><p>Ceilings down, wiring out, everything opened up.</p></div>
+          <ul class="pf-grid" style="--cols:3">
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-3018.jpg" alt="The helm, ceiling down." width="1050" height="1400" loading="lazy"></button><p>The helm, ceiling down.</p></li>
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-3075.jpg" alt="Cabin stripped to the beams." width="1400" height="1050" loading="lazy"></button><p>Cabin stripped to the beams.</p></li>
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-7233.jpg" alt="Demolition below deck." width="1050" height="1400" loading="lazy"></button><p>Demolition below deck.</p></li>
+          </ul>
+        </div>
+        <div class="pf-ch">
+          <div class="pf-ch__head"><p class="label label--pink">Chapter 3</p><h3>Built in the shop</h3><p>Back at Scotty's shop, the new pieces get made by hand.</p></div>
+          <ul class="pf-grid" style="--cols:5">
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-3311.jpg" alt="Scotty's shop." width="1400" height="1050" loading="lazy"></button><p>Scotty's shop.</p></li>
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-4797.jpg" alt="Railing panels taking shape." width="1400" height="1050" loading="lazy"></button><p>Railing panels taking shape.</p></li>
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-7100.jpg" alt="Flamingos cut in wood." width="1050" height="1400" loading="lazy"></button><p>Flamingos cut in wood.</p></li>
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-4283.jpg" alt="A spiral staircase, built from scratch." width="1050" height="1400" loading="lazy"></button><p>A spiral staircase, built from scratch.</p></li>
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-6979.jpg" alt="A panel painted by hand." width="1050" height="1400" loading="lazy"></button><p>A panel painted by hand.</p></li>
+          </ul>
+        </div>
+        <div class="pf-ch">
+          <div class="pf-ch__head"><p class="label label--pink">Chapter 4</p><h3>Back on board</h3><p>The new pieces go on, one by one.</p></div>
+          <ul class="pf-grid" style="--cols:5">
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-4346.jpg" alt="The spiral stairs go aboard." width="1050" height="1400" loading="lazy"></button><p>The spiral stairs go aboard.</p></li>
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-3151.jpg" alt="New railings going on." width="1400" height="1050" loading="lazy"></button><p>New railings going on.</p></li>
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-1208.jpg" alt="The new radar tower." width="1050" height="1400" loading="lazy"></button><p>The new radar tower.</p></li>
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-1099.jpg" alt="A flamingo set into the deck." width="1050" height="1400" loading="lazy"></button><p>A flamingo set into the deck.</p></li>
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-1129.jpg" alt="The new name goes on." width="1050" height="1400" loading="lazy"></button><p>The new name goes on.</p></li>
+          </ul>
+        </div>
+        <div class="pf-ch">
+          <div class="pf-ch__head"><p class="label label--pink">Chapter 5</p><h3>Lights on</h3><p>Pink light, brick, murals and stainless.</p></div>
+          <ul class="pf-grid" style="--cols:3">
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-6621.jpg" alt="The brick bar going in." width="1050" height="1400" loading="lazy"></button><p>The brick bar going in.</p></li>
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-1520.jpg" alt="A Scotty mural in the lounge." width="1050" height="1400" loading="lazy"></button><p>A Scotty mural in the lounge.</p></li>
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-1448.jpg" alt="Pink below deck." width="1400" height="1050" loading="lazy"></button><p>Pink below deck.</p></li>
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-9938.jpg" alt="The bar, lit up." width="1400" height="1050" loading="lazy"></button><p>The bar, lit up.</p></li>
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-1182.jpg" alt="Her first night in pink." width="1400" height="1050" loading="lazy"></button><p>Her first night in pink.</p></li>
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-8451.jpg" alt="The Tribangle on the back deck." width="1400" height="1050" loading="lazy"></button><p>The Tribangle on the back deck.</p></li>
+          </ul>
+        </div>
+        <div class="pf-ch pf-ch--end">
+          <div class="pf-ch__head"><p class="label label--pink">The reveal</p><h3>Pop Flamingo.</h3><p>Pink from bow to stern, and impossible to miss in any marina.</p></div>
+          <figure class="pf-photo"><img src="../assets/art-new/pop-after-marina-wide.jpg" alt="Pop Flamingo finished in pink in the marina" width="1688" height="1056" loading="lazy"></figure>
+        </div>
       </div>
     </section>
+    <div class="pf-viewer" hidden><button class="pf-viewer__x" type="button" aria-label="Close">×</button><img alt=""><p></p></div>
 
     <section class="pf-more" aria-label="More from Scotty">
       <div class="wrap">
-        <p class="label label--pink">More of the build coming soon</p>
+        <p class="label label--pink">That's the build</p>
         <h2>Art doesn't stop at the <em>frame.</em></h2>
         <div class="btns">
           <a class="btn btn--gold" href="https://www.fineartbyscotty.com/fine-art/">See the paintings <span class="arrow" aria-hidden="true">→</span></a>
@@ -186,6 +241,20 @@
 
 <script>
 (function () {
+  // Build photos: tap to view bigger
+  var viewer = document.querySelector('.fas .pf-viewer');
+  if (viewer) {
+    var vImg = viewer.querySelector('img'), vCap = viewer.querySelector('p');
+    var close = function () { viewer.hidden = true; vImg.removeAttribute('src'); document.body.style.overflow = ''; };
+    document.querySelectorAll('.fas .pf-shot').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var im = b.querySelector('img'); vImg.src = im.currentSrc || im.src; vImg.alt = im.alt; vCap.textContent = im.alt;
+        viewer.hidden = false; document.body.style.overflow = 'hidden'; viewer.querySelector('.pf-viewer__x').focus();
+      });
+    });
+    viewer.addEventListener('click', function (e) { if (e.target === viewer || e.target.closest('.pf-viewer__x')) close(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !viewer.hidden) close(); });
+  }
   // Mobile menu (same as the other pages)
   var btn = document.querySelector('.fas .menu-btn');
   var nav = document.getElementById('site-nav');
