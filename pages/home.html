@@ -197,17 +197,21 @@
 /* Toy Box */
 /* Pop Flamingo banner: heading row, then one big photo with Pop large to the bottom right and the "before" floating in the sky top left */
 .fas .popf { border-block: 1px solid var(--line); padding-block: clamp(3rem, 2.5rem + 2.5vw, 5rem); }
-.fas .popf__head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 1.25rem 3rem; margin-bottom: clamp(1.25rem, 1rem + 1vw, 2rem); }
-.fas .popf__text { display: grid; gap: .8rem; max-width: 34rem; min-width: 0; }
+.fas .popf__head { display: grid; grid-template-columns: minmax(0, max-content) auto; justify-content: start; align-items: end; gap: 1rem clamp(1.5rem, 3vw, 3rem); margin-bottom: .35rem; }
+.fas .popf__text { display: grid; gap: .7rem; min-width: 0; max-width: 36rem; }
+.fas .popf h2 { margin-top: .35rem; margin-bottom: -.12em; }
+.fas .popf__before { margin-bottom: .35rem; }
+.fas .popf__cta { position: absolute; z-index: 1; left: clamp(.8rem, 1.6vw, 1.4rem); top: clamp(.8rem, 1.6vw, 1.4rem);
+  border: 2px solid #0b0a0c; box-shadow: 0 0 0 1px rgba(0,0,0,.35), 0 10px 26px rgba(0,0,0,.35); }
 .fas .popf h2 { font-size: var(--step-3); line-height: 1.02; }
 .fas .popf__label { color: #f2a7c3; }
 .fas .popf__stage { position: relative; overflow: hidden; aspect-ratio: 16 / 10; background: #0b0a0c; }
 .fas .popf__main { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.fas .popf__before { position: absolute; z-index: 1; left: 1.2%; top: 1.8%; margin: 0; width: 15%; }
+.fas .popf__before { position: relative; margin: 0; width: clamp(9rem, 7rem + 8vw, 15rem); }
 .fas .popf__before img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border: 2px solid rgba(244,239,232,.92);
-  box-shadow: 0 14px 36px rgba(6,10,30,.45); }
+  box-shadow: 0 14px 36px rgba(0,0,0,.5); }
 .fas .popf__before figcaption { position: absolute; left: 2px; bottom: 2px; padding: .35rem .55rem .3rem; background: #e98bb0; color: var(--ink);
-  font-family: var(--f-label); font-weight: 700; font-size: clamp(.4375rem, .3rem + .3vw, .5625rem); letter-spacing: .24em; text-transform: uppercase; }
+  font-family: var(--f-label); font-weight: 700; font-size: .5625rem; letter-spacing: .24em; text-transform: uppercase; }
 .fas .btn--pink { background: #e98bb0; color: var(--ink); }
 .fas .btn--pink:hover { background: #f6b3cd; }
 .fas .toybox { position: relative; isolation: isolate; overflow: hidden; border-block: 1px solid var(--line); }
@@ -295,10 +299,13 @@
 .fas-lightbox .icon-btn:hover { border-color: var(--bone); }
 .fas-lightbox .icon-btn svg { width: 18px; height: 18px; }
 
-@media (max-width: 700px) {
-  .fas .popf__before { width: 20%; left: 1.5%; top: 2%; }
-  .fas .popf__before img { border-width: 1.5px; }
-  .fas .popf__before figcaption { padding: .2rem .35rem .15rem; letter-spacing: .18em; }
+@media (max-width: 860px) {
+  .fas .popf__head { grid-template-columns: minmax(0, 1fr) auto; }
+}
+@media (max-width: 520px) {
+  .fas .popf__before { width: 7.5rem; }
+  .fas .popf__cta { padding: .7rem .9rem; font-size: .5625rem; letter-spacing: .16em; }
+  .fas .popf__before figcaption { padding: .2rem .35rem .15rem; letter-spacing: .18em; font-size: .5rem; }
 }
 
 @media (max-width: 860px) {
@@ -454,17 +461,17 @@
         <div class="popf__head">
           <div class="popf__text">
             <p class="label popf__label">Pop Flamingo</p>
-            <h2 id="popf-title">Pushing the <em>boundaries.</em></h2>
             <p class="lede">A tired white cruiser, rebuilt by hand into a floating work of art.</p>
+            <h2 id="popf-title">Pushing the <em>boundaries.</em></h2>
           </div>
-          <div class="btns"><a class="btn btn--pink" href="https://www.fineartbyscotty.com/pop-flamingo/">See Scotty's crazy build <span class="arrow" aria-hidden="true">→</span></a></div>
-        </div>
-        <div class="popf__stage">
-          <img class="popf__main" src="../assets/art-new/pop-after-marina-wide.jpg" alt="Pop Flamingo, finished in pink, in the San Diego marina" width="1688" height="1056" loading="lazy">
           <figure class="popf__before">
             <img src="../assets/art-new/pop-before-dock.jpg" alt="The same boat before the build, white at the dock" width="1440" height="1080" loading="lazy">
             <figcaption>Before</figcaption>
           </figure>
+        </div>
+        <div class="popf__stage">
+          <img class="popf__main" src="../assets/art-new/pop-after-marina-wide.jpg" alt="Pop Flamingo, finished in pink, in the San Diego marina" width="1688" height="1056" loading="lazy">
+          <a class="btn btn--pink popf__cta" href="https://www.fineartbyscotty.com/pop-flamingo/">See Scotty's crazy build <span class="arrow" aria-hidden="true">→</span></a>
         </div>
       </div>
     </section>
