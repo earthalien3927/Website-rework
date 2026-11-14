@@ -195,6 +195,23 @@
 .fas .collection__foot { display: flex; justify-content: center; margin-top: clamp(4rem, 3rem + 4vw, 7rem); }
 
 /* Toy Box */
+/* Pop Flamingo banner: full-width photo, text on the left */
+.fas .popf {
+  position: relative; isolation: isolate; overflow: hidden; display: flex; align-items: center;
+  min-height: clamp(520px, 78vh, 820px); border-block: 1px solid var(--line);
+}
+.fas .popf__img { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; max-width: none; object-fit: cover; object-position: 60% 55%; }
+.fas .popf::after {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(90deg, rgba(13,10,11,.92) 0%, rgba(13,10,11,.7) 38%, rgba(13,10,11,.15) 70%, rgba(13,10,11,0) 100%),
+              linear-gradient(180deg, rgba(13,10,11,.5) 0%, transparent 25%, transparent 75%, rgba(13,10,11,.6) 100%);
+}
+.fas .popf .wrap { width: 100%; padding-block: clamp(4rem, 3rem + 4vw, 7rem); }
+.fas .popf__text { display: grid; gap: 1.5rem; max-width: 34rem; }
+.fas .popf h2 { font-size: var(--step-4); }
+.fas .popf__label { color: #f2a7c3; }
+.fas .btn--pink { background: #e98bb0; color: var(--ink); }
+.fas .btn--pink:hover { background: #f6b3cd; }
 .fas .toybox { position: relative; isolation: isolate; overflow: hidden; border-block: 1px solid var(--line); }
 .fas .toybox .wrap {
   display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
@@ -283,6 +300,8 @@
 @media (max-width: 860px) {
   .fas .statement .wrap, .fas .toybox .wrap, .fas .quote .wrap { grid-template-columns: minmax(0, 1fr); }
   .fas .toybox__img::after { background: linear-gradient(0deg, var(--ink), transparent 45%); }
+  .fas .popf { align-items: flex-end; min-height: 640px; }
+  .fas .popf::after { background: linear-gradient(0deg, rgba(13,10,11,.95) 0%, rgba(13,10,11,.75) 45%, rgba(13,10,11,.1) 80%); }
   .fas .work, .fas .work:nth-child(even) { grid-template-columns: minmax(0, 1fr); gap: 1.75rem; }
   .fas .work:nth-child(even) .frame, .fas .work:nth-child(even) .placard { order: 0; }
   .fas .work .frame { justify-self: center; }
@@ -427,16 +446,19 @@
       </div>
     </section>
 
-    <section class="section toybox" aria-labelledby="toybox-title">
+    <!-- Pop Flamingo banner. The photo is a STAND-IN (2018 marina shoot) until
+         Scotty sends a photo of Pop Flamingo on the water. -->
+    <section class="popf" aria-labelledby="popf-title">
+      <img class="popf__img" src="../assets/art-new/pop-flamingo-standin.jpg" alt="Pop Flamingo on the water" width="2000" height="1333" loading="lazy">
       <div class="wrap">
-        <div class="toybox__img">
-          <img src="https://www.fineartbyscotty.com/wp-content/uploads/2024/12/image-42.png" alt="Custom chopper with copper and chrome finish" width="874" height="607" loading="lazy">
-        </div>
-        <div class="toybox__text">
-          <p class="label label--gold">Beyond the canvas</p>
-          <h2 id="toybox-title">The Toy <em>Box.</em></h2>
-          <p class="lede">Horsepower, chrome and custom finishes. The art doesn't stop at the frame.</p>
-          <div class="btns"><a class="btn btn--ghost" href="https://www.fineartbyscotty.com/toy-box/">Explore the Toy Box <span class="arrow" aria-hidden="true">→</span></a></div>
+        <div class="popf__text">
+          <p class="label popf__label">Pop Flamingo</p>
+          <h2 id="popf-title">Pushing the <em>boundaries.</em></h2>
+          <p class="lede">Scotty doesn't stop at the canvas. Follow the build of Pop Flamingo, from bare hull to a floating work of art.</p>
+          <div class="btns">
+            <a class="btn btn--pink" href="#pop-flamingo">See Scotty's crazy build <span class="arrow" aria-hidden="true">→</span></a>
+            <a class="btn btn--ghost" href="https://www.fineartbyscotty.com/toy-box/">Explore the Toy Box</a>
+          </div>
         </div>
       </div>
     </section>
