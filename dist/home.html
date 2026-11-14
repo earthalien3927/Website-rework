@@ -419,7 +419,7 @@ body::before {
 /* Pop Flamingo banner: full-width photo, text on the left */
 .fas .popf {
   position: relative; isolation: isolate; overflow: hidden; display: flex; align-items: center;
-  min-height: clamp(520px, 78vh, 820px); border-block: 1px solid var(--line);
+  min-height: clamp(340px, 46vh, 500px); border-block: 1px solid var(--line);
 }
 .fas .popf__img { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; max-width: none; object-fit: cover; object-position: 60% 55%; }
 .fas .popf::after {
@@ -427,9 +427,9 @@ body::before {
   background: linear-gradient(90deg, rgba(13,10,11,.92) 0%, rgba(13,10,11,.7) 38%, rgba(13,10,11,.15) 70%, rgba(13,10,11,0) 100%),
               linear-gradient(180deg, rgba(13,10,11,.5) 0%, transparent 25%, transparent 75%, rgba(13,10,11,.6) 100%);
 }
-.fas .popf .wrap { width: 100%; padding-block: clamp(4rem, 3rem + 4vw, 7rem); }
-.fas .popf__text { display: grid; gap: 1.5rem; max-width: 34rem; }
-.fas .popf h2 { font-size: var(--step-4); }
+.fas .popf .wrap { width: 100%; padding-block: clamp(2.5rem, 2rem + 2vw, 4rem); }
+.fas .popf__text { display: grid; gap: 1.1rem; max-width: 34rem; }
+.fas .popf h2 { font-size: var(--step-3); }
 .fas .popf__label { color: #f2a7c3; }
 .fas .btn--pink { background: #e98bb0; color: var(--ink); }
 .fas .btn--pink:hover { background: #f6b3cd; }
@@ -521,7 +521,7 @@ body::before {
 @media (max-width: 860px) {
   .fas .statement .wrap, .fas .toybox .wrap, .fas .quote .wrap { grid-template-columns: minmax(0, 1fr); }
   .fas .toybox__img::after { background: linear-gradient(0deg, var(--ink), transparent 45%); }
-  .fas .popf { align-items: flex-end; min-height: 640px; }
+  .fas .popf { align-items: flex-end; min-height: 460px; }
   .fas .popf::after { background: linear-gradient(0deg, rgba(13,10,11,.95) 0%, rgba(13,10,11,.75) 45%, rgba(13,10,11,.1) 80%); }
   .fas .work, .fas .work:nth-child(even) { grid-template-columns: minmax(0, 1fr); gap: 1.75rem; }
   .fas .work:nth-child(even) .frame, .fas .work:nth-child(even) .placard { order: 0; }
