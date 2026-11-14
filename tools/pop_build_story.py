@@ -9,7 +9,7 @@ CHAPTERS = [
    ("1481", "White, at the dock. The blank canvas."), ("4335", "Still called ODESSA."), ("1444", "Hauled out on the travel lift.")]),
  ("Down to the bones", "Ceilings down, wiring out, everything opened up.", None, [
    ("3018", "The helm, ceiling down."), ("3075", "Cabin stripped to the beams."), ("7233", "Demolition below deck.")]),
- ("Built in the shop", "Back at Scotty's shop, the new pieces get made by hand.", None, [
+ ("Built in the shop", "Back at Scotty's shop (cave), the new pieces get made by hand.", None, [
    ("3311", "Scotty's shop."), ("4797", "Railing panels taking shape."), ("7100", "Flamingos cut in wood."),
    ("4283", "A spiral staircase, built from scratch."), ("6979", "A panel painted by hand."), ("8247", "Fresh pink paint in the shop.")]),
  ("Back on board", "The new pieces go on, one by one.", None, [
