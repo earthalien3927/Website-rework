@@ -106,3 +106,4 @@ Use the **website-rework** environment (it allows fineartbyscotty.com) and conne
 - 8484 pink cabin: warm rose tone with highlights pulled down (`tools/warm_tone.py <in> <out> 0.7`). The earlier pink glow (`tools/pink_glow.py`) blew out the windows and wall; Scotty wants warm, not overexposed.
 - 8478 lounge (mural): same warm tone, `tools/warm_tone.py <in> <out> 1.0` (ceiling lights were too bright).
 - 8467 helm: day-for-night edit (`tools/day_for_night.py`): dark blue night outside with sparse marina lights, darker cabin, red dash glow, pink under-glow below the sofa, warm pool on the carpet. Caption "The helm after dark." (edited from a daytime photo).
+- Pop Flamingo page hero (Nov 14): stacked. "Scotty's crazy build" label + the POP FLAMINGO sign centred as a banner, then the boat full width (16:9; 4:3 on phones), then the lede across the width with the pink "Follow the build" button on the right. Previous side-by-side layout is in git history.

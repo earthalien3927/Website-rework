@@ -17,7 +17,12 @@
 /* Lead: words on the left, the finished boat on the right */
 .fas .pf-hero { padding-block: clamp(3rem, 2rem + 4vw, 6rem); border-bottom: 1px solid var(--line);
   background: radial-gradient(60% 80% at 80% 40%, rgba(233,139,176,.14), transparent 70%), var(--ink); }
-.fas .pf-hero .wrap { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(2rem, 1rem + 4vw, 5rem); align-items: center; }
+.fas .pf-hero .wrap { display: grid; gap: clamp(1.5rem, 1rem + 2vw, 2.75rem); }
+.fas .pf-hero__top { display: grid; justify-items: center; gap: 1rem; text-align: center; }
+.fas .pf-hero .pf-sign img { width: min(100%, 40rem); margin-inline: auto; filter: drop-shadow(0 10px 40px rgba(120,60,255,.5)); }
+.fas .pf-hero__photo img { aspect-ratio: 16 / 9; object-fit: cover; object-position: 50% 55%; }
+.fas .pf-hero__foot { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 1.5rem clamp(2rem, 5vw, 5rem); }
+.fas .pf-hero__foot .lede { max-width: none; margin: 0; }
 .fas .pf-hero__text { display: grid; gap: 1.4rem; min-width: 0; }
 .fas .pf-hero h1 { font-size: var(--step-4); line-height: .98; }
 .fas .pf-sign img { display: block; width: min(100%, 30rem); height: auto; filter: drop-shadow(0 8px 30px rgba(120,60,255,.4)); }
@@ -77,7 +82,8 @@
 .fas .pf-more .wrap { display: grid; justify-items: center; gap: 1.25rem; }
 
 @media (max-width: 860px) {
-  .fas .pf-hero .wrap, .fas .pf-step { grid-template-columns: minmax(0, 1fr); }
+  .fas .pf-hero .wrap, .fas .pf-step, .fas .pf-hero__foot { grid-template-columns: minmax(0, 1fr); }
+  .fas .pf-hero__photo img { aspect-ratio: 4 / 3; }
   .fas .pf-step:nth-child(even) .pf-photo { order: 0; }
   .fas .pf-pair { gap: 4px; }
 }
@@ -120,15 +126,17 @@
   <main>
     <section class="pf-hero" aria-labelledby="pf-title">
       <div class="wrap">
-        <div class="pf-hero__text">
+        <div class="pf-hero__top">
           <p class="label label--pink">Scotty's crazy build</p>
           <h1 id="pf-title" class="pf-sign"><img src="../assets/art-new/pop-flamingo-sign.png" alt="Pop Flamingo" width="1600" height="401"></h1>
+        </div>
+        <figure class="pf-photo pf-hero__photo">
+          <img src="../assets/art-new/pop-after-marina-wide.jpg" alt="Pop Flamingo, finished in pink, in the marina with the city behind her" width="1688" height="1056">
+        </figure>
+        <div class="pf-hero__foot">
           <p class="lede">A tired white cruiser, taken down to the bones and rebuilt as a floating work of art. Same hands as the paintings, much bigger canvas.</p>
           <div class="btns"><a class="btn btn--pink" href="#build">Follow the build <span class="arrow" aria-hidden="true">↓</span></a></div>
         </div>
-        <figure class="pf-photo">
-          <img src="../assets/art-new/pop-after-marina-wide.jpg" alt="Pop Flamingo, finished in pink, in the marina with the city behind her" width="1688" height="1056">
-        </figure>
       </div>
     </section>
 
