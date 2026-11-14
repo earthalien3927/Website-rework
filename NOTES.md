@@ -109,3 +109,4 @@ Use the **website-rework** environment (it allows fineartbyscotty.com) and conne
 - Pop Flamingo page hero (Nov 14): stacked. "Scotty's crazy build" label + the POP FLAMINGO sign centred as a banner, then the boat full width (16:9; 4:3 on phones), then the lede across the width with the pink "Follow the build" button on the right. Previous side-by-side layout is in git history.
 - Pop Flamingo page hero photo is now in the studio metal frame (frame CSS copied from home.html), cropped tighter with the right edge just past the US flag: `assets/art-new/pop-hero-framed.jpg` (1590x994, crop (70,30)-(1660,1024) of the 1688x1056 wide image).
 - Pop Flamingo sign straightened (rotated 0.9° to level; 1600x386).
+- Tribangle squared up: rotated 3.4° so the base is level, plus a keystone correction so the square's posts are vertical (1000x928).
