@@ -1,0 +1,209 @@
+<title>Pop Flamingo · Fine Art by Scotty</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Pop Flamingo: Scotty's boat build, from a tired white cruiser to a floating work of art.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@400;500;600;700&family=Syncopate:wght@700&display=swap">
+<link rel="stylesheet" href="../assets/site.css">
+<style>
+/* Pop Flamingo page: same gallery-after-hours look, with flamingo pink as the
+   accent for this one page. */
+.fas { --pink: #e98bb0; --pink-hi: #f6b3cd; --pink-text: #f2a7c3; }
+.fas .nav a.nav-pf[aria-current="page"] { color: var(--pink-hi); }
+.fas .label--pink { color: var(--pink-text); }
+.fas .btn--pink { background: var(--pink); color: var(--ink); }
+.fas .btn--pink:hover { background: var(--pink-hi); }
+
+/* Lead: words on the left, the finished boat on the right */
+.fas .pf-hero { padding-block: clamp(3rem, 2rem + 4vw, 6rem); border-bottom: 1px solid var(--line);
+  background: radial-gradient(60% 80% at 80% 40%, rgba(233,139,176,.14), transparent 70%), var(--ink); }
+.fas .pf-hero .wrap { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(2rem, 1rem + 4vw, 5rem); align-items: center; }
+.fas .pf-hero__text { display: grid; gap: 1.4rem; min-width: 0; }
+.fas .pf-hero h1 { font-size: var(--step-4); line-height: .98; }
+.fas .pf-photo { margin: 0; position: relative; box-shadow: 0 40px 80px -30px rgba(0,0,0,.95); }
+.fas .pf-photo img { width: 100%; display: block; }
+.fas .pf-photo figcaption { margin-top: .8rem; font-size: var(--step--1); color: var(--smoke); }
+
+/* Before and after */
+.fas .pf-ba { padding-block: clamp(3.5rem, 2.5rem + 4vw, 6.5rem); }
+.fas .pf-ba__head { display: grid; gap: 1rem; margin-bottom: clamp(1.5rem, 1rem + 2vw, 2.5rem); }
+.fas .pf-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.fas .pf-pair figure { position: relative; margin: 0; overflow: hidden; aspect-ratio: 4 / 3; max-width: 100%; }
+.fas .pf-pair img { width: 100%; height: 100%; object-fit: cover; }
+.fas .pf-pair figure:first-child img { object-position: 15% 62%; }
+.fas .pf-pair figure:last-child img { object-position: 70% 60%; }
+.fas .pf-tag { position: absolute; top: 1rem; left: 1rem; padding: .5rem .85rem .45rem; font-family: var(--f-label); font-weight: 700;
+  font-size: .625rem; letter-spacing: .22em; text-transform: uppercase; color: var(--bone); background: rgba(13,10,11,.8); }
+.fas .pf-pair figure:last-child .pf-tag { left: auto; right: 1rem; background: var(--pink); color: var(--ink); }
+
+/* The build: one step per row, photo and words alternating sides */
+.fas .pf-build { padding-block: clamp(3.5rem, 2.5rem + 4vw, 6.5rem); border-top: 1px solid var(--line); }
+.fas .pf-build__head { display: grid; gap: 1rem; margin-bottom: clamp(2.5rem, 2rem + 3vw, 4.5rem); }
+.fas .pf-steps { list-style: none; margin: 0; padding: 0; display: grid; gap: clamp(3rem, 2rem + 4vw, 6rem); counter-reset: step; }
+.fas .pf-step { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); gap: clamp(1.5rem, 1rem + 3vw, 4rem); align-items: center; counter-increment: step; }
+.fas .pf-step:nth-child(even) .pf-photo { order: 2; }
+.fas .pf-step .pf-photo { max-width: 760px; }
+.fas .pf-step--tall .pf-photo { max-width: 440px; justify-self: center; }
+.fas .pf-step__text { display: grid; gap: .9rem; min-width: 0; }
+.fas .pf-step__text .label::before { content: "Step " counter(step) " · "; }
+.fas .pf-step h3 { font-size: var(--step-2); }
+
+.fas .pf-more { padding-block: clamp(3rem, 2rem + 3vw, 5rem); border-top: 1px solid var(--line); text-align: center; }
+.fas .pf-more .wrap { display: grid; justify-items: center; gap: 1.25rem; }
+
+@media (max-width: 860px) {
+  .fas .pf-hero .wrap, .fas .pf-step { grid-template-columns: minmax(0, 1fr); }
+  .fas .pf-step:nth-child(even) .pf-photo { order: 0; }
+  .fas .pf-pair { gap: 4px; }
+}
+</style>
+
+<div class="fas" id="top">
+
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="https://www.fineartbyscotty.com/" aria-label="Fine Art by Scotty, home">
+        <span class="brand__logo" aria-hidden="true" style="-webkit-mask-image: url('https://www.fineartbyscotty.com/wp-content/uploads/2016/12/cropped-Fine-Art-by-Scotty-Logo-Black-Michael-Cropped-2.png'); mask-image: url('https://www.fineartbyscotty.com/wp-content/uploads/2016/12/cropped-Fine-Art-by-Scotty-Logo-Black-Michael-Cropped-2.png');"></span>
+        <span class="brand__text"><span class="brand__name">Fine Art <em>by Scotty</em></span><span class="label brand__tag">Tastefully Edgy</span></span>
+      </a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 6h16M2 14h16"/></svg>
+      </button>
+      <nav class="nav" id="site-nav" aria-label="Main">
+        <ul>
+          <li><a href="https://www.fineartbyscotty.com/fine-art/">The Art</a></li>
+          <li><a href="https://www.fineartbyscotty.com/about-us/">The Artist</a></li>
+          <li><a href="https://www.fineartbyscotty.com/toy-box/">Toy Box</a></li>
+          <li><a href="https://www.fineartbyscotty.com/pop-flamingo/" class="nav-pf" aria-current="page">Pop Flamingo</a></li>
+          <li><a href="https://www.fineartbyscotty.com/videos/">Videos</a></li>
+          <li class="has-sub">
+            <button class="sub-toggle" type="button" aria-haspopup="true">News</button>
+            <ul class="sub">
+              <li><a href="https://www.fineartbyscotty.com/category/announcements/">Announcements</a></li>
+              <li><a href="https://www.fineartbyscotty.com/category/press/">Press</a></li>
+              <li><a href="https://www.fineartbyscotty.com/category/events/">Events</a></li>
+              <li><a href="https://www.fineartbyscotty.com/category/blog/">Blog</a></li>
+            </ul>
+          </li>
+          <li><a href="https://www.fineartbyscotty.com/contact/">Contact</a></li>
+        </ul>
+        <a class="btn btn--gold" href="https://www.fineartbyscotty.com/#quote">Request a quote</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="pf-hero" aria-labelledby="pf-title">
+      <div class="wrap">
+        <div class="pf-hero__text">
+          <p class="label label--pink">Scotty's crazy build</p>
+          <h1 id="pf-title">Pop <em>Flamingo.</em></h1>
+          <p class="lede">A tired white cruiser, taken down to the bones and rebuilt as a floating work of art. Same hands as the paintings, much bigger canvas.</p>
+          <div class="btns"><a class="btn btn--pink" href="#build">Follow the build <span class="arrow" aria-hidden="true">↓</span></a></div>
+        </div>
+        <figure class="pf-photo">
+          <img src="../assets/art-new/pop-after-marina.jpg" alt="Pop Flamingo, finished in pink, in the marina with the city behind her" width="480" height="360">
+        </figure>
+      </div>
+    </section>
+
+    <section class="pf-ba" aria-labelledby="pf-ba-title">
+      <div class="wrap">
+        <div class="pf-ba__head">
+          <p class="label label--pink">Before and after</p>
+          <h2 id="pf-ba-title">Same boat. <em>Different attitude.</em></h2>
+        </div>
+        <div class="pf-pair">
+          <figure><img src="../assets/art-new/pop-before-dock.jpg" alt="The boat before the build, white at the dock" width="1440" height="1080" loading="lazy"><figcaption class="pf-tag">Before</figcaption></figure>
+          <figure><img src="../assets/art-new/pop-after-marina.jpg" alt="Pop Flamingo after the build" width="480" height="360" loading="lazy"><figcaption class="pf-tag">After</figcaption></figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="pf-build" id="build" aria-labelledby="pf-build-title">
+      <div class="wrap">
+        <div class="pf-build__head">
+          <p class="label label--pink">The build</p>
+          <h2 id="pf-build-title">From the dock <em>to the spotlight.</em></h2>
+        </div>
+        <ol class="pf-steps">
+          <li class="pf-step">
+            <figure class="pf-photo"><img src="../assets/art-new/pop-before-dock-2.jpg" alt="The white cruiser at the dock before the build" width="1600" height="1200" loading="lazy"></figure>
+            <div class="pf-step__text"><p class="label label--pink">Where she started</p><h3>A plain white cruiser.</h3><p>Solid bones, no personality. Exactly the kind of blank canvas Scotty likes.</p></div>
+          </li>
+          <li class="pf-step pf-step--tall">
+            <figure class="pf-photo"><img src="../assets/art-new/pop-haulout.jpg" alt="The boat lifted out of the water on the travel lift" width="1200" height="1600" loading="lazy"></figure>
+            <div class="pf-step__text"><p class="label label--pink">Out of the water</p><h3>Hauled out.</h3><p>Up on the travel lift and onto dry land, where the real work begins.</p></div>
+          </li>
+          <li class="pf-step pf-step--tall">
+            <figure class="pf-photo"><img src="../assets/art-new/pop-helm.jpg" alt="Inside the helm with the ceiling opened up and the wiring exposed" width="1200" height="1600" loading="lazy"></figure>
+            <div class="pf-step__text"><p class="label label--pink">Down to the bones</p><h3>Opened up.</h3><p>Ceilings down, wiring out. Everything gets looked at before anything gets painted.</p></div>
+          </li>
+          <li class="pf-step">
+            <figure class="pf-photo"><img src="../assets/art-new/pop-after-side.jpg" alt="Pop Flamingo finished in pink, side view at the dock" width="480" height="360" loading="lazy"></figure>
+            <div class="pf-step__text"><p class="label label--pink">The reveal</p><h3>Pop Flamingo.</h3><p>Pink from bow to stern, and impossible to miss in any marina.</p></div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="pf-more" aria-label="More from Scotty">
+      <div class="wrap">
+        <p class="label label--pink">More of the build coming soon</p>
+        <h2>Art doesn't stop at the <em>frame.</em></h2>
+        <div class="btns">
+          <a class="btn btn--gold" href="https://www.fineartbyscotty.com/fine-art/">See the paintings <span class="arrow" aria-hidden="true">→</span></a>
+          <a class="btn btn--ghost" href="https://www.fineartbyscotty.com/toy-box/">Explore the Toy Box</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-top">
+        <img src="https://www.fineartbyscotty.com/wp-content/uploads/2025/01/image-49.png" alt="Fine Art by Scotty logo" width="273" height="253" loading="lazy">
+        <nav class="footer-nav" aria-label="Footer">
+          <ul>
+            <li><a href="https://www.fineartbyscotty.com/fine-art/">The Art</a></li>
+            <li><a href="https://www.fineartbyscotty.com/about-us/">The Artist</a></li>
+            <li><a href="https://www.fineartbyscotty.com/toy-box/">Toy Box</a></li>
+            <li><a href="https://www.fineartbyscotty.com/pop-flamingo/">Pop Flamingo</a></li>
+            <li><a href="https://www.fineartbyscotty.com/videos/">Videos</a></li>
+            <li><a href="https://www.fineartbyscotty.com/news/">News</a></li>
+            <li><a href="https://www.fineartbyscotty.com/contact/">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Fine Art by Scotty. Tastefully Edgy.</span>
+        <a href="#top">Back to top ↑</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script>
+(function () {
+  // Mobile menu (same as the other pages)
+  var btn = document.querySelector('.fas .menu-btn');
+  var nav = document.getElementById('site-nav');
+  if (btn && nav) {
+    btn.addEventListener('click', function () {
+      var open = nav.classList.toggle('is-open');
+      btn.setAttribute('aria-expanded', String(open));
+      btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      var bar = btn.closest('.site-header');
+      if (bar) { nav.style.top = Math.round(bar.getBoundingClientRect().height) + 'px'; nav.style.height = 'calc(100dvh - ' + Math.round(bar.getBoundingClientRect().bottom) + 'px)'; }
+    });
+    nav.addEventListener('click', function (e) {
+      if (e.target.closest('a')) { nav.classList.remove('is-open'); btn.setAttribute('aria-expanded', 'false'); }
+    });
+  }
+  var bar = document.querySelector('.fas .site-header');
+  if (bar) {
+    var compact = function () { bar.classList.toggle('is-compact', window.scrollY > 40); };
+    window.addEventListener('scroll', compact, { passive: true }); compact();
+  }
+})();
+</script>

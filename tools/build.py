@@ -366,6 +366,7 @@ def to_webp(data: bytes, dest: pathlib.Path, edge: int = MAX_EDGE, quality: int 
 PREVIEW_LINKS = {
     'href="https://www.fineartbyscotty.com/"': 'href="https://claude.ai/artifact/VPNkJvE2YWGCc2sHxuhYyn"',
     'href="https://www.fineartbyscotty.com/fine-art/"': 'href="https://claude.ai/artifact/JDNJoTznqp4y1reGv4WFHT"',
+    'href="https://www.fineartbyscotty.com/pop-flamingo/"': 'href="https://claude.ai/artifact/RQbZpBLakzFPdsJ8yY9KqD"',
 }
 
 
