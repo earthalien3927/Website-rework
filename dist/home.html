@@ -129,6 +129,10 @@ body::before {
   transition: color .2s;
 }
 .fas .nav a:hover, .fas .nav .sub-toggle:hover, .fas .nav a[aria-current="page"] { color: var(--bone); }
+.fas .nav a { white-space: nowrap; }
+.fas .nav a.nav-pf { color: #f2a7c3; }                 /* Pop Flamingo: flamingo pink */
+.fas .nav a.nav-pf:hover { color: #ffd1e2; }
+@media (min-width: 1181px) { .fas .nav ul { gap: 1.15rem; } .fas .nav { gap: 1.25rem; } }
 .fas .nav .has-sub { position: relative; }
 .fas .nav .sub {
   position: absolute; top: 100%; left: -1.25rem; min-width: 12rem;
@@ -150,7 +154,7 @@ body::before {
 }
 .fas .menu-btn svg { width: 20px; height: 20px; margin: auto; display: block; }
 
-@media (max-width: 1020px) {
+@media (max-width: 1180px) {
   .fas .menu-btn { display: block; }
   .fas .nav {
     /* The header's blur makes it the panel's frame of reference, so give the
@@ -536,6 +540,7 @@ body::before {
           <li><a href="https://www.fineartbyscotty.com/fine-art/">The Art</a></li>
           <li><a href="https://www.fineartbyscotty.com/about-us/">The Artist</a></li>
           <li><a href="https://www.fineartbyscotty.com/toy-box/">Toy Box</a></li>
+          <li><a href="#pop-flamingo" class="nav-pf" title="Pop Flamingo page coming soon">Pop Flamingo</a></li>
           <li><a href="https://www.fineartbyscotty.com/videos/">Videos</a></li>
           <li class="has-sub">
             <button class="sub-toggle" type="button" aria-haspopup="true">News</button>
