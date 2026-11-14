@@ -16,9 +16,10 @@ CHAPTERS = [
    ("4346", "The spiral stairs go aboard."), ("3151", "New railings going on."), ("3156", "New rails on, still white."),
    ("9633", "The turbine tower."), ("1099", "A flamingo set into the deck."), ("e7e6", "The new name, lit up at night.")]),
  ("Lights on", "After dark, Pop comes alive.", ("3130", "The back of Pop Flamingo, open and lit up at night, with the tower on top."), [
-   ("9644", "Lit from bow to tower."), ("1205", "The stairs and tower, glowing."), ("4071", "Doors closed, lights on."),
-   ("9638", "The turbine tower, lit up."), ("0564", "The bar, lit up under the truss."), ("7451", "The brick bar, glowing blue."),
-   ("1448", "Pink below deck."), ("1520", "A Scotty mural in the lounge."), ("6621", "The brick passage going in.")]),
+   ("9644", "Lit from bow to tower."), ("1205", "The stairs and tower, glowing."), ("4071", "Doors closed, lights on."), ("9638", "The turbine tower, lit up.")]),
+ ("Inside", "Finished, carpeted and lit.", None, [
+   ("8467", "The finished helm."), ("0564", "The bar, lit up under the truss."), ("7451", "The brick bar, glowing blue."), ("8469", "Brick bar and leopard stairs."),
+   ("8478", "The lounge, with Scotty's mural."), ("8472", "The pink cabin."), ("8471", "A Scotty mural on the door."), ("8476", "Art in the hallway.")]),
 ]
 REVEAL = [("8449", "All pink, with the Tribangle on deck and the turbine tower up top."), ("6426", "Pink at the dock, at dusk.")]
 
@@ -28,7 +29,7 @@ def li(n, cap):
     w, h = size(n)
     return f'            <li><button class="pf-shot" type="button"><img src="{P}{n}.jpg" alt="{cap}" width="{w}" height="{h}" loading="lazy"></button><p>{cap}</p></li>\n'
 def grid(ph, cols=None):
-    cols = cols or {2: 2, 3: 3, 5: 5, 6: 3, 9: 3}.get(len(ph), 4)
+    cols = cols or {2: 2, 3: 3, 5: 5, 6: 3, 8: 4, 9: 3}.get(len(ph), 4)
     return f'          <ul class="pf-grid" style="--cols:{cols}">\n' + ''.join(li(n, c) for n, c in ph) + '          </ul>\n'
 
 out = ['''    <section class="pf-build" id="build" aria-labelledby="pf-build-title">
