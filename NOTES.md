@@ -77,7 +77,7 @@ Use the **website-rework** environment (it allows fineartbyscotty.com) and conne
 
 - `unavailable` pick (both pages): pieces no longer offered are left off the wall and out of the quote list. Currently: Rustic Elegance.
 - Venetian Plaster pieces show a small "VENETIAN PLASTER" plate under the frame (from the venetian-plaster category; automatic for new ones).
-- `swap` pick (art page): trades two pieces' places. Currently Trouble <-> Sunday Morning, and Wine Me Up <-> Wine Roper.
+- `swap` pick (art page): trades two pieces' places. Currently Trouble <-> Sunday Morning, Wine Me Up <-> Wine Roper, and Heartstrings <-> Soul Keeper.
 - High Tide and Wine Time (from Dropbox, no numbers yet) lead the art page with a gold "Scotty's Newest" tag (`tag` field on a pinned piece). Pieces wider than 1.15:1 go full width; squares hang like portraits.
 - `large` pick (art page): hangs a piece about 40% bigger. Currently Moon Tale.
 - Art page order picks: `moveTo` (Pick Me -> 9th), `sold` (If You See Kay: red "Sold Out" tag, no quote link, out of the quote list), `series` ("A Full Day": Good Morning, Good Afternoon, Good Evening hung together with a silver "A Full Day · n of 3" tag and a note), `large` also Double Dipping. Sabrina removed from the wall (skip). Reverence is standalone: no studio frame, black background cut away (`assets/art-edits/20.png`, upload to WordPress to use live).
