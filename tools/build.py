@@ -79,9 +79,9 @@ def work_html(w) -> str:
         f'          <article class="work work--{orient}{" work--large" if w.get("large") else ""}{" work--fill" if w.get("fill") else ""}">'
         f'<button class="frame" type="button" data-full="{e(w.get("full") or w["img"])}" aria-label="View {e(w["title"])} full size">'
         f'<span class="frame__mat"><img src="{e(w["img"])}" alt="{e(w["title"])}" width="{e(w.get("width", ""))}" height="{e(w.get("height", ""))}" loading="lazy"></span></button>'
-        f'<div class="placard"><p class="label label--gold">{e(meta)}</p><h3>{e(w["title"])}</h3>{series_note}'
+        f'<div class="placard"><p class="label label--gold">{e(meta)}</p><h3>{e(w["title"])}</h3>'
         f'<div class="placard__links"><button type="button" class="link-view">View full size</button>'
-        f'{"" if is_sold else f"<a href={chr(34)}#quote{chr(34)} class={chr(34)}link-quote{chr(34)} data-title={chr(34)}{e(w[chr(116)+chr(105)+chr(116)+chr(108)+chr(101)])}{chr(34)}>Request a quote →</a>"}</div></div></article>\n'
+        f'<a href="#quote" class="link-quote" data-title="{e(w["title"])}">Request a quote →</a></div></div></article>\n'
     )
 
 

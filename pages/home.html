@@ -531,7 +531,7 @@
     // The menu panel opens just below the bar, wherever the bar is on screen.
     btn.addEventListener('click', function () {
       var bar = btn.closest('.site-header');
-      if (bar) nav.style.top = Math.round(bar.getBoundingClientRect().bottom) + 'px';
+      if (bar) { var hb = Math.round(bar.getBoundingClientRect().height); nav.style.top = hb + 'px'; nav.style.height = 'calc(100dvh - ' + Math.round(bar.getBoundingClientRect().bottom) + 'px)'; }
     });
     nav.addEventListener('click', function (e) {
       if (e.target.closest('a')) { nav.classList.remove('is-open'); btn.setAttribute('aria-expanded', 'false'); }

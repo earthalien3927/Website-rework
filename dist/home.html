@@ -153,7 +153,11 @@ body::before {
 @media (max-width: 1020px) {
   .fas .menu-btn { display: block; }
   .fas .nav {
-    position: fixed; inset: calc(77px + env(safe-area-inset-top, 0px)) 0 0 0;
+    /* The header's blur makes it the panel's frame of reference, so give the
+       panel an explicit screen height instead of stretching to "bottom: 0". */
+    position: fixed; inset: calc(77px + env(safe-area-inset-top, 0px)) 0 auto 0;
+    height: calc(100vh - 77px - env(safe-area-inset-top, 0px));
+    height: calc(100dvh - 77px - env(safe-area-inset-top, 0px));
     background: var(--ink); flex-direction: column; align-items: stretch; gap: 2rem;
     padding: 2rem var(--gutter-r) 3rem var(--gutter); overflow-y: auto;
     display: none;
@@ -897,7 +901,7 @@ body::before {
     // The menu panel opens just below the bar, wherever the bar is on screen.
     btn.addEventListener('click', function () {
       var bar = btn.closest('.site-header');
-      if (bar) nav.style.top = Math.round(bar.getBoundingClientRect().bottom) + 'px';
+      if (bar) { var hb = Math.round(bar.getBoundingClientRect().height); nav.style.top = hb + 'px'; nav.style.height = 'calc(100dvh - ' + Math.round(bar.getBoundingClientRect().bottom) + 'px)'; }
     });
     nav.addEventListener('click', function (e) {
       if (e.target.closest('a')) { nav.classList.remove('is-open'); btn.setAttribute('aria-expanded', 'false'); }
