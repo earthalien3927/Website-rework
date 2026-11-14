@@ -61,6 +61,10 @@
 .fas .pf-shot { display: block; padding: 0; border: 0; background: #000; cursor: zoom-in; aspect-ratio: 4 / 5; overflow: hidden; width: 100%; }
 .fas .pf-shot img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s ease, filter .5s ease; filter: saturate(.92); }
 .fas .pf-shot:hover img, .fas .pf-shot:focus-visible img { transform: scale(1.04); filter: saturate(1.05); }
+.fas .pf-lead { margin: 0; display: grid; justify-items: center; gap: .7rem; }
+.fas .pf-shot--lead { aspect-ratio: auto; width: auto; max-width: 100%; }
+.fas .pf-shot--lead img { width: auto; max-width: 100%; height: auto; max-height: min(88vh, 60rem); object-fit: contain; filter: none; }
+.fas .pf-lead figcaption { font-size: var(--step--1); color: var(--smoke); text-align: center; }
 .fas .pf-ch--end .pf-photo { max-width: 100%; }
 .fas .pf-viewer { position: fixed; inset: 0; z-index: 200; background: rgba(8,6,8,.94); display: grid; place-items: center; padding: 3.5rem 1rem 2rem; }
 .fas .pf-viewer[hidden] { display: none; }
@@ -151,48 +155,51 @@
         <div class="pf-ch">
           <div class="pf-ch__head"><p class="label label--pink">Chapter 1</p><h3>Where she started</h3><p>A plain white cruiser, still wearing her old name.</p></div>
           <ul class="pf-grid" style="--cols:3">
-            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-1481.jpg" alt="White, at the dock. The blank canvas." width="1400" height="1050" loading="lazy"></button><p>White, at the dock. The blank canvas.</p></li>
-            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-4335.jpg" alt="Still called ODESSA." width="1050" height="1400" loading="lazy"></button><p>Still called ODESSA.</p></li>
-            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-1444.jpg" alt="Hauled out on the travel lift." width="1050" height="1400" loading="lazy"></button><p>Hauled out on the travel lift.</p></li>
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-1481.jpg" alt="White, at the dock. The blank canvas." width="1100" height="825" loading="lazy"></button><p>White, at the dock. The blank canvas.</p></li>
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-4335.jpg" alt="Still called ODESSA." width="825" height="1100" loading="lazy"></button><p>Still called ODESSA.</p></li>
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-1444.jpg" alt="Hauled out on the travel lift." width="825" height="1100" loading="lazy"></button><p>Hauled out on the travel lift.</p></li>
           </ul>
         </div>
         <div class="pf-ch">
           <div class="pf-ch__head"><p class="label label--pink">Chapter 2</p><h3>Down to the bones</h3><p>Ceilings down, wiring out, everything opened up.</p></div>
           <ul class="pf-grid" style="--cols:3">
-            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-3018.jpg" alt="The helm, ceiling down." width="1050" height="1400" loading="lazy"></button><p>The helm, ceiling down.</p></li>
-            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-3075.jpg" alt="Cabin stripped to the beams." width="1400" height="1050" loading="lazy"></button><p>Cabin stripped to the beams.</p></li>
-            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-7233.jpg" alt="Demolition below deck." width="1050" height="1400" loading="lazy"></button><p>Demolition below deck.</p></li>
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-3018.jpg" alt="The helm, ceiling down." width="825" height="1100" loading="lazy"></button><p>The helm, ceiling down.</p></li>
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-3075.jpg" alt="Cabin stripped to the beams." width="1100" height="825" loading="lazy"></button><p>Cabin stripped to the beams.</p></li>
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-7233.jpg" alt="Demolition below deck." width="825" height="1100" loading="lazy"></button><p>Demolition below deck.</p></li>
           </ul>
         </div>
         <div class="pf-ch">
           <div class="pf-ch__head"><p class="label label--pink">Chapter 3</p><h3>Built in the shop</h3><p>Back at Scotty's shop, the new pieces get made by hand.</p></div>
-          <ul class="pf-grid" style="--cols:5">
-            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-3311.jpg" alt="Scotty's shop." width="1400" height="1050" loading="lazy"></button><p>Scotty's shop.</p></li>
-            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-4797.jpg" alt="Railing panels taking shape." width="1400" height="1050" loading="lazy"></button><p>Railing panels taking shape.</p></li>
-            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-7100.jpg" alt="Flamingos cut in wood." width="1050" height="1400" loading="lazy"></button><p>Flamingos cut in wood.</p></li>
-            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-4283.jpg" alt="A spiral staircase, built from scratch." width="1050" height="1400" loading="lazy"></button><p>A spiral staircase, built from scratch.</p></li>
-            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-6979.jpg" alt="A panel painted by hand." width="1050" height="1400" loading="lazy"></button><p>A panel painted by hand.</p></li>
+          <ul class="pf-grid" style="--cols:3">
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-3311.jpg" alt="Scotty's shop." width="1100" height="825" loading="lazy"></button><p>Scotty's shop.</p></li>
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-4797.jpg" alt="Railing panels taking shape." width="1100" height="825" loading="lazy"></button><p>Railing panels taking shape.</p></li>
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-7100.jpg" alt="Flamingos cut in wood." width="825" height="1100" loading="lazy"></button><p>Flamingos cut in wood.</p></li>
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-4283.jpg" alt="A spiral staircase, built from scratch." width="825" height="1100" loading="lazy"></button><p>A spiral staircase, built from scratch.</p></li>
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-6979.jpg" alt="A panel painted by hand." width="825" height="1100" loading="lazy"></button><p>A panel painted by hand.</p></li>
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-8247.jpg" alt="Fresh pink paint in the shop." width="1100" height="825" loading="lazy"></button><p>Fresh pink paint in the shop.</p></li>
           </ul>
         </div>
         <div class="pf-ch">
           <div class="pf-ch__head"><p class="label label--pink">Chapter 4</p><h3>Back on board</h3><p>The new pieces go on, one by one.</p></div>
           <ul class="pf-grid" style="--cols:3">
-            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-4346.jpg" alt="The spiral stairs go aboard." width="1050" height="1400" loading="lazy"></button><p>The spiral stairs go aboard.</p></li>
-            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-3151.jpg" alt="New railings going on." width="1400" height="1050" loading="lazy"></button><p>New railings going on.</p></li>
-            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-1208.jpg" alt="The new radar tower." width="1050" height="1400" loading="lazy"></button><p>The new radar tower.</p></li>
-            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-1099.jpg" alt="A flamingo set into the deck." width="1050" height="1400" loading="lazy"></button><p>A flamingo set into the deck.</p></li>
-            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-1129.jpg" alt="The new name goes on." width="1050" height="1400" loading="lazy"></button><p>The new name goes on.</p></li>
-            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-1182.jpg" alt="First pink lights, before the pink paint." width="1400" height="1050" loading="lazy"></button><p>First pink lights, before the pink paint.</p></li>
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-4346.jpg" alt="The spiral stairs go aboard." width="825" height="1100" loading="lazy"></button><p>The spiral stairs go aboard.</p></li>
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-3151.jpg" alt="New railings going on." width="1100" height="825" loading="lazy"></button><p>New railings going on.</p></li>
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-3156.jpg" alt="New rails on, still white." width="825" height="1100" loading="lazy"></button><p>New rails on, still white.</p></li>
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-9633.jpg" alt="The turbine tower." width="825" height="1100" loading="lazy"></button><p>The turbine tower.</p></li>
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-1099.jpg" alt="A flamingo set into the deck." width="825" height="1100" loading="lazy"></button><p>A flamingo set into the deck.</p></li>
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-1182.jpg" alt="First pink lights, before the pink paint." width="1100" height="825" loading="lazy"></button><p>First pink lights, before the pink paint.</p></li>
           </ul>
         </div>
         <div class="pf-ch">
-          <div class="pf-ch__head"><p class="label label--pink">Chapter 5</p><h3>Lights on</h3><p>Pink light, brick, murals and stainless.</p></div>
-          <ul class="pf-grid" style="--cols:5">
-            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-6621.jpg" alt="The brick bar going in." width="1050" height="1400" loading="lazy"></button><p>The brick bar going in.</p></li>
-            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-1520.jpg" alt="A Scotty mural in the lounge." width="1050" height="1400" loading="lazy"></button><p>A Scotty mural in the lounge.</p></li>
-            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-1448.jpg" alt="Pink below deck." width="1400" height="1050" loading="lazy"></button><p>Pink below deck.</p></li>
-            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-0564.jpg" alt="The bar, lit up under the truss." width="825" height="1100" loading="lazy"></button><p>The bar, lit up.</p></li>
-            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-8451.jpg" alt="The Tribangle on the back deck." width="1400" height="1050" loading="lazy"></button><p>The Tribangle on the back deck.</p></li>
+          <div class="pf-ch__head"><p class="label label--pink">Chapter 5</p><h3>Lights on</h3><p>Pink from bow to stern, lit up at night.</p></div>
+          <figure class="pf-lead"><button class="pf-shot pf-shot--lead" type="button"><img src="../assets/art-new/build/pop-build-8449.jpg" alt="Pop Flamingo from the back: all pink, with the Tribangle on deck and the turbine tower up top." width="1200" height="1600" loading="lazy"></button><figcaption>Pop Flamingo from the back: all pink, with the Tribangle on deck and the turbine tower up top.</figcaption></figure>
+          <ul class="pf-grid" style="--cols:3">
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-9638.jpg" alt="The turbine tower, lit up." width="825" height="1100" loading="lazy"></button><p>The turbine tower, lit up.</p></li>
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-0564.jpg" alt="The bar, lit up under the truss." width="825" height="1100" loading="lazy"></button><p>The bar, lit up under the truss.</p></li>
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-7451.jpg" alt="The brick bar, glowing blue." width="825" height="1100" loading="lazy"></button><p>The brick bar, glowing blue.</p></li>
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-1448.jpg" alt="Pink below deck." width="1100" height="825" loading="lazy"></button><p>Pink below deck.</p></li>
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-1520.jpg" alt="A Scotty mural in the lounge." width="825" height="1100" loading="lazy"></button><p>A Scotty mural in the lounge.</p></li>
+            <li><button class="pf-shot" type="button"><img src="../assets/art-new/build/pop-build-6621.jpg" alt="The brick passage going in." width="825" height="1100" loading="lazy"></button><p>The brick passage going in.</p></li>
           </ul>
         </div>
         <div class="pf-ch pf-ch--end">
